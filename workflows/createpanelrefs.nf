@@ -15,6 +15,20 @@ log.info logo + paramsSummaryLog(workflow) + citation
 
 WorkflowCreatepanelrefs.initialise(params, log)
 
+// Check input path parameters to see if they exist
+
+def checkPathParamList = [
+    params.fasta
+]
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CHECK MANDATORY PARAMETERS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+for (param in checkPathParamList) if (param) file(param, checkIfExists: true)
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     MANAGE SAMPLESHEET
@@ -22,6 +36,17 @@ WorkflowCreatepanelrefs.initialise(params, log)
 */
 
 ch_from_samplesheet = Channel.fromSamplesheet("input")
+
+ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
+    if (bam)  return [ [id:"panel", data_type:"bam"  ], bam ]
+    if (cram) return [ [id:"panel", data_type:"cram" ], cram ]
+}.groupTuple().branch{
+    bam:  it[0].data_type == "bam"
+    cram: it[0].data_type == "cram"
+}
+
+// Initialize file channels based on params, defined in the params.genomes[params.genome] scope
+ch_fasta = params.fasta ? Channel.fromPath(params.fasta).first() : Channel.empty()
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,6 +95,11 @@ def multiqc_report = []
 workflow CREATEPANELREFS {
 
     ch_versions = Channel.empty()
+
+    if (params.tools && params.tools.split(',').contains('cnvkit')) {
+        CNVKIT_BATCH ( ch_input.bam.map{meta, bam -> [ meta, [], bam ]}, ch_fasta, [], [], [], true )
+        ch_versions = ch_versions.mix(CNVKIT_BATCH.out.versions)
+    }
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
