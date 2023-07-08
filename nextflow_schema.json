@@ -313,6 +313,9 @@
             "$ref": "#/definitions/input_output_options"
         },
         {
+            "$ref": "#/definitions/main_options"
+        },
+        {
             "$ref": "#/definitions/reference_genome_options"
         },
         {

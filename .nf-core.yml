@@ -1,1 +1,8 @@
 repository_type: pipeline
+lint:
+  actions_ci: False
+  files_exist:
+    - conf/modules.config
+  files_unchanged:
+    - .gitattributes
+    - .gitignore
