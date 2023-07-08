@@ -13,14 +13,23 @@
             "required": ["input", "outdir"],
             "properties": {
                 "input": {
-                    "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/createpanelrefs/usage#samplesheet-input).",
-                    "fa_icon": "fas fa-file-csv"
+                    "help_text": "A design file with information about the samples in your experiment. Use this parameter to specify the location of the input files. It has to be a comma-separated file with a header row. See [usage docs](https://nf-co.re/sarek/usage#input).\n\nIf no input file is specified, sarek will attempt to locate one in the `{outdir}` directory.",
+                    "fa_icon": "fas fa-file-csv",
+                    "schema": "assets/schema_input.json",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/csv",
+                            "pattern": "^\\S+\\.csv$"
+                        },
+                        {
+                            "type": "string",
+                            "maxLength": 0
+                        }
+                    ]
                 },
                 "outdir": {
                     "type": "string",
@@ -41,6 +50,22 @@
                     "fa_icon": "fas fa-file-signature"
                 }
             }
+        },
+        "main_options": {
+            "title": "Main options",
+            "type": "object",
+            "description": "Most common options used for the pipeline",
+            "default": "",
+            "properties": {
+                "tools": {
+                    "type": "string",
+                    "fa_icon": "fas fa-toolbox",
+                    "description": "Tools to use for building Panel of Normals or models.",
+                    "help_text": "Multiple tools separated with commas.\n\nTools available: CNVKIT.",
+                    "pattern": "^((cnvkit)?,?)*(?<!,)$"
+                }
+            },
+            "fa_icon": "fas fa-user-cog"
         },
         "reference_genome_options": {
             "title": "Reference genome options",
