@@ -18,7 +18,10 @@ WorkflowCreatepanelrefs.initialise(params, log)
 // Check input path parameters to see if they exist
 
 def checkPathParamList = [
-    params.fasta
+    params.dict,
+    params.fasta,
+    params.fasta_fai,
+    params.input
 ]
 
 /*
@@ -46,7 +49,9 @@ ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
 }
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_fasta = params.fasta ? Channel.fromPath(params.fasta).first() : Channel.empty()
+ch_dict      = params.dict      ? Channel.fromPath(params.dict).first()      : Channel.empty()
+ch_fasta     = params.fasta     ? Channel.fromPath(params.fasta).first()     : Channel.empty()
+ch_fasta_fai = params.fasta_fai ? Channel.fromPath(params.fasta_fai).first() : Channel.empty()
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,6 +87,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 include { CNVKIT_BATCH                } from '../modules/nf-core/cnvkit/batch/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
+include { BAM_CREATE_SOM_PON_GATK     } from '../subworkflows/nf-core/bam_create_som_pon_gatk/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,8 +103,13 @@ workflow CREATEPANELREFS {
     ch_versions = Channel.empty()
 
     if (params.tools && params.tools.split(',').contains('cnvkit')) {
-        CNVKIT_BATCH ( ch_input.bam.map{meta, bam -> [ meta, [], bam ]}, ch_fasta, [], [], [], true )
+        CNVKIT_BATCH ( ch_input.bam.map{ meta, bam -> [ meta, [], bam ]}, ch_fasta, [], [], [], true )
         ch_versions = ch_versions.mix(CNVKIT_BATCH.out.versions)
+    }
+
+    if (params.tools && params.tools.split(',').contains('mutect2')) {
+        BAM_CREATE_SOM_PON_GATK ( ch_input.cram.map{ meta, cram -> [ meta, bam ]}, ch_fasta, ch_fasta_fai, ch_dict, params.pon_name, [] )
+        ch_versions = ch_versions.mix(BAM_CREATE_SOM_PON_GATK.out.versions)
     }
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
