@@ -15,6 +15,11 @@
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
+                    "gatk4/annotateintervals": {
+                        "branch": "master",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "installed_by": ["modules"]
+                    },
                     "gatk4/collectreadcounts": {
                         "branch": "master",
                         "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
