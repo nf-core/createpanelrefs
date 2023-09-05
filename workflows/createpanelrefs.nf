@@ -38,15 +38,12 @@ for (param in checkPathParamList) if (param) file(param, checkIfExists: true)
 ch_from_samplesheet = Channel.fromSamplesheet("input")
 
 ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
-    if (bam)  return [ [id:"panel", data_type:"bam"  ], bam ]
-    if (cram) return [ [id:"panel", data_type:"cram" ], cram ]
-}.groupTuple().branch{
-    bam:  it[0].data_type == "bam"
-    cram: it[0].data_type == "cram"
+    if (bam)  return [ [data_type:"bam"] + meta, bam ]
+    if (cram) return [ [data_type:"cram"] + meta, cram ]
 }
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_fasta = params.fasta ? Channel.fromPath(params.fasta).first() : Channel.empty()
+ch_fasta = Channel.fromPath(params.fasta).map { it -> [[id:it.baseName], it] }.collect()
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -83,6 +80,11 @@ include { CNVKIT_BATCH                } from '../modules/nf-core/cnvkit/batch/ma
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
+//
+// SUBWORKFLOW imports
+//
+
+include { GERMLINECNVCALLER_COHORT    } from '../subworkflows/local/germlinecnvcaller_cohort'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -97,8 +99,23 @@ workflow CREATEPANELREFS {
     ch_versions = Channel.empty()
 
     if (params.tools && params.tools.split(',').contains('cnvkit')) {
-        CNVKIT_BATCH ( ch_input.bam.map{meta, bam -> [ meta, [], bam ]}, ch_fasta, [], [], [], true )
+        ch_input
+        .map{ meta, bam ->
+            new_meta = meta + [id:"panel"]
+            [new_meta, bam]
+        }.groupTuple().branch{
+            bam:  it[0].data_type == "bam"
+            cram: it[0].data_type == "cram"
+        }.bam.set { ch_cnvkit_input }
+
+        CNVKIT_BATCH ( ch_cnvkit_input.map{meta, bam -> [ meta, [], bam ]}, ch_fasta.map{meta, fasta -> fasta}, [], [], [], true )
         ch_versions = ch_versions.mix(CNVKIT_BATCH.out.versions)
+    }
+
+    if (params.tools && params.tools.split(',').contains('germlinecnvcaller')) {
+
+        GERMLINECNVCALLER_COHORT(ch_input, ch_fasta)
+        ch_versions = ch_versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
     }
 
     CUSTOM_DUMPSOFTWAREVERSIONS (

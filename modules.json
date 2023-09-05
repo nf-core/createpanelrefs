@@ -15,7 +15,32 @@
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
+                    "gatk4/collectreadcounts": {
+                        "branch": "master",
+                        "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/preprocessintervals": {
+                        "branch": "master",
+                        "git_sha": "1226419498a14d17f98d12d6488d333b0dbd0418",
+                        "installed_by": ["modules"]
+                    },
                     "multiqc": {
+                        "branch": "master",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "installed_by": ["modules"]
+                    },
+                    "picard/createsequencedictionary": {
+                        "branch": "master",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/faidx": {
+                        "branch": "master",
+                        "git_sha": "fd742419940e01ba1c5ecb172c3e32ec840662fe",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/index": {
                         "branch": "master",
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]

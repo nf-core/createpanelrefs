@@ -61,8 +61,8 @@
                     "type": "string",
                     "fa_icon": "fas fa-toolbox",
                     "description": "Tools to use for building Panel of Normals or models.",
-                    "help_text": "Multiple tools separated with commas.\n\nTools available: CNVKIT.",
-                    "pattern": "^((cnvkit)?,?)*(?<!,)$"
+                    "help_text": "Multiple tools separated with commas.\n\nTools available: CNVKIT,germlinecnvcaller",
+                    "pattern": "^((cnvkit|germlinecnvcaller)?,?)*(?<!,)$"
                 }
             },
             "fa_icon": "fas fa-user-cog"
