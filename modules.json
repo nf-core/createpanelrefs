@@ -25,6 +25,11 @@
                         "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
                         "installed_by": ["modules"]
                     },
+                    "gatk4/filterintervals": {
+                        "branch": "master",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "installed_by": ["modules"]
+                    },
                     "gatk4/preprocessintervals": {
                         "branch": "master",
                         "git_sha": "1226419498a14d17f98d12d6488d333b0dbd0418",
