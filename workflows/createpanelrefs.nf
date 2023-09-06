@@ -43,7 +43,8 @@ ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
 }
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_fasta = Channel.fromPath(params.fasta).map { it -> [[id:it.baseName], it] }.collect()
+ch_fasta         = Channel.fromPath(params.fasta).map { it -> [[id:it.baseName], it] }.collect()
+ch_ploidy_priors = params.ploidy_priors ? Channel.fromPath(params.ploidy_priors).collect() : Channel.empty()
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,6 +67,8 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 
+include { GERMLINECNVCALLER_COHORT    } from '../subworkflows/local/germlinecnvcaller_cohort'
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT NF-CORE MODULES/SUBWORKFLOWS
@@ -80,11 +83,6 @@ include { CNVKIT_BATCH                } from '../modules/nf-core/cnvkit/batch/ma
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
-//
-// SUBWORKFLOW imports
-//
-
-include { GERMLINECNVCALLER_COHORT    } from '../subworkflows/local/germlinecnvcaller_cohort'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -114,7 +112,7 @@ workflow CREATEPANELREFS {
 
     if (params.tools && params.tools.split(',').contains('germlinecnvcaller')) {
 
-        GERMLINECNVCALLER_COHORT(ch_input, ch_fasta)
+        GERMLINECNVCALLER_COHORT(ch_input, ch_fasta, ch_ploidy_priors)
         ch_versions = ch_versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
     }
 

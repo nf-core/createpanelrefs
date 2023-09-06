@@ -1,15 +1,19 @@
-include { GATK4_ANNOTATEINTERVALS         } from '../../modules/nf-core/gatk4/annotateintervals/main'
-include { GATK4_COLLECTREADCOUNTS         } from '../../modules/nf-core/gatk4/collectreadcounts/main'
-include { GATK4_FILTERINTERVALS           } from '../../modules/nf-core/gatk4/filterintervals/main'
-include { GATK4_PREPROCESSINTERVALS       } from '../../modules/nf-core/gatk4/preprocessintervals/main'
-include { PICARD_CREATESEQUENCEDICTIONARY } from '../../modules/nf-core/picard/createsequencedictionary/main'
-include { SAMTOOLS_FAIDX                  } from '../../modules/nf-core/samtools/faidx/main'
-include { SAMTOOLS_INDEX                  } from '../../modules/nf-core/samtools/index/main'
+include { GATK4_ANNOTATEINTERVALS             } from '../../modules/nf-core/gatk4/annotateintervals/main'
+include { GATK4_COLLECTREADCOUNTS             } from '../../modules/nf-core/gatk4/collectreadcounts/main'
+include { GATK4_DETERMINEGERMLINECONTIGPLOIDY } from '../../modules/nf-core/gatk4/determinegermlinecontigploidy/main'
+include { GATK4_FILTERINTERVALS               } from '../../modules/nf-core/gatk4/filterintervals/main'
+include { GATK4_GERMLINECNVCALLER             } from '../../modules/nf-core/gatk4/germlinecnvcaller/main'
+include { GATK4_POSTPROCESSGERMLINECNVCALLS   } from '../../modules/nf-core/gatk4/postprocessgermlinecnvcalls/main'
+include { GATK4_PREPROCESSINTERVALS           } from '../../modules/nf-core/gatk4/preprocessintervals/main'
+include { PICARD_CREATESEQUENCEDICTIONARY     } from '../../modules/nf-core/picard/createsequencedictionary/main'
+include { SAMTOOLS_FAIDX                      } from '../../modules/nf-core/samtools/faidx/main'
+include { SAMTOOLS_INDEX                      } from '../../modules/nf-core/samtools/index/main'
 
 workflow GERMLINECNVCALLER_COHORT {
     take:
-        ch_bam    // channel: [mandatory] [ val(meta), [path(bam)] ]
-        ch_fasta  // channel: [mandatory] [ val(meta), [path(fasta)] ]
+        ch_bam           // channel: [mandatory] [ val(meta), [path(bam)] ]
+        ch_fasta         // channel: [mandatory] [ val(meta), [path(fasta)] ]
+        ch_ploidy_priors // channel: [mandatory] [ path(tsv) ]
 
     main:
         ch_versions = Channel.empty()
@@ -34,8 +38,8 @@ workflow GERMLINECNVCALLER_COHORT {
                                  ch_fai,
                                  ch_dict)
                                 .tsv
-                                .collect{it[1]}
-                                .map {tsvs -> [[id:'cohort'],tsvs]}
+                                .collect { it[1] }
+                                .map {tsv -> [[id:'cohort'],tsv]}
                                 .set { ch_readcounts_out }
 
         GATK4_ANNOTATEINTERVALS (GATK4_PREPROCESSINTERVALS.out.interval_list,
@@ -48,7 +52,24 @@ workflow GERMLINECNVCALLER_COHORT {
                                ch_readcounts_out,
                                GATK4_ANNOTATEINTERVALS.out.annotated_intervals)
 
+        ch_readcounts_out
+            .combine(GATK4_FILTERINTERVALS.out.interval_list)
+            .map{ meta, counts, meta2, il -> [meta,  counts, il, []] }
+            .set {ch_contigploidy_in}
+
+        GATK4_DETERMINEGERMLINECONTIGPLOIDY (ch_contigploidy_in,
+                                             [[:],[]],
+                                             ch_ploidy_priors)
+
+
+        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
+        ch_versions = ch_versions.mix(PICARD_CREATESEQUENCEDICTIONARY.out.versions)
+        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
         ch_versions = ch_versions.mix(GATK4_PREPROCESSINTERVALS.out.versions)
+        ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_ANNOTATEINTERVALS.out.versions)
+        ch_versions = ch_versions.mix(GATK4_FILTERINTERVALS.out.versions)
+        ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
 
     emit:
         versions = ch_versions

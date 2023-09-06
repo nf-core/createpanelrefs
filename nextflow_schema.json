@@ -103,6 +103,14 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
+                },
+                "ploidy_priors": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "description": "Path to a file containing ploidy priors table.",
+                    "fa_icon": "fas fa-file"
                 }
             }
         },
