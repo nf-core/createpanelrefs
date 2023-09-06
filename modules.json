@@ -7,7 +7,7 @@
                 "nf-core": {
                     "cnvkit/batch": {
                         "branch": "master",
-                        "git_sha": "603ecbd9f45300c9788f197d2a15a005685b4220",
+                        "git_sha": "016397249f05f5af7b97e3ea8d64458a07df2928",
                         "installed_by": ["modules"]
                     },
                     "custom/dumpsoftwareversions": {
