@@ -3,7 +3,7 @@ include { GATK4_COLLECTREADCOUNTS             } from '../../modules/nf-core/gatk
 include { GATK4_DETERMINEGERMLINECONTIGPLOIDY } from '../../modules/nf-core/gatk4/determinegermlinecontigploidy/main'
 include { GATK4_FILTERINTERVALS               } from '../../modules/nf-core/gatk4/filterintervals/main'
 include { GATK4_GERMLINECNVCALLER             } from '../../modules/nf-core/gatk4/germlinecnvcaller/main'
-include { GATK4_POSTPROCESSGERMLINECNVCALLS   } from '../../modules/nf-core/gatk4/postprocessgermlinecnvcalls/main'
+include { GATK4_INTERVALLISTTOOLS             } from '../../modules/nf-core/gatk4/intervallisttools/main'
 include { GATK4_PREPROCESSINTERVALS           } from '../../modules/nf-core/gatk4/preprocessintervals/main'
 include { PICARD_CREATESEQUENCEDICTIONARY     } from '../../modules/nf-core/picard/createsequencedictionary/main'
 include { SAMTOOLS_FAIDX                      } from '../../modules/nf-core/samtools/faidx/main'
@@ -52,24 +52,39 @@ workflow GERMLINECNVCALLER_COHORT {
                                ch_readcounts_out,
                                GATK4_ANNOTATEINTERVALS.out.annotated_intervals)
 
+        GATK4_INTERVALLISTTOOLS(GATK4_FILTERINTERVALS.out.interval_list)
+                                .interval_list
+                                .map {meta, it -> it}
+                                .flatten()
+                                .set { ch_intervallist_out }
+
         ch_readcounts_out
             .combine(GATK4_FILTERINTERVALS.out.interval_list)
-            .map{ meta, counts, meta2, il -> [meta,  counts, il, []] }
+            .map{ meta, counts, meta2, il -> [meta, counts, il, []] }
             .set {ch_contigploidy_in}
 
         GATK4_DETERMINEGERMLINECONTIGPLOIDY (ch_contigploidy_in,
                                              [[:],[]],
                                              ch_ploidy_priors)
 
+        ch_readcounts_out
+            .combine(ch_intervallist_out)
+            .combine(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
+            .map{ meta, counts, il, meta2, calls -> [meta + [id:il.baseName],  counts, il, calls, []] }
+            .set {ch_cnvcaller_in}
+
+        GATK4_GERMLINECNVCALLER (ch_cnvcaller_in)
 
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         ch_versions = ch_versions.mix(PICARD_CREATESEQUENCEDICTIONARY.out.versions)
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
+        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_PREPROCESSINTERVALS.out.versions)
         ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_ANNOTATEINTERVALS.out.versions)
         ch_versions = ch_versions.mix(GATK4_FILTERINTERVALS.out.versions)
+        ch_versions = ch_versions.mix(GATK4_INTERVALLISTTOOLS.out.versions)
         ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
+        ch_versions = ch_versions.mix(GATK4_GERMLINECNVCALLER.out.versions.first())
 
     emit:
         versions = ch_versions
