@@ -38,13 +38,15 @@ for (param in checkPathParamList) if (param) file(param, checkIfExists: true)
 ch_from_samplesheet = Channel.fromSamplesheet("input")
 
 ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
-    if (bam)  return [ [data_type:"bam"] + meta, bam ]
-    if (cram) return [ [data_type:"cram"] + meta, cram ]
+    if (bam)  return [ meta + [data_type:"bam"], bam ]
+    if (cram) return [ meta + [data_type:"cram" ], cram ]
 }
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_fasta         = Channel.fromPath(params.fasta).map { it -> [[id:it.baseName], it] }.collect()
-ch_ploidy_priors = params.ploidy_priors ? Channel.fromPath(params.ploidy_priors).collect() : Channel.empty()
+ch_fasta         = params.fasta         ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
+                                        : Channel.empty()
+ch_ploidy_priors = params.ploidy_priors ? Channel.fromPath(params.ploidy_priors).collect()
+                                        : Channel.empty()
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,16 +99,21 @@ workflow CREATEPANELREFS {
     ch_versions = Channel.empty()
 
     if (params.tools && params.tools.split(',').contains('cnvkit')) {
+
         ch_input
         .map{ meta, bam ->
             new_meta = meta + [id:"panel"]
             [new_meta, bam]
-        }.groupTuple().branch{
+        }
+        .groupTuple()
+        .branch{
             bam:  it[0].data_type == "bam"
-            cram: it[0].data_type == "cram"
-        }.bam.set { ch_cnvkit_input }
+        }
+        .bam
+        .map {meta, bam -> [ meta, [], bam ]}
+        .set { ch_cnvkit_input }
 
-        CNVKIT_BATCH ( ch_cnvkit_input.map{meta, bam -> [ meta, [], bam ]}, ch_fasta.map{meta, fasta -> fasta}, [], [], [], true )
+        CNVKIT_BATCH ( ch_cnvkit_input, ch_fasta, [[:],[]], [[:],[]], [[:],[]], true )
         ch_versions = ch_versions.mix(CNVKIT_BATCH.out.versions)
     }
 
