@@ -37,7 +37,9 @@ workflow GERMLINECNVCALLER_COHORT {
                                  ch_fasta,
                                  ch_fai,
                                  ch_dict)
-                                .tsv
+
+        GATK4_COLLECTREADCOUNTS.out.tsv
+                                .mix(GATK4_COLLECTREADCOUNTS.out.hdf5)
                                 .collect { it[1] }
                                 .map {tsv -> [[id:'cohort'],tsv]}
                                 .set { ch_readcounts_out }

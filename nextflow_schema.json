@@ -11,14 +11,14 @@
             "description": "Options used by the germlinecnvcaller subworkflow",
             "default": "",
             "properties": {
-                "binlength": {
+                "bin_length": {
                     "type": "number",
                     "default": 1000,
                     "description": "Length (in bp) of the bins. If zero, no binning will be performed.",
                     "fa_icon": "fas fa-sort-numeric-down",
-                    "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a binlength of 1000 for WGS analysis, and 0 for WES analysis. "
+                    "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a bin length of 1000 for WGS analysis, and 0 for WES analysis. "
                 },
-                "mappableregions": {
+                "mappable_regions": {
                     "type": "string",
                     "exists": true,
                     "description": "Path to Umap single-read mappability track in .bed or .bed.gz format. Overlapping intervals must be merged.",
@@ -56,7 +56,7 @@
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK/Picards's IntervalListTools."
                 },
-                "segmentalduplications": {
+                "segmental_duplications": {
                     "type": "string",
                     "exists": true,
                     "description": "Path to segmental-duplication track in .bed or .bed.gz format. Overlapping intervals must be merged.",
