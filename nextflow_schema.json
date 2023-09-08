@@ -164,6 +164,24 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
+                },
+                "dict": {
+                    "type": "string",
+                    "description": "Path to sequence dictionary file",
+                    "pattern": "^\\\\S+\\\\.dict$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "exists": true,
+                    "mimetype": "text/plain"
+                },
+                "fai": {
+                    "type": "string",
+                    "description": "Path to fasta index file",
+                    "pattern": "^\\\\S+\\\\.fn?a(sta)?\\\\.fai$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "exists": true,
+                    "mimetype": "text/plain"
                 }
             }
         },
