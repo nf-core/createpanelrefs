@@ -168,7 +168,7 @@
                 "dict": {
                     "type": "string",
                     "description": "Path to sequence dictionary file",
-                    "pattern": "^\\\\S+\\\\.dict$",
+                    "pattern": "^\\S+\\.dict$",
                     "format": "file-path",
                     "fa_icon": "fas fa-file",
                     "exists": true,
@@ -177,7 +177,7 @@
                 "fai": {
                     "type": "string",
                     "description": "Path to fasta index file",
-                    "pattern": "^\\\\S+\\\\.fn?a(sta)?\\\\.fai$",
+                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
                     "format": "file-path",
                     "fa_icon": "fas fa-file",
                     "exists": true,

@@ -43,6 +43,10 @@ ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
 }
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
+ch_dict          = params.dict          ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
+                                        : Channel.empty()
+ch_fai           = params.fai           ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
+                                        : Channel.empty()
 ch_fasta         = params.fasta         ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
                                         : Channel.empty()
 ch_ploidy_priors = params.ploidy_priors ? Channel.fromPath(params.ploidy_priors).collect()
@@ -119,7 +123,12 @@ workflow CREATEPANELREFS {
 
     if (params.tools && params.tools.split(',').contains('germlinecnvcaller')) {
 
-        GERMLINECNVCALLER_COHORT(ch_input, ch_fasta, ch_ploidy_priors)
+        GERMLINECNVCALLER_COHORT(ch_dict,
+                                 ch_fai,
+                                 ch_fasta,
+                                 ch_input,
+                                 ch_ploidy_priors)
+
         ch_versions = ch_versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
     }
 
