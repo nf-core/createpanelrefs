@@ -5,6 +5,67 @@
     "description": "Generate Panel of Normals, models or other similar references from lots of samples",
     "type": "object",
     "definitions": {
+        "germlinecnvcaller_options": {
+            "title": "Germlinecnvcaller options",
+            "type": "object",
+            "description": "Options used by the germlinecnvcaller subworkflow",
+            "default": "",
+            "properties": {
+                "binlength": {
+                    "type": "number",
+                    "default": 1000,
+                    "description": "Length (in bp) of the bins. If zero, no binning will be performed.",
+                    "fa_icon": "fas fa-sort-numeric-down",
+                    "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a binlength of 1000 for WGS analysis, and 0 for WES analysis. "
+                },
+                "mappableregions": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to Umap single-read mappability track in .bed or .bed.gz format. Overlapping intervals must be merged.",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "help_text": "Used by GATK's AnnotateIntervals."
+                },
+                "padding": {
+                    "type": "number",
+                    "description": "Length (in bp) of the padding regions on each side of the intervals.",
+                    "default": 0,
+                    "fa_icon": "fas fa-sort-numeric-down",
+                    "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a padding of 0 for WGS analysis, and 250 for WES analysis."
+                },
+                "ploidy_priors": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "description": "Path to a file containing ploidy priors table.",
+                    "fa_icon": "fas fa-file",
+                    "help_text": "Used by GATK's DeterminGermlineContigPloidy."
+                },
+                "readcount_format": {
+                    "type": "string",
+                    "description": "Output file format for count data",
+                    "default": "HDF5",
+                    "fa_icon": "fas fa-align-left",
+                    "enum": ["HDF5", "TSV"]
+                },
+                "scatter_content": {
+                    "type": "number",
+                    "description": "When scattering with this argument, each of the resultant files will (ideally) have this amount of interval-counts.",
+                    "default": 5000,
+                    "fa_icon": "fas fa-sort-numeric-down",
+                    "help_text": "Used by GATK/Picards's IntervalListTools."
+                },
+                "segmentalduplications": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to segmental-duplication track in .bed or .bed.gz format. Overlapping intervals must be merged.",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "help_text": "Used by GATK's AnnotateIntervals."
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -103,14 +164,6 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
-                },
-                "ploidy_priors": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "description": "Path to a file containing ploidy priors table.",
-                    "fa_icon": "fas fa-file"
                 }
             }
         },
@@ -208,14 +261,12 @@
                     "type": "boolean",
                     "description": "Display help text.",
                     "fa_icon": "fas fa-question-circle",
-                    "default": false,
                     "hidden": true
                 },
                 "version": {
                     "type": "boolean",
                     "description": "Display version and exit.",
                     "fa_icon": "fas fa-question-circle",
-                    "default": false,
                     "hidden": true
                 },
                 "publish_dir_mode": {
@@ -239,7 +290,6 @@
                     "type": "boolean",
                     "description": "Send plain-text email instead of HTML.",
                     "fa_icon": "fas fa-remove-format",
-                    "default": false,
                     "hidden": true
                 },
                 "max_multiqc_email_size": {
@@ -254,7 +304,6 @@
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
                     "fa_icon": "fas fa-palette",
-                    "default": false,
                     "hidden": true
                 },
                 "hook_url": {
@@ -293,7 +342,6 @@
                     "type": "boolean",
                     "fa_icon": "far fa-eye-slash",
                     "description": "Show all params when using `--help`",
-                    "default": false,
                     "hidden": true,
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
                 },
@@ -301,7 +349,6 @@
                     "type": "boolean",
                     "fa_icon": "far fa-check-circle",
                     "description": "Validation of parameters fails when an unrecognised parameter is found.",
-                    "default": false,
                     "hidden": true,
                     "help_text": "By default, when an unrecognised parameter is found, it returns a warinig."
                 },
@@ -309,7 +356,6 @@
                     "type": "boolean",
                     "fa_icon": "far fa-check-circle",
                     "description": "Validation of parameters in lenient more.",
-                    "default": false,
                     "hidden": true,
                     "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
                 }
@@ -317,6 +363,9 @@
         }
     },
     "allOf": [
+        {
+            "$ref": "#/definitions/germlinecnvcaller_options"
+        },
         {
             "$ref": "#/definitions/input_output_options"
         },
