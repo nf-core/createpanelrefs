@@ -11,8 +11,8 @@ include { SAMTOOLS_INDEX                      } from '../../modules/nf-core/samt
 
 workflow GERMLINECNVCALLER_COHORT {
     take:
-        ch_bam           // channel: [mandatory] [ val(meta), [path(bam)] ]
-        ch_fasta         // channel: [mandatory] [ val(meta), [path(fasta)] ]
+        ch_input         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_ploidy_priors // channel: [mandatory] [ path(tsv) ]
 
     main:
@@ -20,9 +20,22 @@ workflow GERMLINECNVCALLER_COHORT {
 
         ch_fai  = SAMTOOLS_FAIDX (ch_fasta, [[:],[]]).fai
         ch_dict = PICARD_CREATESEQUENCEDICTIONARY (ch_fasta).reference_dict
-        ch_bai  = SAMTOOLS_INDEX (ch_bam)
 
-        ch_bam_bai = ch_bam.join(SAMTOOLS_INDEX.out.bai)
+        ch_input
+            .branch { meta, bam, bai ->
+                bam_with_index: bai.size() > 0
+                    return [meta, bam, bai]
+                bam_without_index: bai.size() == 0
+                    return [meta, bam]
+            }
+            .set { ch_for_mix }
+
+        SAMTOOLS_INDEX (ch_for_mix.bam_without_index)
+
+        ch_bam_bai = ch_for_mix.bam_without_index
+                        .join(SAMTOOLS_INDEX.out.bai)
+                        .mix(ch_for_mix.bam_with_index)
+                        .dump{"test $it"}
 
         GATK4_PREPROCESSINTERVALS (ch_fasta,
                                    ch_fai,

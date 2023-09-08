@@ -38,8 +38,8 @@ for (param in checkPathParamList) if (param) file(param, checkIfExists: true)
 ch_from_samplesheet = Channel.fromSamplesheet("input")
 
 ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
-    if (bam)  return [ meta + [data_type:"bam"], bam ]
-    if (cram) return [ meta + [data_type:"cram" ], cram ]
+    if (bam)  return [ meta + [data_type:"bam"], bam, bai ]
+    if (cram) return [ meta + [data_type:"cram"], cram, crai ]
 }
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
@@ -101,9 +101,9 @@ workflow CREATEPANELREFS {
     if (params.tools && params.tools.split(',').contains('cnvkit')) {
 
         ch_input
-        .map{ meta, bam ->
+        .map{ meta, align, index ->
             new_meta = meta + [id:"panel"]
-            [new_meta, bam]
+            [new_meta, align]
         }
         .groupTuple()
         .branch{
