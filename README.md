@@ -20,7 +20,8 @@
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 2. Build Panel of Normals for [`CNVKIT`](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004873)
-3. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+3. Build ploidy and cnv calling models for [`GATK's germlinecnvcaller workflow`](https://genome.cshlp.org/content/20/9/1297)
+4. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
@@ -34,14 +35,19 @@ First, prepare a samplesheet with your input data that looks as follows:
 `samplesheet.csv`:
 
 ```csv
-sample,bam
-sample1,sample1.bam
-sample2,sample2.bam
-sample3,sample3.bam
-sample4,sample4.bam
+sample,bam,bai,cram,crai
+sample1,sample1.bam,sample1.bai,,
+sample2,sample2.bam,,,
+sample3,sample3.bam,sample3.bai,,
+sample4,sample4.bam,,,
 ```
 
-Each row represents a bam file.
+Each row in the samplesheet represents an alignment file, and it is important that you provide the files in the right format for the analysis you want to run.
+
+| Tool              | Alignment format |
+| ----------------- | ---------------- |
+| cnvkit            | bam              |
+| germlinecnvcaller | bam              |
 
 Now, you can run the pipeline using:
 
@@ -49,6 +55,7 @@ Now, you can run the pipeline using:
 nextflow run nf-core/createpanelrefs \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
+   --tools <cnvkit/germlinecnvcaller> \
    --genome GATK.GRCh38 \
    --outdir <OUTDIR>
 ```
