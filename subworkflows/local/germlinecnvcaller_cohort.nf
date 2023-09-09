@@ -82,7 +82,7 @@ workflow GERMLINECNVCALLER_COHORT {
                 .set {ch_readcounts_in}
 
         //
-        // Collect read counts
+        // Collect read counts, and generate models
         //
         GATK4_COLLECTREADCOUNTS (ch_readcounts_in,
                                  ch_fasta,
