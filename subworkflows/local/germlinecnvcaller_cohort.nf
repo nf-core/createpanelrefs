@@ -14,12 +14,15 @@ workflow GERMLINECNVCALLER_COHORT {
         ch_user_dict     // channel: [mandatory] [ val(meta), path(dict) ]
         ch_user_fai      // channel: [mandatory] [ val(meta), path(fai) ]
         ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_input         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_input         // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
         ch_ploidy_priors // channel: [mandatory] [ path(tsv) ]
 
     main:
         ch_versions = Channel.empty()
 
+        //
+        //  Prepare references
+        //
         SAMTOOLS_FAIDX (ch_fasta, [[:],[]])
 
         PICARD_CREATESEQUENCEDICTIONARY (ch_fasta)
@@ -34,30 +37,53 @@ workflow GERMLINECNVCALLER_COHORT {
             .collect()
             .set { ch_fai }
 
-        ch_input
-            .branch { meta, bam, bai ->
-                bam_with_index: bai.size() > 0
-                    return [meta, bam, bai]
-                bam_without_index: bai.size() == 0
-                    return [meta, bam]
-            }
-            .set { ch_for_mix }
-
-        SAMTOOLS_INDEX (ch_for_mix.bam_without_index)
-
-        ch_bam_bai = ch_for_mix.bam_without_index
-                        .join(SAMTOOLS_INDEX.out.bai)
-                        .mix(ch_for_mix.bam_with_index)
-
         GATK4_PREPROCESSINTERVALS (ch_fasta,
                                    ch_fai,
                                    ch_dict,
                                    [[:],[]], [[:],[]])
 
-        ch_bam_bai
-            .combine(GATK4_PREPROCESSINTERVALS.out.interval_list.map{it -> it[1]})
-            .set {ch_readcounts_in}
+        GATK4_ANNOTATEINTERVALS (GATK4_PREPROCESSINTERVALS.out.interval_list,
+                                 ch_fasta,
+                                 ch_fai,
+                                 ch_dict,
+                                 [[:],[]], [[:],[]], [[:],[]], [[:],[]])
 
+        GATK4_INTERVALLISTTOOLS(GATK4_FILTERINTERVALS.out.interval_list)
+                                .interval_list
+                                .map {meta, it -> it}
+                                .flatten()
+                                .set { ch_intervallist_out }
+
+        //
+        // Filter out files that lack indices, and generate them
+        //
+        ch_input
+                .branch { meta, alignment, index ->
+                    alignment_with_index: index.size() > 0
+                        return [meta, alignment, index]
+                    alignment_without_index: index.size() == 0
+                        return [meta, alignment]
+                }
+                .set { ch_for_mix }
+
+        SAMTOOLS_INDEX (ch_for_mix.alignment_without_index)
+
+        SAMTOOLS_INDEX.out.bai
+               .mix(SAMTOOLS_INDEX.out.crai)
+               .set { ch_index }
+
+        //
+        // Collect alignment files and their indices
+        //
+        ch_for_mix.alignment_without_index
+                .join(ch_index)
+                .mix(ch_for_mix.alignment_with_index)
+                .combine(GATK4_PREPROCESSINTERVALS.out.interval_list.map{it -> it[1]})
+                .set {ch_readcounts_in}
+
+        //
+        // Collect read counts
+        //
         GATK4_COLLECTREADCOUNTS (ch_readcounts_in,
                                  ch_fasta,
                                  ch_fai,
@@ -69,36 +95,25 @@ workflow GERMLINECNVCALLER_COHORT {
                                 .map {tsv -> [[id:'cohort'],tsv]}
                                 .set { ch_readcounts_out }
 
-        GATK4_ANNOTATEINTERVALS (GATK4_PREPROCESSINTERVALS.out.interval_list,
-                                 ch_fasta,
-                                 ch_fai,
-                                 ch_dict,
-                                 [[:],[]], [[:],[]], [[:],[]], [[:],[]])
 
         GATK4_FILTERINTERVALS (GATK4_PREPROCESSINTERVALS.out.interval_list,
                                ch_readcounts_out,
                                GATK4_ANNOTATEINTERVALS.out.annotated_intervals)
 
-        GATK4_INTERVALLISTTOOLS(GATK4_FILTERINTERVALS.out.interval_list)
-                                .interval_list
-                                .map {meta, it -> it}
-                                .flatten()
-                                .set { ch_intervallist_out }
-
         ch_readcounts_out
-            .combine(GATK4_FILTERINTERVALS.out.interval_list)
-            .map{ meta, counts, meta2, il -> [meta, counts, il, []] }
-            .set {ch_contigploidy_in}
+                .combine(GATK4_FILTERINTERVALS.out.interval_list)
+                .map{ meta, counts, meta2, il -> [meta, counts, il, []] }
+                .set {ch_contigploidy_in}
 
         GATK4_DETERMINEGERMLINECONTIGPLOIDY (ch_contigploidy_in,
                                              [[:],[]],
                                              ch_ploidy_priors)
 
         ch_readcounts_out
-            .combine(ch_intervallist_out)
-            .combine(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
-            .map{ meta, counts, il, meta2, calls -> [meta + [id:il.baseName],  counts, il, calls, []] }
-            .set {ch_cnvcaller_in}
+                .combine(ch_intervallist_out)
+                .combine(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
+                .map{ meta, counts, il, meta2, calls -> [meta + [id:il.baseName],  counts, il, calls, []] }
+                .set {ch_cnvcaller_in}
 
         GATK4_GERMLINECNVCALLER (ch_cnvcaller_in)
 
