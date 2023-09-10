@@ -48,12 +48,6 @@ workflow GERMLINECNVCALLER_COHORT {
                                  ch_dict,
                                  [[:],[]], [[:],[]], [[:],[]], [[:],[]])
 
-        GATK4_INTERVALLISTTOOLS(GATK4_FILTERINTERVALS.out.interval_list)
-                                .interval_list
-                                .map {meta, it -> it}
-                                .flatten()
-                                .set { ch_intervallist_out }
-
         //
         // Filter out files that lack indices, and generate them
         //
@@ -99,6 +93,12 @@ workflow GERMLINECNVCALLER_COHORT {
         GATK4_FILTERINTERVALS (GATK4_PREPROCESSINTERVALS.out.interval_list,
                                ch_readcounts_out,
                                GATK4_ANNOTATEINTERVALS.out.annotated_intervals)
+
+        GATK4_INTERVALLISTTOOLS(GATK4_FILTERINTERVALS.out.interval_list)
+                                .interval_list
+                                .map {meta, it -> it}
+                                .flatten()
+                                .set { ch_intervallist_out }
 
         ch_readcounts_out
                 .combine(GATK4_FILTERINTERVALS.out.interval_list)
