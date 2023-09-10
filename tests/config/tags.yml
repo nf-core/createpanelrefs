@@ -13,7 +13,7 @@ cnvkit:
   - modules/nf-core/cnvkit/batch/main.nf
   - tests/cnvkit.nf.test
 
-germlinecnvcaller:
-  - conf/modules/germlinecnvcaller.config
+germlinecnvcaller_cohort:
+  - conf/modules/germlinecnvcaller_cohort.config
   - subworkflows/local/germlinecnvcaller_cohort.nf
   - tests/pipeline/germlinecnvcaller_cohort.nf.test
