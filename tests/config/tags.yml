@@ -14,3 +14,6 @@ cnvkit:
   - tests/cnvkit.nf.test
 
 germlinecnvcaller:
+  - conf/modules/germlinecnvcaller.config
+  - subworkflows/local/germlinecnvcaller_cohort.nf
+  - tests/pipeline/subworkflows/local/germlinecnvcaller_cohort.nf.snap
