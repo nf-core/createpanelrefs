@@ -44,10 +44,10 @@ sample4,sample4.bam,,,
 
 Each row in the samplesheet represents an alignment file, and it is important that you provide the files in the right format for the analysis you want to run.
 
-| Tool              | Alignment format |
-| ----------------- | ---------------- |
-| cnvkit            | bam              |
-| germlinecnvcaller | bam              |
+| Tool              | Alignment format           |
+| ----------------- | ---------------------------|
+| cnvkit            | bam                        |
+| germlinecnvcaller | bam/cram/or a mix of both  |
 
 Now, you can run the pipeline using:
 
