@@ -34,7 +34,7 @@ nextflow_workflow {
                 assert workflow.trace.failed().size() == 0
 
                 FileFilter filter = file -> file.isFile()
-                assert path("$outputDir").toFile().listFiles(filter).collect() == 94
+                assert path("$outputDir").toFile().listFiles(filter).size() == 94
 
                 def expected      = path("$baseDir/tests/test_assets/germlinecnvcaller_software_versions.yaml").yaml.collect()
                 def observed_list = []
