@@ -38,11 +38,19 @@ for (param in checkPathParamList) if (param) file(param, checkIfExists: true)
 ch_from_samplesheet = Channel.fromSamplesheet("input")
 
 ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
-    if (bam)  return [ meta + [data_type:"bam"], bam ]
-    if (cram) return [ meta + [data_type:"cram" ], cram ]
+    if (bam)  return [ meta + [data_type:"bam"], bam, bai ]
+    if (cram) return [ meta + [data_type:"cram"], cram, crai ]
 }
+
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_fasta = params.fasta ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect() : Channel.empty()
+ch_dict          = params.dict          ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
+                                        : Channel.empty()
+ch_fai           = params.fai           ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
+                                        : Channel.empty()
+ch_fasta         = params.fasta         ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
+                                        : Channel.empty()
+ch_ploidy_priors = params.ploidy_priors ? Channel.fromPath(params.ploidy_priors).collect()
+                                        : Channel.empty()
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,6 +72,8 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
+
+include { GERMLINECNVCALLER_COHORT    } from '../subworkflows/local/germlinecnvcaller_cohort'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,9 +105,9 @@ workflow CREATEPANELREFS {
     if (params.tools && params.tools.split(',').contains('cnvkit')) {
 
         ch_input
-        .map{ meta, bam ->
+        .map{ meta, align, index ->
             new_meta = meta + [id:"panel"]
-            [new_meta, bam]
+            [new_meta, align]
         }
         .groupTuple()
         .branch{
@@ -109,6 +119,17 @@ workflow CREATEPANELREFS {
 
         CNVKIT_BATCH ( ch_cnvkit_input, ch_fasta, [[:],[]], [[:],[]], [[:],[]], true )
         ch_versions = ch_versions.mix(CNVKIT_BATCH.out.versions)
+    }
+
+    if (params.tools && params.tools.split(',').contains('germlinecnvcaller')) {
+
+        GERMLINECNVCALLER_COHORT(ch_dict,
+                                 ch_fai,
+                                 ch_fasta,
+                                 ch_input,
+                                 ch_ploidy_priors)
+
+        ch_versions = ch_versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
     }
 
     CUSTOM_DUMPSOFTWAREVERSIONS (

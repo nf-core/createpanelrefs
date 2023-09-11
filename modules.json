@@ -15,7 +15,57 @@
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
+                    "gatk4/annotateintervals": {
+                        "branch": "master",
+                        "git_sha": "016397249f05f5af7b97e3ea8d64458a07df2928",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/collectreadcounts": {
+                        "branch": "master",
+                        "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/determinegermlinecontigploidy": {
+                        "branch": "master",
+                        "git_sha": "8c4542e5d421c4690cf1fa6ec729e9304763fdaf",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/filterintervals": {
+                        "branch": "master",
+                        "git_sha": "016397249f05f5af7b97e3ea8d64458a07df2928",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/germlinecnvcaller": {
+                        "branch": "master",
+                        "git_sha": "16bda00336e449b83d9b62abaa614f3880664ffb",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/intervallisttools": {
+                        "branch": "master",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/preprocessintervals": {
+                        "branch": "master",
+                        "git_sha": "1226419498a14d17f98d12d6488d333b0dbd0418",
+                        "installed_by": ["modules"]
+                    },
                     "multiqc": {
+                        "branch": "master",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "installed_by": ["modules"]
+                    },
+                    "picard/createsequencedictionary": {
+                        "branch": "master",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/faidx": {
+                        "branch": "master",
+                        "git_sha": "fd742419940e01ba1c5ecb172c3e32ec840662fe",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/index": {
                         "branch": "master",
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
