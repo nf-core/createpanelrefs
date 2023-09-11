@@ -44,7 +44,7 @@ nextflow_workflow {
                 observed.stream()
                     .forEach(observed_list::addAll)
 
-                assertContainsInAnyOrder(observed_list, expected)
+                assertContainsInAnyOrder(expected, observed_list)
 
         }
 
