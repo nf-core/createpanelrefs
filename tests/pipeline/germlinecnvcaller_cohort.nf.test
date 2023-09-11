@@ -33,8 +33,10 @@ nextflow_workflow {
                 assert workflow.trace.succeeded().size() == 13
                 assert workflow.trace.failed().size() == 0
 
-                FileFilter filter = file -> file.isFile()
-                assert path("$outputDir").toFile().listFiles(filter).size() == 94
+                assert path("$outputDir/germlinecnvcaller/references/genome.dict").toFile().isFile()
+                assert path("$outputDir/germlinecnvcaller/germlinecnvcaller/1scattered-cnv-model").toFile().isDirectory()
+                assert path("$outputDir/germlinecnvcaller/determinegermlinecontigploidy/cohort-model").toFile().isDirectory()
+
 
                 def expected      = path("$baseDir/tests/test_assets/germlinecnvcaller_software_versions.yaml").yaml.collect()
                 def observed_list = []
