@@ -129,5 +129,8 @@ workflow GERMLINECNVCALLER_COHORT {
         ch_versions = ch_versions.mix(GATK4_GERMLINECNVCALLER.out.versions.first())
 
     emit:
-        versions = ch_versions
+        cnvmodel    = GATK4_GERMLINECNVCALLER.out.cohortmodel
+        ploidymodel = GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.model
+        readcounts  = ch_readcounts_out
+        versions    = ch_versions
 }
