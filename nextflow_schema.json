@@ -66,6 +66,17 @@
                 }
             }
         },
+        "cnvkit_options": {
+            "title": "CNVkit options",
+            "type": "object",
+            "description": "Options used by the cnvkit subworkflow",
+            "default": "",
+            "properties": {
+                "cnvkit_targets": {
+                    "type": "string"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -383,6 +394,9 @@
     "allOf": [
         {
             "$ref": "#/definitions/germlinecnvcaller_options"
+        },
+        {
+            "$ref": "#/definitions/cnvkit_options"
         },
         {
             "$ref": "#/definitions/input_output_options"
