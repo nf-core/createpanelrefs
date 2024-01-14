@@ -52,7 +52,7 @@ ch_fasta          = params.fasta          ? Channel.fromPath(params.fasta).map {
 ch_ploidy_priors  = params.ploidy_priors  ? Channel.fromPath(params.ploidy_priors).collect()
                                             : Channel.empty()
 ch_cnvkit_targets = params.cnvkit_targets ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName],targets]}.collect()
-                                            : Channel.empty()
+                                            : Channel.value([[:],[]])
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
