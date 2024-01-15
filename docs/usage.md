@@ -114,7 +114,6 @@ If you are running the pipeline to generate references for the GATK's germlinecn
 
 <sup>1</sup> To learn more about this file, see [this comment](https://gatk.broadinstitute.org/hc/en-us/community/posts/360074399831/comments/13441240230299) on GATK forum.<br />
 
-
 ### cnvkit
 
 If you are running the pipeline to generate references for the CNVkit variant calling workflow, you should consider that currently the default method for this pipeline is whole-genome. In order to use the CNVkit default, i.e. hybrid capture, when the user is creating a background for targeted capture sequencing (most commonly, exomes or panels), the user should
@@ -132,8 +131,6 @@ process {
 ```
 
 2. provide the `--cnvkit_target` parameter (optional) as a .bed file for the targets
-
-
 
 ## Core Nextflow arguments
 
