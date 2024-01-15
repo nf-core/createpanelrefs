@@ -43,14 +43,16 @@ ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
 }
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_dict          = params.dict          ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
-                                        : Channel.empty()
-ch_fai           = params.fai           ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
-                                        : Channel.empty()
-ch_fasta         = params.fasta         ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
-                                        : Channel.empty()
-ch_ploidy_priors = params.ploidy_priors ? Channel.fromPath(params.ploidy_priors).collect()
-                                        : Channel.empty()
+ch_dict           = params.dict           ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
+                                            : Channel.empty()
+ch_fai            = params.fai            ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
+                                            : Channel.empty()
+ch_fasta          = params.fasta          ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
+                                            : Channel.empty()
+ch_ploidy_priors  = params.ploidy_priors  ? Channel.fromPath(params.ploidy_priors).collect()
+                                            : Channel.empty()
+ch_cnvkit_targets = params.cnvkit_targets ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName],targets]}.collect()
+                                            : Channel.value([[:],[]])
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,7 +119,7 @@ workflow CREATEPANELREFS {
         .map {meta, bam -> [ meta, [], bam ]}
         .set { ch_cnvkit_input }
 
-        CNVKIT_BATCH ( ch_cnvkit_input, ch_fasta, [[:],[]], [[:],[]], [[:],[]], true )
+        CNVKIT_BATCH ( ch_cnvkit_input, ch_fasta, [[:],[]], ch_cnvkit_targets, [[:],[]], true )
         ch_versions = ch_versions.mix(CNVKIT_BATCH.out.versions)
     }
 
