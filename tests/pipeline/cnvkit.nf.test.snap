@@ -1,9 +1,9 @@
 {
     "software_versions": {
         "content": [
-            "{CNVKIT_BATCH={cnvkit=0.9.10}, CUSTOM_DUMPSOFTWAREVERSIONS={python=3.11.0, yaml=6.0}, Workflow={nf-core/createpanelrefs=1.0dev}}"
+            "{CNVKIT_BATCH={cnvkit=0.9.10}, CUSTOM_DUMPSOFTWAREVERSIONS={python=3.11.7, yaml=5.4.1}, Workflow={nf-core/createpanelrefs=1.0dev}}"
         ],
-        "timestamp": "2023-07-08T16:51:32+0000"
+        "timestamp": "2024-01-17T10:32:05.468312"
     },
     "cnvkit": {
         "content": [
