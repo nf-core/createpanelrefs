@@ -15,11 +15,6 @@
                         "git_sha": "8ec825f465b9c17f9d83000022995b4f7de6fe93",
                         "installed_by": ["modules"]
                     },
-                    "fastqc": {
-                        "branch": "master",
-                        "git_sha": "617777a807a1770f73deb38c80004bac06807eef",
-                        "installed_by": ["modules"]
-                    },
                     "gatk4/annotateintervals": {
                         "branch": "master",
                         "git_sha": "42ae163c3c6eb23646189c30c07a889ad39c9b0e",
