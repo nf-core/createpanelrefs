@@ -7,67 +7,67 @@
                 "nf-core": {
                     "cnvkit/batch": {
                         "branch": "master",
-                        "git_sha": "016397249f05f5af7b97e3ea8d64458a07df2928",
+                        "git_sha": "a64788f5ad388f1d2ac5bd5f1f3f8fc81476148c",
                         "installed_by": ["modules"]
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "8ec825f465b9c17f9d83000022995b4f7de6fe93",
                         "installed_by": ["modules"]
                     },
                     "gatk4/annotateintervals": {
                         "branch": "master",
-                        "git_sha": "016397249f05f5af7b97e3ea8d64458a07df2928",
+                        "git_sha": "42ae163c3c6eb23646189c30c07a889ad39c9b0e",
                         "installed_by": ["modules"]
                     },
                     "gatk4/collectreadcounts": {
                         "branch": "master",
-                        "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
                         "installed_by": ["modules"]
                     },
                     "gatk4/determinegermlinecontigploidy": {
                         "branch": "master",
-                        "git_sha": "8c4542e5d421c4690cf1fa6ec729e9304763fdaf",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
                         "installed_by": ["modules"]
                     },
                     "gatk4/filterintervals": {
                         "branch": "master",
-                        "git_sha": "016397249f05f5af7b97e3ea8d64458a07df2928",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
                         "installed_by": ["modules"]
                     },
                     "gatk4/germlinecnvcaller": {
                         "branch": "master",
-                        "git_sha": "16bda00336e449b83d9b62abaa614f3880664ffb",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
                         "installed_by": ["modules"]
                     },
                     "gatk4/intervallisttools": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
                         "installed_by": ["modules"]
                     },
                     "gatk4/preprocessintervals": {
                         "branch": "master",
-                        "git_sha": "1226419498a14d17f98d12d6488d333b0dbd0418",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "8ec825f465b9c17f9d83000022995b4f7de6fe93",
                         "installed_by": ["modules"]
                     },
                     "picard/createsequencedictionary": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "20b0918591d4ba20047d7e13e5094bcceba81447",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
                         "branch": "master",
-                        "git_sha": "fd742419940e01ba1c5ecb172c3e32ec840662fe",
+                        "git_sha": "a64788f5ad388f1d2ac5bd5f1f3f8fc81476148c",
                         "installed_by": ["modules"]
                     },
                     "samtools/index": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "a64788f5ad388f1d2ac5bd5f1f3f8fc81476148c",
                         "installed_by": ["modules"]
                     }
                 }
