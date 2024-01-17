@@ -1,0 +1,18 @@
+{
+    "software_versions": {
+        "content": [
+            "{CNVKIT_BATCH={cnvkit=0.9.10}, CUSTOM_DUMPSOFTWAREVERSIONS={python=3.11.0, yaml=6.0}, Workflow={nf-core/createpanelrefs=1.0dev}}"
+        ],
+        "timestamp": "2023-07-08T16:51:32+0000"
+    },
+    "cnvkit": {
+        "content": [
+            "panel.cnn:md5,07dea67088da689ad04012552c606882",
+            "test.paired_end.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+            "test.paired_end.sorted.targetcoverage.cnn:md5,ff526714696aa49bdc1dc8d00d965266",
+            "test2.paired_end.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+            "test2.paired_end.sorted.targetcoverage.cnn:md5,6ae6b3fce7299eedca6133d911c38fe1"
+        ],
+        "timestamp": "2023-07-08T16:51:32+0000"
+    }
+}
