@@ -43,16 +43,16 @@ ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
 }
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_dict           = params.dict           ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
-                                            : Channel.empty()
-ch_fai            = params.fai            ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
-                                            : Channel.empty()
-ch_fasta          = params.fasta          ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
-                                            : Channel.empty()
-ch_ploidy_priors  = params.ploidy_priors  ? Channel.fromPath(params.ploidy_priors).collect()
-                                            : Channel.empty()
-ch_cnvkit_targets = params.cnvkit_targets ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName],targets]}.collect()
-                                            : Channel.value([[:],[]])
+ch_dict           = params.dict               ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
+                                                : Channel.empty()
+ch_fai            = params.fai                ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
+                                                : Channel.empty()
+ch_fasta          = params.fasta              ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
+                                                : Channel.empty()
+ch_ploidy_priors  = params.gcnv_ploidy_priors ? Channel.fromPath(params.gcnv_ploidy_priors).collect()
+                                                : Channel.empty()
+ch_cnvkit_targets = params.cnvkit_targets     ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName],targets]}.collect()
+                                                : Channel.value([[:],[]])
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,6 +75,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 
+include { GENS_PON                    } from '../subworkflows/local/gens_pon'
 include { GERMLINECNVCALLER_COHORT    } from '../subworkflows/local/germlinecnvcaller_cohort'
 
 /*
@@ -132,6 +133,16 @@ workflow CREATEPANELREFS {
                                  ch_ploidy_priors)
 
         ch_versions = ch_versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
+    }
+
+    if (params.tools && params.tools.split(',').contains('gens')) {
+
+        GENS_PON(ch_dict,
+                ch_fai,
+                ch_fasta,
+                ch_input)
+
+        ch_versions = ch_versions.mix(GENS_PON.out.versions)
     }
 
     CUSTOM_DUMPSOFTWAREVERSIONS (

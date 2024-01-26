@@ -111,10 +111,10 @@ If you wish to share such profile (such as upload as supplementary material for 
 
 If you are running the pipeline to generate references for the GATK's germlinecnvcalling workflow, you should ensure that you have provided all the mandatory options specified in the table below.
 
-| Mandatory                 | Optional |
-| ------------------------- | -------- |
-| fasta/genomes             | fai      |
-| ploidy_priors<sup>1</sup> | dict     |
+| Mandatory                      | Optional |
+| ------------------------------ | -------- |
+| fasta/genomes                  | fai      |
+| gcnv_ploidy_priors<sup>1</sup> | dict     |
 
 <sup>1</sup> To learn more about this file, see [this comment](https://gatk.broadinstitute.org/hc/en-us/community/posts/360074399831/comments/13441240230299) on GATK forum.<br />
 
