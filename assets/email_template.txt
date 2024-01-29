@@ -4,7 +4,7 @@
   |\\ | |__  __ /  ` /  \\ |__) |__         }  {
   | \\| |       \\__, \\__/ |  \\ |___     \\`-._,-`-,
                                         `._,._,'
-  nf-core/createpanelrefs v${version}
+  nf-core/createpanelrefs ${version}
 ----------------------------------------------------
 Run Name: $runName
 
