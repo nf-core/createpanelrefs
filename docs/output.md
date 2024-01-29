@@ -12,8 +12,8 @@ The directories listed below will be created in the results directory after the 
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- [FastQC](#fastqc) - Raw read QC
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
+- [GATK's germlinecnvcaller](#germlinecnvcaller) - Publish read counts, ploidy and cnvcalling models that can be used to call cnv's in the case mode.
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
 ### FastQC
@@ -38,6 +38,26 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 :::note
 The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They may contain adapter sequence and potentially regions with low quality.
 :::
+
+### GATK germlinecnvcaller
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `results/germlinecnvcaller/`
+  - `determinecontigploidy`
+    - `cohort-model`: Contig ploidy model.
+  - `germlinecnvcaller`
+    - `*_model`: CNV caller model for each scattered shard.
+  - `readcounts`
+    - `*.hdf5|.tsv`: Read count statistics for each sample.
+  - `references`
+    - `*.dict`: Sequence dictionary file. This file is not published if user supplies this file to the pipeline using the `--dict` parameter.
+    - `*.fai`: Fasta index file. This file is not published if user supplies this file to the pipeline using the `--fai` parameter.
+
+</details>
+
+[GATK](https://github.com/broadinstitute/gatk) is a toolkit which offers a wide variety of tools with a primary focus on variant discovery and genotyping. In this pipeline we have implemented GATK's germlinecnvcalling workflow for analysing a cohort of samples. The output files generated from this analysis can be used for analysing samples in case mode. For more information about the workflow and output files, see GATK's documentation [here.](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants)
 
 ### MultiQC
 

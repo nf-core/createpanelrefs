@@ -9,6 +9,10 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 
 ### `Added`
 
+- [#5](https://github.com/nf-core/createpanelrefs/pull/5) - `CNVKIT` can be used to create a PON
+- [#5](https://github.com/nf-core/createpanelrefs/pull/5) - Usage of nf-validation
+- [#5](https://github.com/nf-core/createpanelrefs/pull/5) - Usage of nf-test
+
 ### `Fixed`
 
 ### `Dependencies`
