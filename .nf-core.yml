@@ -8,6 +8,6 @@ lint:
     - .gitignore
   nextflow_config:
     - config_defaults:
-      - params.bin_length
-      - params.padding
-      - params.scatter_content
+        - params.bin_length
+        - params.padding
+        - params.scatter_content
