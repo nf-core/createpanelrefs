@@ -1,9 +1,8 @@
-*.pyc
-.DS_Store
 .nextflow*
-.nf-test/
+work/
 data/
 results/
-testing*
+.DS_Store
 testing/
-work/
+testing*
+*.pyc
