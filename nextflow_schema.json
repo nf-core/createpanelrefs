@@ -11,6 +11,13 @@
             "description": "Options used by the germlinecnvcaller subworkflow",
             "default": "",
             "properties": {
+                "analysis_type": {
+                    "type": "string",
+                    "default": "wgs",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs' or 'wes'.",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["wgs", "wes"]
+                },
                 "bin_length": {
                     "type": "number",
                     "default": 1000,
@@ -63,6 +70,24 @@
                     "format": "file-path",
                     "fa_icon": "fas fa-file",
                     "help_text": "Used by GATK's AnnotateIntervals."
+                },
+                "target_bed": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "Path to directory for target bed file.",
+                    "help_text": "If the regions you would like to analyse are in bed format, use this option. If you have an interval_list file, use `target_interval_list` parameter instead."
+                },
+                "target_interval_list": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\._interval_list$",
+                    "description": "Path to directory for target interval_list file.",
+                    "help_text": "If the regions you would like to analyse are in interval_list format, use this option. If you have a bed file, use `target_bed` parameter instead."
                 }
             }
         },

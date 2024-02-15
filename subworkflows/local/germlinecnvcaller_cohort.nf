@@ -11,11 +11,13 @@ include { SAMTOOLS_INDEX                      } from '../../modules/nf-core/samt
 
 workflow GERMLINECNVCALLER_COHORT {
     take:
-        ch_user_dict     // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_user_fai      // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_input         // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
-        ch_ploidy_priors // channel: [mandatory] [ path(tsv) ]
+        ch_user_dict            // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_user_fai             // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_fasta                // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_input                // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
+        ch_ploidy_priors        // channel: [mandatory] [ path(tsv) ]
+        ch_target_bed           // channel: [mandatory] [ val(meta), path(bed) ]
+        ch_target_interval_list // channel: [mandatory] [ val(meta), path(intervals) ]
 
     main:
         ch_versions = Channel.empty()
