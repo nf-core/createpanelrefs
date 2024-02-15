@@ -1,4 +1,5 @@
 include { GATK4_ANNOTATEINTERVALS             } from '../../modules/nf-core/gatk4/annotateintervals/main'
+include { GATK4_BEDTOINTERVALLIST             } from '../../modules/nf-core/gatk4/bedtointervallist/main'
 include { GATK4_COLLECTREADCOUNTS             } from '../../modules/nf-core/gatk4/collectreadcounts/main'
 include { GATK4_DETERMINEGERMLINECONTIGPLOIDY } from '../../modules/nf-core/gatk4/determinegermlinecontigploidy/main'
 include { GATK4_FILTERINTERVALS               } from '../../modules/nf-core/gatk4/filterintervals/main'
@@ -11,13 +12,13 @@ include { SAMTOOLS_INDEX                      } from '../../modules/nf-core/samt
 
 workflow GERMLINECNVCALLER_COHORT {
     take:
-        ch_user_dict            // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_user_fai             // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_fasta                // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_input                // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
-        ch_ploidy_priors        // channel: [mandatory] [ path(tsv) ]
-        ch_target_bed           // channel: [mandatory] [ val(meta), path(bed) ]
-        ch_target_interval_list // channel: [mandatory] [ val(meta), path(intervals) ]
+        ch_user_dict                 // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_user_fai                  // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_fasta                     // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_input                     // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
+        ch_ploidy_priors             // channel: [mandatory] [ path(tsv) ]
+        ch_target_bed                // channel: [mandatory] [ val(meta), path(bed) ]
+        ch_user_target_interval_list // channel: [mandatory] [ val(meta), path(intervals) ]
 
     main:
         ch_versions = Channel.empty()
@@ -39,10 +40,27 @@ workflow GERMLINECNVCALLER_COHORT {
             .collect()
             .set { ch_fai }
 
-        GATK4_PREPROCESSINTERVALS (ch_fasta,
-                                   ch_fai,
-                                   ch_dict,
-                                   [[:],[]], [[:],[]])
+        GATK4_BEDTOINTERVALLIST (ch_target_bed, ch_dict) //Runs for wes analysis, when target_bed file is provided instead of target_interval_list
+
+        ch_user_target_interval_list
+            .combine(GATK4_BEDTOINTERVALLIST.out.interval_list)
+            .branch { it  ->                   // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
+                intervallistfrompath: it[2].equals(null)
+                    return [it[0], it[1]]
+                intervallistfrombed: !(it[2].equals(null))
+                    return [it[2], it[3]]
+            }
+            .set { ch_for_mix }
+
+        ch_for_mix.intervallistfrompath.mix(ch_for_mix.intervallistfrombed)
+            .collect()
+            .set { ch_target_interval_list }
+
+        GATK4_PREPROCESSINTERVALS ( ch_fasta,
+                                    ch_fai,
+                                    ch_dict,
+                                    ch_target_interval_list,
+                                    [[:],[]])
 
         GATK4_ANNOTATEINTERVALS (GATK4_PREPROCESSINTERVALS.out.interval_list,
                                  ch_fasta,
