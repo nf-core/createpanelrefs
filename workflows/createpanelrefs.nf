@@ -43,20 +43,24 @@ ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
 }
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_cnvkit_targets       = params.cnvkit_targets ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName],targets]}.collect()
-                                                : Channel.value([[:],[]])
-ch_dict                 = params.dict           ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
-                                                : Channel.empty()
-ch_fai                  = params.fai            ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
-                                                : Channel.empty()
-ch_fasta                = params.fasta          ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
-                                                : Channel.empty()
-ch_ploidy_priors        = params.ploidy_priors  ? Channel.fromPath(params.ploidy_priors).collect()
-                                                : Channel.empty()
-ch_target_bed           = params.target_bed     ? Channel.fromPath(params.target_bed).map { targets -> [[id:targets.baseName],targets]}.collect()
-                                                : Channel.value([[:],[]])
-ch_target_interval_list = params.target_interval_list ? Channel.fromPath(params.target_interval_list).map { targets -> [[id:targets.baseName],targets]}.collect()
-                                                : Channel.value([[:],[]])
+ch_cnvkit_targets        = params.cnvkit_targets        ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName],targets]}.collect()
+                                                    : Channel.value([[:],[]])
+ch_dict                  = params.dict                  ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
+                                                    : Channel.empty()
+ch_exclude_bed           = params.exclude_bed           ? Channel.fromPath(params.exclude_bed).map { exclude -> [[id:exclude.baseName],exclude]}.collect()
+                                                    : Channel.value([[:],[]])
+ch_exclude_interval_list = params.exclude_interval_list ? Channel.fromPath(params.exclude_interval_list).map { exclude -> [[id:exclude.baseName],exclude]}.collect()
+                                                    : Channel.value([[:],[]])
+ch_fai                   = params.fai                   ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
+                                                    : Channel.empty()
+ch_fasta                 = params.fasta                 ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
+                                                    : Channel.empty()
+ch_ploidy_priors         = params.ploidy_priors         ? Channel.fromPath(params.ploidy_priors).collect()
+                                                    : Channel.empty()
+ch_target_bed            = params.target_bed            ? Channel.fromPath(params.target_bed).map { targets -> [[id:targets.baseName],targets]}.collect()
+                                                    : Channel.value([[:],[]])
+ch_target_interval_list  = params.target_interval_list  ? Channel.fromPath(params.target_interval_list).map { targets -> [[id:targets.baseName],targets]}.collect()
+                                                    : Channel.value([[:],[]])
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -135,7 +139,9 @@ workflow CREATEPANELREFS {
                                  ch_input,
                                  ch_ploidy_priors,
                                  ch_target_bed,
-                                 ch_target_interval_list)
+                                 ch_target_interval_list,
+                                 ch_exclude_bed,
+                                 ch_exclude_interval_list)
 
         ch_versions = ch_versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
     }

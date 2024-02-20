@@ -16,11 +16,13 @@ nextflow.enable.dsl = 2
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-params.fasta                = WorkflowMain.getGenomeAttribute(params, 'fasta')
-params.fai                  = WorkflowMain.getGenomeAttribute(params, 'fai')
-params.dict                 = WorkflowMain.getGenomeAttribute(params, 'dict')
-params.target_bed           = WorkflowMain.getGenomeAttribute(params, 'target_bed')
-params.target_interval_list = WorkflowMain.getGenomeAttribute(params, 'target_interval_list')
+params.fasta                 = WorkflowMain.getGenomeAttribute(params, 'fasta')
+params.fai                   = WorkflowMain.getGenomeAttribute(params, 'fai')
+params.dict                  = WorkflowMain.getGenomeAttribute(params, 'dict')
+params.target_bed            = WorkflowMain.getGenomeAttribute(params, 'target_bed')
+params.target_interval_list  = WorkflowMain.getGenomeAttribute(params, 'target_interval_list')
+params.exclude_bed           = WorkflowMain.getGenomeAttribute(params, 'exclude_bed')
+params.exclude_interval_list = WorkflowMain.getGenomeAttribute(params, 'exclude_interval_list')
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     VALIDATE & PRINT PARAMETER SUMMARY

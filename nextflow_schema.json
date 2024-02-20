@@ -25,6 +25,24 @@
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a bin length of 1000 for WGS analysis, and 0 for WES analysis. "
                 },
+                "exclude_bed": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed$",
+                    "description": "Path to directory for a bed file containing regions to be exluded from the analysis.",
+                    "help_text": "If the regions you would like to exclude are in bed format, use this option. If you have an interval_list file, use `exclude_interval_list` parameter instead."
+                },
+                "exclude_interval_list": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\._interval_list$",
+                    "description": "Path to directory for exclude_interval_list file.",
+                    "help_text": "If the regions you would like to exclude are in interval_list format, use this option. If you have a bed file, use `exclude` parameter instead."
+                },
                 "mappable_regions": {
                     "type": "string",
                     "exists": true,
@@ -76,7 +94,7 @@
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "pattern": "^\\S+\\.bed$",
                     "description": "Path to directory for target bed file.",
                     "help_text": "If the regions you would like to analyse are in bed format, use this option. If you have an interval_list file, use `target_interval_list` parameter instead."
                 },
