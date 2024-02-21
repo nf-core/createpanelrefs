@@ -4,7 +4,7 @@ nextflow_workflow {
     script "subworkflows/local/germlinecnvcaller_cohort.nf"
     workflow "GERMLINECNVCALLER_COHORT"
     tag "germlinecnvcaller"
-    config "./germlinecnvcaller_cohort.config"
+    config "tests/pipeline/germlinecnvcaller_cohort.config"
 
     test("Run germlinecnvcaller test") {
 
