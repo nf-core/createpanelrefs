@@ -1,6 +1,6 @@
 nextflow_pipeline {
 
-    name "Test pipeline"
+    name "Test CNVKIT_BATCH"
     script "main.nf"
     tag "cnvkit"
 

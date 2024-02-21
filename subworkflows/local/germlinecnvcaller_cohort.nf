@@ -29,9 +29,9 @@ workflow GERMLINECNVCALLER_COHORT {
         //
         //  Prepare references
         //
-        SAMTOOLS_FAIDX (ch_fasta, [[:],[]])
+        SAMTOOLS_FAIDX ( ch_fasta, [[:],[]] )
 
-        PICARD_CREATESEQUENCEDICTIONARY (ch_fasta)
+        PICARD_CREATESEQUENCEDICTIONARY ( ch_fasta )
 
         ch_user_dict
             .mix(PICARD_CREATESEQUENCEDICTIONARY.out.reference_dict)
@@ -80,11 +80,11 @@ workflow GERMLINECNVCALLER_COHORT {
                                     ch_target_interval_list,
                                     ch_exclude_interval_list)
 
-        GATK4_ANNOTATEINTERVALS (GATK4_PREPROCESSINTERVALS.out.interval_list,
-                                 ch_fasta,
-                                 ch_fai,
-                                 ch_dict,
-                                 [[:],[]], [[:],[]], [[:],[]], [[:],[]])
+        GATK4_ANNOTATEINTERVALS (   GATK4_PREPROCESSINTERVALS.out.interval_list,
+                                    ch_fasta,
+                                    ch_fai,
+                                    ch_dict,
+                                    [[:],[]], [[:],[]], [[:],[]], [[:],[]])
 
         //
         // Filter out files that lack indices, and generate them
@@ -98,11 +98,11 @@ workflow GERMLINECNVCALLER_COHORT {
                 }
                 .set { ch_for_mix }
 
-        SAMTOOLS_INDEX (ch_for_mix.alignment_without_index)
+        SAMTOOLS_INDEX ( ch_for_mix.alignment_without_index )
 
         SAMTOOLS_INDEX.out.bai
-               .mix(SAMTOOLS_INDEX.out.crai)
-               .set { ch_index }
+                .mix(SAMTOOLS_INDEX.out.crai)
+                .set { ch_index }
 
         //
         // Collect alignment files and their indices
@@ -116,10 +116,10 @@ workflow GERMLINECNVCALLER_COHORT {
         //
         // Collect read counts, and generate models
         //
-        GATK4_COLLECTREADCOUNTS (ch_readcounts_in,
-                                 ch_fasta,
-                                 ch_fai,
-                                 ch_dict)
+        GATK4_COLLECTREADCOUNTS (   ch_readcounts_in,
+                                    ch_fasta,
+                                    ch_fai,
+                                    ch_dict )
 
         GATK4_COLLECTREADCOUNTS.out.tsv
                                 .mix(GATK4_COLLECTREADCOUNTS.out.hdf5)
@@ -128,11 +128,11 @@ workflow GERMLINECNVCALLER_COHORT {
                                 .set { ch_readcounts_out }
 
 
-        GATK4_FILTERINTERVALS (GATK4_PREPROCESSINTERVALS.out.interval_list,
-                               ch_readcounts_out,
-                               GATK4_ANNOTATEINTERVALS.out.annotated_intervals)
+        GATK4_FILTERINTERVALS ( GATK4_PREPROCESSINTERVALS.out.interval_list,
+                                ch_readcounts_out,
+                                GATK4_ANNOTATEINTERVALS.out.annotated_intervals )
 
-        GATK4_INTERVALLISTTOOLS(GATK4_FILTERINTERVALS.out.interval_list)
+        GATK4_INTERVALLISTTOOLS ( GATK4_FILTERINTERVALS.out.interval_list )
                                 .interval_list
                                 .map {meta, it -> it}
                                 .flatten()
@@ -143,9 +143,9 @@ workflow GERMLINECNVCALLER_COHORT {
                 .map{ meta, counts, meta2, il -> [meta, counts, il, []] }
                 .set {ch_contigploidy_in}
 
-        GATK4_DETERMINEGERMLINECONTIGPLOIDY (ch_contigploidy_in,
-                                             [[:],[]],
-                                             ch_ploidy_priors)
+        GATK4_DETERMINEGERMLINECONTIGPLOIDY (   ch_contigploidy_in,
+                                                [[:],[]],
+                                                ch_ploidy_priors )
 
         ch_readcounts_out
                 .combine(ch_intervallist_out)
@@ -153,7 +153,7 @@ workflow GERMLINECNVCALLER_COHORT {
                 .map{ meta, counts, il, meta2, calls -> [meta + [id:il.baseName],  counts, il, calls, []] }
                 .set {ch_cnvcaller_in}
 
-        GATK4_GERMLINECNVCALLER (ch_cnvcaller_in)
+        GATK4_GERMLINECNVCALLER ( ch_cnvcaller_in )
 
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         ch_versions = ch_versions.mix(PICARD_CREATESEQUENCEDICTIONARY.out.versions)

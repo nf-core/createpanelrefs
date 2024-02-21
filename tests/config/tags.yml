@@ -17,3 +17,4 @@ germlinecnvcaller_cohort:
   - conf/modules/germlinecnvcaller_cohort.config
   - subworkflows/local/germlinecnvcaller_cohort.nf
   - tests/pipeline/germlinecnvcaller_cohort.nf.test
+  - tests/pipeline/germlinecnvcaller_cohort.nf.config
