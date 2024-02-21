@@ -93,11 +93,11 @@ workflow CREATEPANELREFS {
             }
             .set { ch_germlinecnvcaller_input }
 
-        GERMLINECNVCALLER_COHORT(ch_dict,
-                                 ch_fai,
-                                 ch_fasta,
-                                 ch_germlinecnvcaller_input,
-                                 ch_ploidy_priors)
+        GERMLINECNVCALLER_COHORT (  ch_dict,
+                                    ch_fai,
+                                    ch_fasta,
+                                    ch_germlinecnvcaller_input,
+                                    ch_ploidy_priors )
 
         ch_versions = ch_versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
     }
