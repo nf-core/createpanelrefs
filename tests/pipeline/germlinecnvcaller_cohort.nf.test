@@ -25,6 +25,10 @@ nextflow_workflow {
                                 [[ id:'test' ], file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam"),[]],
                                 [[ id:'test2' ], file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam"),[]])
                 input[4] = Channel.fromPath(params.ploidy_priors)
+                input[5] = Channel.value([[:],[]])
+                input[6] = Channel.value([[:],[]])
+                input[7] = Channel.value([[:],[]])
+                input[8] = Channel.value([[:],[]])
                 """
             }
         }
