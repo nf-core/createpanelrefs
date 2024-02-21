@@ -68,15 +68,11 @@ workflow CREATEPANELREFS {
     if (params.tools && params.tools.split(',').contains('cnvkit')) {
 
         ch_samplesheet
-            .map{ meta, align, index ->
+            .map{ meta, bam, bai, cram, crai ->
                 new_meta = meta + [id:"panel"]
-                [new_meta, align]
+                [new_meta, bam]
             }
             .groupTuple()
-            .branch{
-                bam:  it[0].data_type == "bam"
-            }
-            .bam
             .map {meta, bam -> [ meta, [], bam ]}
             .set { ch_cnvkit_input }
 
