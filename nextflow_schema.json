@@ -143,6 +143,7 @@
             "title": "Reference genome options",
             "type": "object",
             "fa_icon": "fas fa-dna",
+            "required": ["fasta"],
             "description": "Reference genome related files and options required for the workflow.",
             "properties": {
                 "genome": {
