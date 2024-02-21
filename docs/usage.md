@@ -111,10 +111,18 @@ If you wish to share such profile (such as upload as supplementary material for 
 
 If you are running the pipeline to generate references for the GATK's germlinecnvcalling workflow, you should ensure that you have provided all the mandatory options specified in the table below.
 
-| Mandatory                 | Optional |
-| ------------------------- | -------- |
-| fasta/genomes             | fai      |
-| ploidy_priors<sup>1</sup> | dict     |
+| Mandatory                 | Optional                          |
+| ------------------------- | --------------------------------- |
+| fasta/genomes             | fai                               |
+| ploidy_priors<sup>1</sup> | dict                              |
+|                           | target_bed/target_interval_list   |
+|                           | exclude_bed/exclude_interval_list |
+|                           | bin_length                        |
+|                           | mappable_regions                  |
+|                           | padding                           |
+|                           | readcount_format                  |
+|                           | scatter_content                   |
+|                           | segmental_duplications            |
 
 <sup>1</sup> To learn more about this file, see [this comment](https://gatk.broadinstitute.org/hc/en-us/community/posts/360074399831/comments/13441240230299) on GATK forum.<br />
 
