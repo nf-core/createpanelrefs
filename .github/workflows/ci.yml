@@ -60,7 +60,7 @@ jobs:
         # Run tests based on changes in code
         tags: ["${{ fromJson(needs.changes.outputs.tags) }}"]
         # Only run docker tests on dev branch
-        profile: ["docker"]
+        profile: ["docker", "singularity"]
         # Only test minimal version
         NXF_VER: ["23.10.0"]
         # Always run default test
