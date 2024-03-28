@@ -30,13 +30,16 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_crea
 
 //   This is an example of how to use getGenomeAttribute() to fetch parameters
 //   from igenomes.config using `--genome`
-params.fasta                 = getGenomeAttribute('fasta')
-params.fai                   = getGenomeAttribute('fai')
-params.dict                  = getGenomeAttribute('dict')
-params.target_bed            = getGenomeAttribute('target_bed')
-params.target_interval_list  = getGenomeAttribute('target_interval_list')
-params.exclude_bed           = getGenomeAttribute('exclude_bed')
-params.exclude_interval_list = getGenomeAttribute('exclude_interval_list')
+params.fasta                       = getGenomeAttribute('fasta')
+params.fai                         = getGenomeAttribute('fai')
+params.dict                        = getGenomeAttribute('dict')
+params.gcnv_exclude_bed            = getGenomeAttribute('gcnv_exclude_bed')
+params.gcnv_exclude_interval_list  = getGenomeAttribute('gcnv_exclude_interval_list')
+params.gcnv_mappable_regions       = getGenomeAttribute('gcnv_mappable_regions')
+params.gcnv_target_bed             = getGenomeAttribute('gcnv_target_bed')
+params.gcnv_target_interval_list   = getGenomeAttribute('gcnv_target_interval_list')
+params.gcnv_ploidy_priors          = getGenomeAttribute('gcnv_ploidy_priors')
+params.gcnv_segmental_duplications = getGenomeAttribute('gcnv_segmental_duplications')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
