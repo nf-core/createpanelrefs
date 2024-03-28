@@ -16,7 +16,6 @@ nextflow.enable.dsl = 2
     IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
 include { CREATEPANELREFS         } from './workflows/createpanelrefs'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
@@ -31,9 +30,13 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_crea
 
 //   This is an example of how to use getGenomeAttribute() to fetch parameters
 //   from igenomes.config using `--genome`
-params.fasta = getGenomeAttribute('fasta')
-params.fai   = getGenomeAttribute('fai')
-params.dict  = getGenomeAttribute('dict')
+params.fasta                 = getGenomeAttribute('fasta')
+params.fai                   = getGenomeAttribute('fai')
+params.dict                  = getGenomeAttribute('dict')
+params.target_bed            = getGenomeAttribute('target_bed')
+params.target_interval_list  = getGenomeAttribute('target_interval_list')
+params.exclude_bed           = getGenomeAttribute('exclude_bed')
+params.exclude_interval_list = getGenomeAttribute('exclude_interval_list')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

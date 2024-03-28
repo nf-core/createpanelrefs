@@ -15,6 +15,11 @@
                         "git_sha": "42ae163c3c6eb23646189c30c07a889ad39c9b0e",
                         "installed_by": ["modules"]
                     },
+                    "gatk4/bedtointervallist": {
+                        "branch": "master",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "installed_by": ["modules"]
+                    },
                     "gatk4/collectreadcounts": {
                         "branch": "master",
                         "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
