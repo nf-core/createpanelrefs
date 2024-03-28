@@ -1,20 +1,17 @@
 nextflow_workflow {
 
-    name "Test Workflow GERMLINECNVCALLER_COHORT"
-    script "subworkflows/local/germlinecnvcaller_cohort.nf"
-    workflow "GERMLINECNVCALLER_COHORT"
-    tag "germlinecnvcaller"
-    config "tests/pipeline/germlinecnvcaller_cohort.config"
+    name "Test Workflow GENS_PON"
+    script "subworkflows/local/gens_pon.nf"
+    workflow "GENS_PON"
+    tag "gens"
 
-    test("Run germlinecnvcaller test") {
+    test("Run gens test") {
 
         when {
             params {
                 outdir          = "$outputDir"
-                tools           = 'germlinecnvcaller'
-                gcnv_scatter_content = 2
+                tools           = 'gens'
                 fasta           = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta"
-                ploidy_priors   = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/gatk/contig_ploidy_priors_table.tsv"
             }
             workflow {
                 """
@@ -24,26 +21,20 @@ nextflow_workflow {
                 input[3] = Channel.of(
                                 [[ id:'test' ], file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam"),[]],
                                 [[ id:'test2' ], file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam"),[]])
-                input[4] = Channel.fromPath(params.ploidy_priors)
-                input[5] = Channel.value([[:],[]])
-                input[6] = Channel.value([[:],[]])
-                input[7] = Channel.value([[:],[]])
-                input[8] = Channel.value([[:],[]])
                 """
             }
         }
 
         then {
                 assert workflow.success
-                assert workflow.trace.succeeded().size() == 13
+                assert workflow.trace.succeeded().size() == 8
                 assert workflow.trace.failed().size() == 0
 
-                assert path("$outputDir/germlinecnvcaller/references/genome.dict").toFile().isFile()
-                assert path("$outputDir/germlinecnvcaller/germlinecnvcaller/1scattered-cnv-model").toFile().isDirectory()
-                assert path("$outputDir/germlinecnvcaller/determinegermlinecontigploidy/cohort-model").toFile().isDirectory()
+                assert path("$outputDir/gens_pon/references/genome.dict").toFile().isFile()
+                assert path("$outputDir/gens_pon/references/genome.fasta.fai").toFile().isFile()
+                assert path("$outputDir/gens_pon/createreadcountpanelofnormals/gens_pon.hdf5").toFile().isFile()
 
-
-                def expected      = path("$baseDir/tests/test_assets/germlinecnvcaller_software_versions.yaml").yaml.collect()
+                def expected      = path("$baseDir/tests/test_assets/gens_software_versions.yaml").yaml.collect()
                 def observed_list = []
                 def observed      = workflow.out.versions.collect {f -> path(f).yaml.entrySet()}
                 observed.stream()

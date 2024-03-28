@@ -15,6 +15,7 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_crea
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+include { GENS_PON                    } from '../subworkflows/local/gens_pon'
 include { GERMLINECNVCALLER_COHORT    } from '../subworkflows/local/germlinecnvcaller_cohort'
 
 /*
@@ -57,6 +58,7 @@ ch_multiqc_config          = Channel.fromPath("$projectDir/assets/multiqc_config
 ch_multiqc_custom_config   = params.multiqc_config ? Channel.fromPath( params.multiqc_config, checkIfExists: true ) : Channel.empty()
 ch_multiqc_logo            = params.multiqc_logo   ? Channel.fromPath( params.multiqc_logo, checkIfExists: true ) : Channel.empty()
 ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -108,6 +110,16 @@ workflow CREATEPANELREFS {
                                     ch_exclude_interval_list )
 
         ch_versions = ch_versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
+    }
+
+    if (params.tools && params.tools.split(',').contains('gens')) {
+
+        GENS_PON(ch_dict,
+                ch_fai,
+                ch_fasta,
+                ch_input)
+
+        ch_versions = ch_versions.mix(GENS_PON.out.versions)
     }
 
     //
