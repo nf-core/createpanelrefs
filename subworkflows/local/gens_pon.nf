@@ -68,6 +68,10 @@ workflow GENS_PON {
 
         GATK4_COLLECTREADCOUNTS.out.tsv
             .mix(GATK4_COLLECTREADCOUNTS.out.hdf5)
+            .collect { it[1] }
+            .map { it ->
+                    return [[id:"gens_pon"], it]
+                }
             .set { ch_readcounts_out }
 
         GATK4_CREATEREADCOUNTPANELOFNORMALS ( ch_readcounts_out )
