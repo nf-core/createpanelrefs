@@ -60,7 +60,7 @@ jobs:
         # Run tests based on changes in code
         tags: ["${{ fromJson(needs.changes.outputs.tags) }}"]
         # Only run docker tests on dev branch
-        profile: ["docker", "singularity"]
+        profile: ["docker"]
         # Only test minimal version
         NXF_VER: ["23.10.0"]
         # Always run default test
@@ -88,11 +88,8 @@ jobs:
         with:
           version: "${{ matrix.NXF_VER }}"
 
-      - name: Set up Singularity
-        if: matrix.profile == 'singularity'
-        uses: eWaterCycle/setup-singularity@v5
-        with:
-          singularity-version: 3.7.1
+      - name: Disk space cleanup
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
       - name: Run nf-test
         uses: Wandalen/wretry.action@v1.0.11
