@@ -129,10 +129,12 @@ process {
 
 If you are running the pipeline to generate references for the gens workflow, you should ensure that you have provided all the mandatory options specified in the table below.
 
-| Mandatory     | Optional |
-| ------------- | -------- |
-| fasta/genomes | fai      |
-|               | dict     |
+| Mandatory     | Optional             |
+| ------------- | -------------------- |
+| fasta/genomes | fai                  |
+|               | dict                 |
+|               | gens_bin_length      |
+|               | gens_readcount_format|
 
 ### germlinecnvcaller
 
