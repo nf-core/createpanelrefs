@@ -4,7 +4,7 @@ nextflow_workflow {
     script "subworkflows/local/gens_pon.nf"
     workflow "GENS_PON"
     tag "gens"
-    config "tests/pipeline/gens_pon.config"
+    config "./gens_pon.config"
 
     test("Run gens test") {
 
@@ -15,14 +15,12 @@ nextflow_workflow {
                 gens_bin_length       = 100
                 tools                 = 'gens'
                 fasta                 = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta"
-                fai                   = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta.fai"
-                dict                  = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.dict"
 
             }
             workflow {
                 """
-                input[0] = Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
-                input[1] = Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
+                input[0] = Channel.empty()
+                input[1] = Channel.empty()
                 input[2] = Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
                 input[3] = Channel.of(
                                 [[ id:'test' ], file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam"),[]],
