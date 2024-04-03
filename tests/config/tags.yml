@@ -10,7 +10,16 @@ default:
 
 cnvkit:
   - conf/modules/cnvkit.config
-  - modules/nf-core/cnvkit/batch/main.nf
+  - modules/nf-core/cnvkit/batch/**
+  - tests/cnvkit.nf.test
+
+mutect2:
+  - conf/modules/mutect2.config
+  - modules/nf-core/gatk4/mutect2/**
+  - modules/nf-core/gatk4/genomicsdbimport/**
+  - modules/nf-core/gatk4/createsomaticpanelofnormals/**
+  - modules/nf-core/cnvkit/batch/**
+  - subworkflows/nf-core/bam_create_som_pon_gatk/**
   - tests/cnvkit.nf.test
 
 germlinecnvcaller_cohort:
