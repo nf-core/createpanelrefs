@@ -107,25 +107,6 @@ If you wish to share such profile (such as upload as supplementary material for 
 
 ## Workflow specific arguments
 
-### germlinecnvcaller
-
-If you are running the pipeline to generate references for the GATK's germlinecnvcalling workflow, you should ensure that you have provided all the mandatory options specified in the table below.
-
-| Mandatory                 | Optional                          |
-| ------------------------- | --------------------------------- |
-| fasta/genomes             | fai                               |
-| ploidy_priors<sup>1</sup> | dict                              |
-|                           | target_bed/target_interval_list   |
-|                           | exclude_bed/exclude_interval_list |
-|                           | bin_length                        |
-|                           | mappable_regions                  |
-|                           | padding                           |
-|                           | readcount_format                  |
-|                           | scatter_content                   |
-|                           | segmental_duplications            |
-
-<sup>1</sup> To learn more about this file, see [this comment](https://gatk.broadinstitute.org/hc/en-us/community/posts/360074399831/comments/13441240230299) on GATK forum.<br />
-
 ### cnvkit
 
 If you are running the pipeline to generate references for the CNVkit variant calling workflow, you should consider that currently the default method for this pipeline is whole-genome. In order to use the CNVkit default, i.e. hybrid capture, when the user is creating a background for targeted capture sequencing (most commonly, exomes or panels), the user should
@@ -143,6 +124,36 @@ process {
 ```
 
 2. provide the `--cnvkit_target` parameter (optional) as a .bed file for the targets
+
+### gens
+
+If you are running the pipeline to generate references for the gens workflow, you should ensure that you have provided all the mandatory options specified in the table below.
+
+| Mandatory     | Optional              |
+| ------------- | --------------------- |
+| fasta/genomes | fai                   |
+|               | dict                  |
+|               | gens_bin_length       |
+|               | gens_readcount_format |
+
+### germlinecnvcaller
+
+If you are running the pipeline to generate references for the GATK's germlinecnvcalling workflow, you should ensure that you have provided all the mandatory options specified in the table below.
+
+| Mandatory                      | Optional                                    |
+| ------------------------------ | ------------------------------------------- |
+| fasta/genomes                  | fai                                         |
+| gcnv_ploidy_priors<sup>1</sup> | dict                                        |
+|                                | gcnv_target_bed/gcnv_target_interval_list   |
+|                                | gcnv_exclude_bed/gcnv_exclude_interval_list |
+|                                | gcnv_bin_length                             |
+|                                | gcnv_mappable_regions                       |
+|                                | gcnv_padding                                |
+|                                | gcnv_readcount_format                       |
+|                                | gcnv_scatter_content                        |
+|                                | gcnv_segmental_duplications                 |
+
+<sup>1</sup> To learn more about this file, see [this comment](https://gatk.broadinstitute.org/hc/en-us/community/posts/360074399831/comments/13441240230299) on GATK forum.<br />
 
 ## Core Nextflow arguments
 

@@ -11,21 +11,21 @@
             "description": "Options used by the germlinecnvcaller subworkflow",
             "default": "",
             "properties": {
-                "analysis_type": {
+                "gcnv_analysis_type": {
                     "type": "string",
                     "default": "wgs",
                     "description": "Specifies which analysis type for the pipeline- either 'wgs' or 'wes'.",
                     "fa_icon": "fas fa-align-center",
                     "enum": ["wgs", "wes"]
                 },
-                "bin_length": {
+                "gcnv_bin_length": {
                     "type": "number",
                     "default": 1000,
                     "description": "Length (in bp) of the bins. If zero, no binning will be performed.",
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a bin length of 1000 for WGS analysis, and 0 for WES analysis. "
                 },
-                "exclude_bed": {
+                "gcnv_exclude_bed": {
                     "type": "string",
                     "exists": true,
                     "format": "path",
@@ -34,7 +34,7 @@
                     "description": "Path to directory for a bed file containing regions to be exluded from the analysis.",
                     "help_text": "If the regions you would like to exclude are in bed format, use this option. If you have an interval_list file, use `exclude_interval_list` parameter instead."
                 },
-                "exclude_interval_list": {
+                "gcnv_exclude_interval_list": {
                     "type": "string",
                     "exists": true,
                     "format": "path",
@@ -43,7 +43,7 @@
                     "description": "Path to directory for exclude_interval_list file.",
                     "help_text": "If the regions you would like to exclude are in interval_list format, use this option. If you have a bed file, use `exclude` parameter instead."
                 },
-                "mappable_regions": {
+                "gcnv_mappable_regions": {
                     "type": "string",
                     "exists": true,
                     "description": "Path to Umap single-read mappability track in .bed or .bed.gz format. Overlapping intervals must be merged.",
@@ -51,14 +51,14 @@
                     "fa_icon": "fas fa-file",
                     "help_text": "Used by GATK's AnnotateIntervals."
                 },
-                "padding": {
+                "gcnv_padding": {
                     "type": "number",
                     "description": "Length (in bp) of the padding regions on each side of the intervals.",
                     "default": 0,
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a padding of 0 for WGS analysis, and 250 for WES analysis."
                 },
-                "ploidy_priors": {
+                "gcnv_ploidy_priors": {
                     "type": "string",
                     "exists": true,
                     "format": "file-path",
@@ -67,21 +67,21 @@
                     "fa_icon": "fas fa-file",
                     "help_text": "Used by GATK's DeterminGermlineContigPloidy."
                 },
-                "readcount_format": {
+                "gcnv_readcount_format": {
                     "type": "string",
                     "description": "Output file format for count data",
                     "default": "HDF5",
                     "fa_icon": "fas fa-align-left",
                     "enum": ["HDF5", "TSV"]
                 },
-                "scatter_content": {
+                "gcnv_scatter_content": {
                     "type": "number",
                     "description": "When scattering with this argument, each of the resultant files will (ideally) have this amount of interval-counts.",
                     "default": 5000,
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK/Picards's IntervalListTools."
                 },
-                "segmental_duplications": {
+                "gcnv_segmental_duplications": {
                     "type": "string",
                     "exists": true,
                     "description": "Path to segmental-duplication track in .bed or .bed.gz format. Overlapping intervals must be merged.",
@@ -89,7 +89,7 @@
                     "fa_icon": "fas fa-file",
                     "help_text": "Used by GATK's AnnotateIntervals."
                 },
-                "target_bed": {
+                "gcnv_target_bed": {
                     "type": "string",
                     "exists": true,
                     "format": "path",
@@ -98,7 +98,7 @@
                     "description": "Path to directory for target bed file.",
                     "help_text": "If the regions you would like to analyse are in bed format, use this option. If you have an interval_list file, use `target_interval_list` parameter instead."
                 },
-                "target_interval_list": {
+                "gcnv_target_interval_list": {
                     "type": "string",
                     "exists": true,
                     "format": "path",
@@ -106,6 +106,28 @@
                     "pattern": "^\\S+\\._interval_list$",
                     "description": "Path to directory for target interval_list file.",
                     "help_text": "If the regions you would like to analyse are in interval_list format, use this option. If you have a bed file, use `target_bed` parameter instead."
+                }
+            }
+        },
+        "gens_options": {
+            "title": "GENS options",
+            "type": "object",
+            "description": "Options used by the gens subworkflow",
+            "default": "",
+            "properties": {
+                "gens_bin_length": {
+                    "type": "number",
+                    "default": 100,
+                    "description": "Length (in bp) of the bins. If zero, no binning will be performed.",
+                    "fa_icon": "fas fa-sort-numeric-down",
+                    "help_text": "Used by GATK's PreprocessIntervals. We recommend a bin length of 100."
+                },
+                "gens_readcount_format": {
+                    "type": "string",
+                    "description": "Output file format for count data",
+                    "default": "HDF5",
+                    "fa_icon": "fas fa-align-left",
+                    "enum": ["HDF5", "TSV"]
                 }
             }
         },
@@ -177,7 +199,7 @@
                     "fa_icon": "fas fa-toolbox",
                     "description": "Tools to use for building Panel of Normals or models.",
                     "help_text": "Multiple tools separated with commas.\n\nTools available: CNVKIT,germlinecnvcaller",
-                    "pattern": "^((cnvkit|germlinecnvcaller)?,?)*(?<!,)$"
+                    "pattern": "^((cnvkit|germlinecnvcaller|gens)?,?)*(?<!,)$"
                 }
             },
             "fa_icon": "fas fa-user-cog"
@@ -429,6 +451,9 @@
     "allOf": [
         {
             "$ref": "#/definitions/germlinecnvcaller_options"
+        },
+        {
+            "$ref": "#/definitions/gens_options"
         },
         {
             "$ref": "#/definitions/cnvkit_options"

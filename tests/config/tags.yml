@@ -18,3 +18,10 @@ germlinecnvcaller_cohort:
   - subworkflows/local/germlinecnvcaller_cohort.nf
   - tests/pipeline/germlinecnvcaller_cohort.nf.test
   - tests/pipeline/germlinecnvcaller_cohort.nf.config
+  - tests/test_assets/germlinecnvcaller_software_versions.yaml
+
+gens_pon:
+  - conf/modules/gens_pon.config
+  - subworkflows/local/gens_pon.nf
+  - tests/pipeline/gens_pon.nf.test
+  - tests/test_assets/gens_software_versions.yaml
