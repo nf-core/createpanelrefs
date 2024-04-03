@@ -27,25 +27,26 @@ include { GERMLINECNVCALLER_COHORT    } from '../subworkflows/local/germlinecnvc
 include { CNVKIT_BATCH                } from '../modules/nf-core/cnvkit/batch/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 
+// Initialize file channels based on params, defined in the params.genomes[params.genome] scope
+ch_cnvkit_targets           = params.cnvkit_targets         ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName],targets]}.collect()
+                            : Channel.value([[:],[]])
+ch_dict                     = params.dict                   ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
+                            : Channel.empty()
+ch_exclude_bed              = params.exclude_bed            ? Channel.fromPath(params.exclude_bed).map { exclude -> [[id:exclude.baseName],exclude]}.collect()
+                            : Channel.value([[:],[]])
+ch_exclude_interval_list    = params.exclude_interval_list  ? Channel.fromPath(params.exclude_interval_list).map { exclude -> [[id:exclude.baseName],exclude]}.collect()
+                            : Channel.value([[:],[]])
+ch_fai                      = params.fai                    ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
+                            : Channel.empty()
+ch_fasta                    = params.fasta                  ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
+                            : Channel.empty()
+ch_ploidy_priors            = params.ploidy_priors          ? Channel.fromPath(params.ploidy_priors).collect()
+                            : Channel.empty()
+ch_target_bed               = params.target_bed             ? Channel.fromPath(params.target_bed).map { targets -> [[id:targets.baseName],targets]}.collect()
+                            : Channel.value([[:],[]])
+ch_target_interval_list     = params.target_interval_list   ? Channel.fromPath(params.target_interval_list).map { targets -> [[id:targets.baseName],targets]}.collect()
+                            : Channel.value([[:],[]])
 
-ch_cnvkit_targets        = params.cnvkit_targets        ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName],targets]}.collect()
-                                                    : Channel.value([[:],[]])
-ch_dict                  = params.dict                  ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
-                                                    : Channel.empty()
-ch_exclude_bed           = params.exclude_bed           ? Channel.fromPath(params.exclude_bed).map { exclude -> [[id:exclude.baseName],exclude]}.collect()
-                                                    : Channel.value([[:],[]])
-ch_exclude_interval_list = params.exclude_interval_list ? Channel.fromPath(params.exclude_interval_list).map { exclude -> [[id:exclude.baseName],exclude]}.collect()
-                                                    : Channel.value([[:],[]])
-ch_fai                   = params.fai                   ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
-                                                    : Channel.empty()
-ch_fasta                 = params.fasta                 ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
-                                                    : Channel.empty()
-ch_ploidy_priors         = params.ploidy_priors         ? Channel.fromPath(params.ploidy_priors).collect()
-                                                    : Channel.empty()
-ch_target_bed            = params.target_bed            ? Channel.fromPath(params.target_bed).map { targets -> [[id:targets.baseName],targets]}.collect()
-                                                    : Channel.value([[:],[]])
-ch_target_interval_list  = params.target_interval_list  ? Channel.fromPath(params.target_interval_list).map { targets -> [[id:targets.baseName],targets]}.collect()
-                                                    : Channel.value([[:],[]])
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
@@ -56,7 +57,6 @@ ch_multiqc_config          = Channel.fromPath("$projectDir/assets/multiqc_config
 ch_multiqc_custom_config   = params.multiqc_config ? Channel.fromPath( params.multiqc_config, checkIfExists: true ) : Channel.empty()
 ch_multiqc_logo            = params.multiqc_logo   ? Channel.fromPath( params.multiqc_logo, checkIfExists: true ) : Channel.empty()
 ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
-
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
