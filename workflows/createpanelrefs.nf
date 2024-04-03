@@ -111,11 +111,11 @@ workflow CREATEPANELREFS {
     if (params.tools && params.tools.split(',').contains('mutect2')) {
 
         ch_mutect2_input = ch_samplesheet.map{meta, bam, bai, cram, crai ->
-            if (bam)    return [ meta + [data_type:'bam'], bam, bai ]
-            if (cram)   return [ meta + [data_type:'cram'], cram, crai ]
+            if (bam)    return [ meta + [data_type:'bam'], bam, bai, [] ]
+            if (cram)   return [ meta + [data_type:'cram'], cram, crai, [] ]
         }
 
-        BAM_CREATE_SOM_PON_GATK(ch_mutect2_input.map{ meta, reads, index -> [ meta, reads, index, [] ] },
+        BAM_CREATE_SOM_PON_GATK(ch_mutect2_input,
             ch_fasta,
             ch_fai,
             ch_dict,
