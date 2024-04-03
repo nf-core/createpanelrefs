@@ -115,7 +115,7 @@ workflow CREATEPANELREFS {
             if (cram)   return [ meta + [data_type:'cram'], cram, crai ]
         }
 
-        BAM_CREATE_SOM_PON_GATK(ch_mutect2_input,
+        BAM_CREATE_SOM_PON_GATK(ch_mutect2_input.map{ meta, reads, index -> [ meta, reads, index, [] ] },
             ch_fasta,
             ch_fai,
             ch_dict,
