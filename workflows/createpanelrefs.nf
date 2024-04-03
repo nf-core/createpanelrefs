@@ -17,6 +17,7 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_crea
 
 include { GENS_PON                    } from '../subworkflows/local/gens_pon'
 include { GERMLINECNVCALLER_COHORT    } from '../subworkflows/local/germlinecnvcaller_cohort'
+include { BAM_CREATE_SOM_PON_GATK     } from '../subworkflows/nf-core/bam_create_som_pon_gatk'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,24 +29,24 @@ include { CNVKIT_BATCH                } from '../modules/nf-core/cnvkit/batch/ma
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_cnvkit_targets           = params.cnvkit_targets         ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName],targets]}.collect()
-                            : Channel.value([[:],[]])
-ch_dict                     = params.dict                   ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
+ch_cnvkit_targets           = params.cnvkit_targets         ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName], targets]}.collect()
+                            : Channel.value([[id:'null'], []])
+ch_dict                     = params.dict                   ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName], dict]}.collect()
                             : Channel.empty()
-ch_exclude_bed              = params.exclude_bed            ? Channel.fromPath(params.exclude_bed).map { exclude -> [[id:exclude.baseName],exclude]}.collect()
-                            : Channel.value([[:],[]])
-ch_exclude_interval_list    = params.exclude_interval_list  ? Channel.fromPath(params.exclude_interval_list).map { exclude -> [[id:exclude.baseName],exclude]}.collect()
-                            : Channel.value([[:],[]])
-ch_fai                      = params.fai                    ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
+ch_exclude_bed              = params.exclude_bed            ? Channel.fromPath(params.exclude_bed).map { exclude -> [[id:exclude.baseName], exclude]}.collect()
+                            : Channel.value([[id:'null'], []])
+ch_exclude_interval_list    = params.exclude_interval_list  ? Channel.fromPath(params.exclude_interval_list).map { exclude -> [[id:exclude.baseName], exclude]}.collect()
+                            : Channel.value([[id:'null'], []])
+ch_fai                      = params.fai                    ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName], fai]}.collect()
                             : Channel.empty()
-ch_fasta                    = params.fasta                  ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
+ch_fasta                    = params.fasta                  ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName], fasta]}.collect()
                             : Channel.empty()
 ch_ploidy_priors            = params.ploidy_priors          ? Channel.fromPath(params.ploidy_priors).collect()
                             : Channel.empty()
-ch_target_bed               = params.target_bed             ? Channel.fromPath(params.target_bed).map { targets -> [[id:targets.baseName],targets]}.collect()
-                            : Channel.value([[:],[]])
-ch_target_interval_list     = params.target_interval_list   ? Channel.fromPath(params.target_interval_list).map { targets -> [[id:targets.baseName],targets]}.collect()
-                            : Channel.value([[:],[]])
+ch_target_bed               = params.target_bed             ? Channel.fromPath(params.target_bed).map { targets -> [[id:targets.baseName], targets]}.collect()
+                            : Channel.value([[id:'null'], []])
+ch_target_interval_list     = params.target_interval_list   ? Channel.fromPath(params.target_interval_list).map { targets -> [[id:targets.baseName], targets]}.collect()
+                            : Channel.value([[id:'null'], []])
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -76,10 +77,7 @@ workflow CREATEPANELREFS {
     if (params.tools && params.tools.split(',').contains('cnvkit')) {
 
         ch_samplesheet
-            .map{ meta, bam, bai, cram, crai ->
-                new_meta = meta + [id:"panel"]
-                [new_meta, bam]
-            }
+            .map{ meta, bam, bai, cram, crai -> [meta + [id:'panel'], bam]}
             .groupTuple()
             .map {meta, bam -> [ meta, [], bam ]}
             .set { ch_cnvkit_input }
@@ -92,8 +90,8 @@ workflow CREATEPANELREFS {
 
         ch_samplesheet
             .map{meta, bam, bai, cram, crai ->
-                if (bam)  return [ meta + [data_type:"bam"], bam, bai ]
-                if (cram) return [ meta + [data_type:"cram"], cram, crai ]
+                if (bam)  return [ meta + [data_type:'bam'], bam, bai ]
+                if (cram) return [ meta + [data_type:'cram'], cram, crai ]
             }
             .set { ch_germlinecnvcaller_input }
 
@@ -112,14 +110,18 @@ workflow CREATEPANELREFS {
 
     if (params.tools && params.tools.split(',').contains('mutect2')) {
 
-        ch_samplesheet
-            .map{meta, bam, bai, cram, crai ->
-                if (bam)  return [ meta + [data_type:"bam"], bam, bai ]
-                if (cram) return [ meta + [data_type:"cram"], cram, crai ]
-            }
-            .set { ch_mutect2_input }
+        ch_mutect2_input = ch_samplesheet.map{meta, bam, bai, cram, crai ->
+            if (bam)    return [ meta + [data_type:'bam'], bam, bai ]
+            if (cram)   return [ meta + [data_type:'cram'], cram, crai ]
+        }
 
-        BAM_CREATE_SOM_PON_GATK ( ch_mutect2_input.map{ meta, cram -> [ meta, bam ]}, ch_fasta, ch_fai, ch_dict, params.pon_name, [] )
+        BAM_CREATE_SOM_PON_GATK(ch_mutect2_input,
+            ch_fasta,
+            ch_fai,
+            ch_dict,
+            params.pon_name,
+            ch_target_bed.map{ meta, bed -> [ bed ] })
+
         ch_versions = ch_versions.mix(BAM_CREATE_SOM_PON_GATK.out.versions)
 
     }
@@ -128,8 +130,8 @@ workflow CREATEPANELREFS {
 
         ch_samplesheet
             .map{meta, bam, bai, cram, crai ->
-                if (bam)  return [ meta + [data_type:"bam"], bam, bai ]
-                if (cram) return [ meta + [data_type:"cram"], cram, crai ]
+                if (bam)  return [ meta + [data_type:'bam'], bam, bai ]
+                if (cram) return [ meta + [data_type:'cram'], cram, crai ]
             }
             .set { ch_gens_input }
 

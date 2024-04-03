@@ -142,6 +142,17 @@
                 }
             }
         },
+        "mutect2_options": {
+            "title": "Mutect2 options",
+            "type": "object",
+            "description": "Options used by the mutect2 subworkflow",
+            "default": "",
+            "properties": {
+                "pon_name": {
+                    "type": "string"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -457,6 +468,9 @@
         },
         {
             "$ref": "#/definitions/cnvkit_options"
+        },
+        {
+            "$ref": "#/definitions/mutect2_options"
         },
         {
             "$ref": "#/definitions/input_output_options"
