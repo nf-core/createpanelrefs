@@ -1,0 +1,53 @@
+nextflow_workflow {
+
+    name "Test Workflow GENS_PON"
+    script "subworkflows/local/gens_pon.nf"
+    workflow "GENS_PON"
+    tag "gens"
+    config "./gens_pon.config"
+
+    test("Run gens test") {
+
+        when {
+            params {
+                outdir                = "$outputDir"
+                gens_readcount_format = "TSV"
+                gens_bin_length       = 100
+                tools                 = 'gens'
+                fasta                 = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta"
+
+            }
+            workflow {
+                """
+                input[0] = Channel.empty()
+                input[1] = Channel.empty()
+                input[2] = Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
+                input[3] = Channel.of(
+                                [[ id:'test' ], file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam"),[]],
+                                [[ id:'test2' ], file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam"),[]])
+                """
+            }
+        }
+
+        then {
+                assert workflow.success
+                assert workflow.trace.succeeded().size() == 8
+                assert workflow.trace.failed().size() == 0
+
+                assert path("$outputDir/gens_pon/references/genome.dict").toFile().isFile()
+                assert path("$outputDir/gens_pon/references/genome.fasta.fai").toFile().isFile()
+                assert path("$outputDir/gens_pon/createreadcountpanelofnormals/gens_pon.hdf5").toFile().isFile()
+
+                def expected      = path("$baseDir/tests/test_assets/gens_software_versions.yaml").yaml.collect()
+                def observed_list = []
+                def observed      = workflow.out.versions.collect {f -> path(f).yaml.entrySet()}
+                observed.stream()
+                    .forEach(observed_list::addAll)
+
+                assertContainsInAnyOrder(expected, observed_list)
+
+        }
+
+    }
+
+}

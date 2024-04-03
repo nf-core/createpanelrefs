@@ -1,58 +1,51 @@
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    PRINT PARAMS SUMMARY
+    IMPORT FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet } from 'plugin/nf-validation'
-
-def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
-def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
-def summary_params = paramsSummaryMap(workflow)
-
-// Print parameter summary log to screen
-log.info logo + paramsSummaryLog(workflow) + citation
-
-WorkflowCreatepanelrefs.initialise(params, log)
-
-// Check input path parameters to see if they exist
-
-def checkPathParamList = [
-    params.dict,
-    params.fasta,
-    params.fasta_fai,
-    params.input
-]
+include { paramsSummaryMap       } from 'plugin/nf-validation'
+include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CHECK MANDATORY PARAMETERS
+    IMPORT SUBWORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-for (param in checkPathParamList) if (param) file(param, checkIfExists: true)
+include { GENS_PON                    } from '../subworkflows/local/gens_pon'
+include { GERMLINECNVCALLER_COHORT    } from '../subworkflows/local/germlinecnvcaller_cohort'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    MANAGE SAMPLESHEET
+    IMPORT MODULES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-ch_from_samplesheet = Channel.fromSamplesheet("input")
+include { CNVKIT_BATCH                } from '../modules/nf-core/cnvkit/batch/main'
+include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 
-ch_input = ch_from_samplesheet.map{meta, bam, bai, cram, crai ->
-    if (bam)  return [ [id:"panel", data_type:"bam"  ], bam ]
-    if (cram) return [ [id:"panel", data_type:"cram" ], cram ]
-}.groupTuple().branch{
-    bam:  it[0].data_type == "bam"
-    cram: it[0].data_type == "cram"
-}
 
-// Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_dict      = params.dict      ? Channel.fromPath(params.dict).first()      : Channel.empty()
-ch_fasta     = params.fasta     ? Channel.fromPath(params.fasta).first()     : Channel.empty()
-ch_fasta_fai = params.fasta_fai ? Channel.fromPath(params.fasta_fai).first() : Channel.empty()
-
+ch_cnvkit_targets        = params.cnvkit_targets        ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName],targets]}.collect()
+                                                    : Channel.value([[:],[]])
+ch_dict                  = params.dict                  ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName],dict]}.collect()
+                                                    : Channel.empty()
+ch_exclude_bed           = params.exclude_bed           ? Channel.fromPath(params.exclude_bed).map { exclude -> [[id:exclude.baseName],exclude]}.collect()
+                                                    : Channel.value([[:],[]])
+ch_exclude_interval_list = params.exclude_interval_list ? Channel.fromPath(params.exclude_interval_list).map { exclude -> [[id:exclude.baseName],exclude]}.collect()
+                                                    : Channel.value([[:],[]])
+ch_fai                   = params.fai                   ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName],fai]}.collect()
+                                                    : Channel.empty()
+ch_fasta                 = params.fasta                 ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName],fasta]}.collect()
+                                                    : Channel.empty()
+ch_ploidy_priors         = params.ploidy_priors         ? Channel.fromPath(params.ploidy_priors).collect()
+                                                    : Channel.empty()
+ch_target_bed            = params.target_bed            ? Channel.fromPath(params.target_bed).map { targets -> [[id:targets.baseName],targets]}.collect()
+                                                    : Channel.value([[:],[]])
+ch_target_interval_list  = params.target_interval_list  ? Channel.fromPath(params.target_interval_list).map { targets -> [[id:targets.baseName],targets]}.collect()
+                                                    : Channel.value([[:],[]])
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
@@ -64,30 +57,6 @@ ch_multiqc_custom_config   = params.multiqc_config ? Channel.fromPath( params.mu
 ch_multiqc_logo            = params.multiqc_logo   ? Channel.fromPath( params.multiqc_logo, checkIfExists: true ) : Channel.empty()
 ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT LOCAL MODULES/SUBWORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-//
-// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
-//
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT NF-CORE MODULES/SUBWORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-//
-// MODULE: Installed directly from nf-core/modules
-//
-
-include { CNVKIT_BATCH                } from '../modules/nf-core/cnvkit/batch/main'
-include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
-include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
-include { BAM_CREATE_SOM_PON_GATK     } from '../subworkflows/nf-core/bam_create_som_pon_gatk/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,38 +64,99 @@ include { BAM_CREATE_SOM_PON_GATK     } from '../subworkflows/nf-core/bam_create
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// Info required for completion email and summary
-def multiqc_report = []
-
 workflow CREATEPANELREFS {
 
+    take:
+    ch_samplesheet // channel: samplesheet read in from --input
+
+    main:
     ch_versions = Channel.empty()
+    ch_multiqc_files = Channel.empty()
 
     if (params.tools && params.tools.split(',').contains('cnvkit')) {
-        CNVKIT_BATCH ( ch_input.bam.map{ meta, bam -> [ meta, [], bam ]}, ch_fasta, [], [], [], true )
+
+        ch_samplesheet
+            .map{ meta, bam, bai, cram, crai ->
+                new_meta = meta + [id:"panel"]
+                [new_meta, bam]
+            }
+            .groupTuple()
+            .map {meta, bam -> [ meta, [], bam ]}
+            .set { ch_cnvkit_input }
+
+        CNVKIT_BATCH ( ch_cnvkit_input, ch_fasta, [[:],[]], ch_cnvkit_targets, [[:],[]], true )
         ch_versions = ch_versions.mix(CNVKIT_BATCH.out.versions)
     }
 
-    if (params.tools && params.tools.split(',').contains('mutect2')) {
-        BAM_CREATE_SOM_PON_GATK ( ch_input.cram.map{ meta, cram -> [ meta, bam ]}, ch_fasta, ch_fasta_fai, ch_dict, params.pon_name, [] )
-        ch_versions = ch_versions.mix(BAM_CREATE_SOM_PON_GATK.out.versions)
+    if (params.tools && params.tools.split(',').contains('germlinecnvcaller')) {
+
+        ch_samplesheet
+            .map{meta, bam, bai, cram, crai ->
+                if (bam)  return [ meta + [data_type:"bam"], bam, bai ]
+                if (cram) return [ meta + [data_type:"cram"], cram, crai ]
+            }
+            .set { ch_germlinecnvcaller_input }
+
+        GERMLINECNVCALLER_COHORT (  ch_dict,
+                                    ch_fai,
+                                    ch_fasta,
+                                    ch_germlinecnvcaller_input,
+                                    ch_ploidy_priors,
+                                    ch_target_bed,
+                                    ch_target_interval_list,
+                                    ch_exclude_bed,
+                                    ch_exclude_interval_list )
+
+        ch_versions = ch_versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
     }
 
-    CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique().collectFile(name: 'collated_versions.yml')
-    )
+    if (params.tools && params.tools.split(',').contains('mutect2')) {
 
-    // MULTIQC
-    workflow_summary    = WorkflowCreatepanelrefs.paramsSummaryMultiqc(workflow, summary_params)
-    ch_workflow_summary = Channel.value(workflow_summary)
+        ch_samplesheet
+            .map{meta, bam, bai, cram, crai ->
+                if (bam)  return [ meta + [data_type:"bam"], bam, bai ]
+                if (cram) return [ meta + [data_type:"cram"], cram, crai ]
+            }
+            .set { ch_mutect2_input }
 
-    methods_description    = WorkflowCreatepanelrefs.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description, params)
-    ch_methods_description = Channel.value(methods_description)
+        BAM_CREATE_SOM_PON_GATK ( ch_mutect2_input.map{ meta, cram -> [ meta, bam ]}, ch_fasta, ch_fai, ch_dict, params.pon_name, [] )
+        ch_versions = ch_versions.mix(BAM_CREATE_SOM_PON_GATK.out.versions)
 
-    ch_multiqc_files = Channel.empty()
-    ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
+    }
+
+    if (params.tools && params.tools.split(',').contains('gens')) {
+
+        ch_samplesheet
+            .map{meta, bam, bai, cram, crai ->
+                if (bam)  return [ meta + [data_type:"bam"], bam, bai ]
+                if (cram) return [ meta + [data_type:"cram"], cram, crai ]
+            }
+            .set { ch_gens_input }
+
+        GENS_PON(ch_dict,
+                ch_fai,
+                ch_fasta,
+                ch_gens_input)
+
+        ch_versions = ch_versions.mix(GENS_PON.out.versions)
+    }
+
+    //
+    // Collate and save software versions
+    //
+    softwareVersionsToYAML(ch_versions)
+        .collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'nf_core_pipeline_software_mqc_versions.yml', sort: true, newLine: true)
+        .set { ch_collated_versions }
+
+    //
+    // MODULE: MultiQC
+    //
+    summary_params                        = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    ch_workflow_summary                   = Channel.value(paramsSummaryMultiqc(summary_params))
+    ch_methods_description                = Channel.value(methodsDescriptionText(ch_multiqc_custom_methods_description))
+    ch_multiqc_files                      = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+    ch_multiqc_files                      = ch_multiqc_files.mix(ch_collated_versions)
+    ch_multiqc_files                      = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: false))
 
     MULTIQC (
         ch_multiqc_files.collect(),
@@ -134,23 +164,10 @@ workflow CREATEPANELREFS {
         ch_multiqc_custom_config.toList(),
         ch_multiqc_logo.toList()
     )
-    multiqc_report = MULTIQC.out.report.toList()
-}
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    COMPLETION EMAIL AND SUMMARY
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-workflow.onComplete {
-    if (params.email || params.email_on_fail) {
-        NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report)
-    }
-    NfcoreTemplate.summary(workflow, params, log)
-    if (params.hook_url) {
-        NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
-    }
+    emit:
+    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
 /*

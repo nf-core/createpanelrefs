@@ -14,7 +14,7 @@ on:
 
 env:
   NXF_ANSI_LOG: false
-  NFTEST_VER: "0.7.3"
+  NFTEST_VER: "0.8.4"
 
 # Cancel if a newer run is started
 concurrency:
@@ -46,7 +46,7 @@ jobs:
           if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.base_ref }}" == "dev" && "${{ matrix.NXF_VER }}" != "latest-everything" ]]; then
             echo matrix='["latest-everything"]' | tee -a $GITHUB_OUTPUT
           else
-            echo matrix='["latest-everything", "23.04.0"]' | tee -a $GITHUB_OUTPUT
+            echo matrix='["latest-everything", "23.10.0"]' | tee -a $GITHUB_OUTPUT
           fi
 
   test-dev:
@@ -62,14 +62,14 @@ jobs:
         # Only run docker tests on dev branch
         profile: ["docker"]
         # Only test minimal version
-        NXF_VER: ["23.04.0"]
+        NXF_VER: ["23.10.0"]
         # Always run default test
         include:
           - tags: default
 
     steps:
       - name: Check out pipeline code
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - uses: actions/cache@v3
         with:
@@ -87,6 +87,9 @@ jobs:
         uses: nf-core/setup-nextflow@v1.2.0
         with:
           version: "${{ matrix.NXF_VER }}"
+
+      - name: Disk space cleanup
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
       - name: Run nf-test
         uses: Wandalen/wretry.action@v1.0.11
@@ -131,7 +134,7 @@ jobs:
 
     steps:
       - name: Check out pipeline code
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - uses: actions/cache@v3
         with:
@@ -146,9 +149,12 @@ jobs:
           sudo mv nf-test /usr/local/bin/
 
       - name: Install Nextflow ${{ matrix.NXF_VER }}
-        uses: nf-core/setup-nextflow@v1.2.0
+        uses: nf-core/setup-nextflow@b9f764e8ba5c76b712ace14ecbfcef0e40ae2dd8 # v1
         with:
           version: "${{ matrix.NXF_VER }}"
+
+      - name: Disk space cleanup
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
       - name: Set up Singularity
         if: matrix.profile == 'singularity'
