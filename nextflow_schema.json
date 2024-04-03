@@ -261,6 +261,15 @@
                     "fa_icon": "fas fa-file",
                     "exists": true,
                     "mimetype": "text/plain"
+                },
+                "target_bed": {
+                    "type": "string",
+                    "description": "Path to target bed file",
+                    "pattern": "^\\S+\\.bed$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "exists": true,
+                    "mimetype": "text/plain"
                 }
             }
         },
