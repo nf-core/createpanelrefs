@@ -142,6 +142,17 @@
                 }
             }
         },
+        "mutect2_options": {
+            "title": "Mutect2 options",
+            "type": "object",
+            "description": "Options used by the mutect2 subworkflow",
+            "default": "",
+            "properties": {
+                "mutect2_pon_name": {
+                    "type": "string"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -192,14 +203,15 @@
             "title": "Main options",
             "type": "object",
             "description": "Most common options used for the pipeline",
+            "required": ["tools"],
             "default": "",
             "properties": {
                 "tools": {
                     "type": "string",
                     "fa_icon": "fas fa-toolbox",
                     "description": "Tools to use for building Panel of Normals or models.",
-                    "help_text": "Multiple tools separated with commas.\n\nTools available: CNVKIT,germlinecnvcaller",
-                    "pattern": "^((cnvkit|germlinecnvcaller|gens)?,?)*(?<!,)$"
+                    "help_text": "Multiple tools separated with commas.\n\nTools available: CNVKIT,germlinecnvcaller,gens,mutect2",
+                    "pattern": "^((cnvkit|germlinecnvcaller|gens|mutect2)?,?)*(?<!,)$"
                 }
             },
             "fa_icon": "fas fa-user-cog"
@@ -246,6 +258,15 @@
                     "type": "string",
                     "description": "Path to fasta index file",
                     "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "exists": true,
+                    "mimetype": "text/plain"
+                },
+                "target_bed": {
+                    "type": "string",
+                    "description": "Path to target bed file",
+                    "pattern": "^\\S+\\.bed$",
                     "format": "file-path",
                     "fa_icon": "fas fa-file",
                     "exists": true,
@@ -457,6 +478,9 @@
         },
         {
             "$ref": "#/definitions/cnvkit_options"
+        },
+        {
+            "$ref": "#/definitions/mutect2_options"
         },
         {
             "$ref": "#/definitions/input_output_options"

@@ -12,6 +12,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#5](https://github.com/nf-core/createpanelrefs/pull/5) - `CNVKIT` can be used to create a PON
 - [#5](https://github.com/nf-core/createpanelrefs/pull/5) - Usage of nf-validation
 - [#5](https://github.com/nf-core/createpanelrefs/pull/5) - Usage of nf-test
+- [#8](https://github.com/nf-core/createpanelrefs/pull/8) - `Mutect2` can be used to create a PON
 
 ### `Fixed`
 
