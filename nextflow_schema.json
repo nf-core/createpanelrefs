@@ -148,7 +148,7 @@
             "description": "Options used by the mutect2 subworkflow",
             "default": "",
             "properties": {
-                "pon_name": {
+                "mutect2_pon_name": {
                     "type": "string"
                 }
             }
