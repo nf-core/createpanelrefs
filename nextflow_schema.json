@@ -203,6 +203,7 @@
             "title": "Main options",
             "type": "object",
             "description": "Most common options used for the pipeline",
+            "required": ["tools"],
             "default": "",
             "properties": {
                 "tools": {
