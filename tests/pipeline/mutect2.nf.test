@@ -10,7 +10,7 @@ nextflow_pipeline {
             params {
                 outdir                       = "$outputDir"
                 tools                        = 'mutect2'
-                pon_name                     = 'test'
+                mutect2_pon_name             = 'test'
                 validationSchemaIgnoreParams = 'genomes,baseDir,base-dir,outputDir,output-dir'
             }
         }
