@@ -119,7 +119,7 @@ workflow CREATEPANELREFS {
             ch_fasta,
             ch_fai,
             ch_dict,
-            params.pon_name,
+            params.mutect2_pon_name,
             ch_target_bed.map{ meta, bed -> [ bed ] })
 
         ch_versions = ch_versions.mix(BAM_CREATE_SOM_PON_GATK.out.versions)
