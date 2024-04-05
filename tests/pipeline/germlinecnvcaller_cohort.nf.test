@@ -13,6 +13,8 @@ nextflow_workflow {
                 outdir               = "$outputDir"
                 tools                = 'germlinecnvcaller'
                 fasta                = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta"
+                fai                  = null
+                dict                 = null
                 gcnv_scatter_content = 2
                 gcnv_pon_name        = 'cohort'
                 gcnv_ploidy_priors   = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/gatk/contig_ploidy_priors_table.tsv"
