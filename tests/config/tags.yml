@@ -18,12 +18,22 @@ mutect2:
   - modules/nf-core/gatk4/mutect2/**
   - modules/nf-core/gatk4/genomicsdbimport/**
   - modules/nf-core/gatk4/createsomaticpanelofnormals/**
-  - modules/nf-core/cnvkit/batch/**
   - subworkflows/nf-core/bam_create_som_pon_gatk/**
-  - tests/cnvkit.nf.test
 
 germlinecnvcaller_cohort:
   - conf/modules/germlinecnvcaller_cohort.config
+  - modules/nf-core/gatk4/annotateintervals/**
+  - modules/nf-core/gatk4/bedtointervallist/**
+  - modules/nf-core/gatk4/bedtointervallist/**
+  - modules/nf-core/gatk4/collectreadcounts/**
+  - modules/nf-core/gatk4/determinegermlinecontigploidy/**
+  - modules/nf-core/gatk4/filterintervals/**
+  - modules/nf-core/gatk4/germlinecnvcaller/**
+  - modules/nf-core/gatk4/intervallisttools/**
+  - modules/nf-core/gatk4/preprocessintervals/**
+  - modules/nf-core/picard/createsequencedictionary/**
+  - modules/nf-core/samtools/faidx/**
+  - modules/nf-core/samtools/index/**
   - subworkflows/local/germlinecnvcaller_cohort.nf
   - tests/pipeline/germlinecnvcaller_cohort.nf.test
   - tests/pipeline/germlinecnvcaller_cohort.nf.config
@@ -31,6 +41,12 @@ germlinecnvcaller_cohort:
 
 gens_pon:
   - conf/modules/gens_pon.config
+  - modules/nf-core/gatk4/collectreadcounts/**
+  - modules/nf-core/gatk4/createreadcountpanelofnormals/**
+  - modules/nf-core/gatk4/preprocessintervals/**
+  - modules/nf-core/picard/createsequencedictionary/**
+  - modules/nf-core/samtools/faidx/**
+  - modules/nf-core/samtools/index/**
   - subworkflows/local/gens_pon.nf
   - tests/pipeline/gens_pon.nf.test
   - tests/test_assets/gens_software_versions.yaml

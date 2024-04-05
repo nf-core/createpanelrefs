@@ -15,7 +15,7 @@ nextflow_workflow {
                 gens_bin_length       = 100
                 tools                 = 'gens'
                 fasta                 = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta"
-
+                gens_pon_name         = 'gens_pon'
             }
             workflow {
                 """
@@ -25,6 +25,7 @@ nextflow_workflow {
                 input[3] = Channel.of(
                                 [[ id:'test' ], file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam"),[]],
                                 [[ id:'test2' ], file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam"),[]])
+                input[4] = params.gens_pon_name
                 """
             }
         }

@@ -29,24 +29,26 @@ include { CNVKIT_BATCH                } from '../modules/nf-core/cnvkit/batch/ma
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_cnvkit_targets           = params.cnvkit_targets         ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName], targets]}.collect()
-                            : Channel.value([[id:'null'], []])
-ch_dict                     = params.dict                   ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName], dict]}.collect()
-                            : Channel.empty()
-ch_exclude_bed              = params.exclude_bed            ? Channel.fromPath(params.exclude_bed).map { exclude -> [[id:exclude.baseName], exclude]}.collect()
-                            : Channel.value([[id:'null'], []])
-ch_exclude_interval_list    = params.exclude_interval_list  ? Channel.fromPath(params.exclude_interval_list).map { exclude -> [[id:exclude.baseName], exclude]}.collect()
-                            : Channel.value([[id:'null'], []])
-ch_fai                      = params.fai                    ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName], fai]}.collect()
-                            : Channel.empty()
-ch_fasta                    = params.fasta                  ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName], fasta]}.collect()
-                            : Channel.empty()
-ch_ploidy_priors            = params.ploidy_priors          ? Channel.fromPath(params.ploidy_priors).collect()
-                            : Channel.empty()
-ch_target_bed               = params.target_bed             ? Channel.fromPath(params.target_bed).map { targets -> [[id:targets.baseName], targets]}.collect()
-                            : Channel.value([[id:'null'], []])
-ch_target_interval_list     = params.target_interval_list   ? Channel.fromPath(params.target_interval_list).map { targets -> [[id:targets.baseName], targets]}.collect()
-                            : Channel.value([[id:'null'], []])
+ch_cnvkit_targets               = params.cnvkit_targets             ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id:targets.baseName], targets]}.collect()
+                                : Channel.value([[id:'null'], []])
+ch_dict                         = params.dict                       ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName], dict]}.collect()
+                                : Channel.empty()
+ch_gcnv_exclude_bed             = params.gcnv_exclude_bed           ? Channel.fromPath(params.gcnv_exclude_bed).map { exclude -> [[id:exclude.baseName], exclude]}.collect()
+                                : Channel.value([[id:'null'], []])
+ch_gcnv_exclude_interval_list   = params.gcnv_exclude_interval_list ? Channel.fromPath(params.gcnv_exclude_interval_list).map { exclude -> [[id:exclude.baseName], exclude]}.collect()
+                                : Channel.value([[id:'null'], []])
+ch_fai                          = params.fai                        ? Channel.fromPath(params.fai).map { fai -> [[id:fai.baseName], fai]}.collect()
+                                : Channel.empty()
+ch_fasta                        = params.fasta                      ? Channel.fromPath(params.fasta).map { fasta -> [[id:fasta.baseName], fasta]}.collect()
+                                : Channel.empty()
+ch_gcnv_ploidy_priors           = params.gcnv_ploidy_priors         ? Channel.fromPath(params.gcnv_ploidy_priors).collect()
+                                : Channel.empty()
+ch_gcnv_target_bed              = params.gcnv_target_bed            ? Channel.fromPath(params.gcnv_target_bed).map { targets -> [[id:targets.baseName], targets]}.collect()
+                                : Channel.value([[id:'null'], []])
+ch_gcnv_target_interval_list    = params.gcnv_target_interval_list  ? Channel.fromPath(params.gcnv_target_interval_list).map { targets -> [[id:targets.baseName], targets]}.collect()
+                                : Channel.value([[id:'null'], []])
+ch_mutect2_target_bed           = params.mutect2_target_bed          ? Channel.fromPath(params.mutect2_target_bed).collect()
+                                : Channel.value([])
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -99,11 +101,12 @@ workflow CREATEPANELREFS {
                                     ch_fai,
                                     ch_fasta,
                                     ch_germlinecnvcaller_input,
-                                    ch_ploidy_priors,
-                                    ch_target_bed,
-                                    ch_target_interval_list,
-                                    ch_exclude_bed,
-                                    ch_exclude_interval_list )
+                                    ch_gcnv_ploidy_priors,
+                                    ch_gcnv_target_bed,
+                                    ch_gcnv_target_interval_list,
+                                    ch_gcnv_exclude_bed,
+                                    ch_gcnv_exclude_interval_list,
+                                    params.gcnv_pon_name )
 
         ch_versions = ch_versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
     }
@@ -120,7 +123,7 @@ workflow CREATEPANELREFS {
             ch_fai,
             ch_dict,
             params.mutect2_pon_name,
-            ch_target_bed.map{ meta, bed -> [ bed ] })
+            ch_mutect2_target_bed)
 
         ch_versions = ch_versions.mix(BAM_CREATE_SOM_PON_GATK.out.versions)
 
@@ -138,7 +141,9 @@ workflow CREATEPANELREFS {
         GENS_PON(ch_dict,
                 ch_fai,
                 ch_fasta,
-                ch_gens_input)
+                ch_gens_input,
+                params.gens_pon_name )
+
 
         ch_versions = ch_versions.mix(GENS_PON.out.versions)
     }

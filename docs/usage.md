@@ -151,7 +151,6 @@ If you are running the pipeline to generate references for the GATK's germlinecn
 |                                | gcnv_padding                                |
 |                                | gcnv_readcount_format                       |
 |                                | gcnv_scatter_content                        |
-|                                | gcnv_segmental_duplications                 |
 
 <sup>1</sup> To learn more about this file, see [this comment](https://gatk.broadinstitute.org/hc/en-us/community/posts/360074399831/comments/13441240230299) on GATK forum.<br />
 

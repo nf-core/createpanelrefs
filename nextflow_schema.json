@@ -58,6 +58,11 @@
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a padding of 0 for WGS analysis, and 250 for WES analysis."
                 },
+                "gcnv_pon_name": {
+                    "type": "string",
+                    "description": "Name for panel of normals.",
+                    "default": "germlinecnvcaller"
+                },
                 "gcnv_ploidy_priors": {
                     "type": "string",
                     "exists": true,
@@ -80,14 +85,6 @@
                     "default": 5000,
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK/Picards's IntervalListTools."
-                },
-                "gcnv_segmental_duplications": {
-                    "type": "string",
-                    "exists": true,
-                    "description": "Path to segmental-duplication track in .bed or .bed.gz format. Overlapping intervals must be merged.",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "help_text": "Used by GATK's AnnotateIntervals."
                 },
                 "gcnv_target_bed": {
                     "type": "string",
@@ -122,6 +119,11 @@
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK's PreprocessIntervals. We recommend a bin length of 100."
                 },
+                "gens_pon_name": {
+                    "type": "string",
+                    "description": "Name for panel of normals.",
+                    "default": "gens"
+                },
                 "gens_readcount_format": {
                     "type": "string",
                     "description": "Output file format for count data",
@@ -150,6 +152,15 @@
             "properties": {
                 "mutect2_pon_name": {
                     "type": "string"
+                },
+                "mutect2_target_bed": {
+                    "type": "string",
+                    "description": "Path to target bed file",
+                    "pattern": "^\\S+\\.bed$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "exists": true,
+                    "mimetype": "text/plain"
                 }
             }
         },
@@ -258,15 +269,6 @@
                     "type": "string",
                     "description": "Path to fasta index file",
                     "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "exists": true,
-                    "mimetype": "text/plain"
-                },
-                "target_bed": {
-                    "type": "string",
-                    "description": "Path to target bed file",
-                    "pattern": "^\\S+\\.bed$",
                     "format": "file-path",
                     "fa_icon": "fas fa-file",
                     "exists": true,
