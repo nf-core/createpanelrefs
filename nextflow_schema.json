@@ -58,7 +58,7 @@
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a padding of 0 for WGS analysis, and 250 for WES analysis."
                 },
-                "gcnv_pon_name": {
+                "gcnv_model_name": {
                     "type": "string",
                     "description": "Name for panel of normals.",
                     "default": "germlinecnvcaller"
@@ -85,6 +85,14 @@
                     "default": 5000,
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK/Picards's IntervalListTools."
+                },
+                "gcnv_segmental_duplications": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to segmental-duplication track in .bed or .bed.gz format. Overlapping intervals must be merged.",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "help_text": "Used by GATK's AnnotateIntervals."
                 },
                 "gcnv_target_bed": {
                     "type": "string",

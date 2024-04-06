@@ -29,6 +29,7 @@ germlinecnvcaller_cohort:
   - modules/nf-core/gatk4/determinegermlinecontigploidy/**
   - modules/nf-core/gatk4/filterintervals/**
   - modules/nf-core/gatk4/germlinecnvcaller/**
+  - modules/nf-core/gatk4/indexfeaturefile/**
   - modules/nf-core/gatk4/intervallisttools/**
   - modules/nf-core/gatk4/preprocessintervals/**
   - modules/nf-core/picard/createsequencedictionary/**
