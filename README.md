@@ -27,7 +27,9 @@
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 2. Build Panel of Normals for [`CNVKIT`](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004873)
 3. Build ploidy and cnv calling models for [`GATK's germlinecnvcaller workflow`](https://genome.cshlp.org/content/20/9/1297)
-4. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+4. Build Panel of Normals for [`GENS`](https://github.com/Clinical-Genomics-Lund/gens)
+5. Build Panel of Normals for [`Mutect2`](https://genome.cshlp.org/content/20/9/1297)
+6. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 

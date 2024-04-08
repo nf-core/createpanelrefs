@@ -1,27 +1,32 @@
-include { GATK4_ANNOTATEINTERVALS                                    } from '../../modules/nf-core/gatk4/annotateintervals/main'
-include { GATK4_BEDTOINTERVALLIST as GATK4_BEDTOINTERVALLIST_TARGETS } from '../../modules/nf-core/gatk4/bedtointervallist/main'
-include { GATK4_BEDTOINTERVALLIST as GATK4_BEDTOINTERVALLIST_EXCLUDE } from '../../modules/nf-core/gatk4/bedtointervallist/main'
-include { GATK4_COLLECTREADCOUNTS                                    } from '../../modules/nf-core/gatk4/collectreadcounts/main'
-include { GATK4_DETERMINEGERMLINECONTIGPLOIDY                        } from '../../modules/nf-core/gatk4/determinegermlinecontigploidy/main'
-include { GATK4_FILTERINTERVALS                                      } from '../../modules/nf-core/gatk4/filterintervals/main'
-include { GATK4_GERMLINECNVCALLER                                    } from '../../modules/nf-core/gatk4/germlinecnvcaller/main'
-include { GATK4_INTERVALLISTTOOLS                                    } from '../../modules/nf-core/gatk4/intervallisttools/main'
-include { GATK4_PREPROCESSINTERVALS                                  } from '../../modules/nf-core/gatk4/preprocessintervals/main'
-include { PICARD_CREATESEQUENCEDICTIONARY                            } from '../../modules/nf-core/picard/createsequencedictionary/main'
-include { SAMTOOLS_FAIDX                                             } from '../../modules/nf-core/samtools/faidx/main'
-include { SAMTOOLS_INDEX                                             } from '../../modules/nf-core/samtools/index/main'
+include { GATK4_ANNOTATEINTERVALS                                       } from '../../modules/nf-core/gatk4/annotateintervals/main'
+include { GATK4_BEDTOINTERVALLIST as GATK4_BEDTOINTERVALLIST_TARGETS    } from '../../modules/nf-core/gatk4/bedtointervallist/main'
+include { GATK4_BEDTOINTERVALLIST as GATK4_BEDTOINTERVALLIST_EXCLUDE    } from '../../modules/nf-core/gatk4/bedtointervallist/main'
+include { GATK4_COLLECTREADCOUNTS                                       } from '../../modules/nf-core/gatk4/collectreadcounts/main'
+include { GATK4_DETERMINEGERMLINECONTIGPLOIDY                           } from '../../modules/nf-core/gatk4/determinegermlinecontigploidy/main'
+include { GATK4_FILTERINTERVALS                                         } from '../../modules/nf-core/gatk4/filterintervals/main'
+include { GATK4_GERMLINECNVCALLER                                       } from '../../modules/nf-core/gatk4/germlinecnvcaller/main'
+include { GATK4_INDEXFEATUREFILE as GATK4_INDEXFEATUREFILE_MAPPABILITY  } from '../../modules/nf-core/gatk4/indexfeaturefile/main'
+include { GATK4_INDEXFEATUREFILE as GATK4_INDEXFEATUREFILE_SEGDUP       } from '../../modules/nf-core/gatk4/indexfeaturefile/main'
+include { GATK4_INTERVALLISTTOOLS                                       } from '../../modules/nf-core/gatk4/intervallisttools/main'
+include { GATK4_PREPROCESSINTERVALS                                     } from '../../modules/nf-core/gatk4/preprocessintervals/main'
+include { PICARD_CREATESEQUENCEDICTIONARY                               } from '../../modules/nf-core/picard/createsequencedictionary/main'
+include { SAMTOOLS_FAIDX                                                } from '../../modules/nf-core/samtools/faidx/main'
+include { SAMTOOLS_INDEX                                                } from '../../modules/nf-core/samtools/index/main'
 
 workflow GERMLINECNVCALLER_COHORT {
     take:
-        ch_user_dict                  // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_user_fai                   // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_fasta                      // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_input                      // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
-        ch_ploidy_priors              // channel: [mandatory] [ path(tsv) ]
-        ch_target_bed                 // channel: [mandatory] [ val(meta), path(bed) ]
-        ch_user_target_interval_list  // channel: [mandatory] [ val(meta), path(intervals) ]
-        ch_exclude_bed                // channel: [mandatory] [ val(meta), path(bed) ]
-        ch_user_exclude_interval_list // channel: [mandatory] [ val(meta), path(intervals) ]
+        ch_user_dict                   // channel: [optional] [ val(meta), path(dict) ]
+        ch_user_fai                    // channel: [optional] [ val(meta), path(fai) ]
+        ch_fasta                       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_input                       // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
+        ch_ploidy_priors               // channel: [mandatory] [ path(tsv) ]
+        ch_mappable_regions            // channel: [optional] [ val(meta), path(bed) ]
+        ch_segmental_duplications      // channel: [optional] [ val(meta), path(bed) ]
+        ch_target_bed                  // channel: [optional] [ val(meta), path(bed) ]
+        ch_user_target_interval_list   // channel: [optional] [ val(meta), path(intervals) ]
+        ch_exclude_bed                 // channel: [optional] [ val(meta), path(bed) ]
+        ch_user_exclude_interval_list  // channel: [optional] [ val(meta), path(intervals) ]
+        val_pon_name                   //  string: [optional] name for panel of normals
 
     main:
         ch_versions = Channel.empty()
@@ -32,6 +37,10 @@ workflow GERMLINECNVCALLER_COHORT {
         SAMTOOLS_FAIDX ( ch_fasta, [[:],[]] )
 
         PICARD_CREATESEQUENCEDICTIONARY ( ch_fasta )
+
+        GATK4_INDEXFEATUREFILE_MAPPABILITY ( ch_mappable_regions )
+
+        GATK4_INDEXFEATUREFILE_SEGDUP ( ch_segmental_duplications )
 
         ch_user_dict
             .mix(PICARD_CREATESEQUENCEDICTIONARY.out.reference_dict)
@@ -84,7 +93,10 @@ workflow GERMLINECNVCALLER_COHORT {
                                     ch_fasta,
                                     ch_fai,
                                     ch_dict,
-                                    [[:],[]], [[:],[]], [[:],[]], [[:],[]])
+                                    ch_mappable_regions,
+                                    GATK4_INDEXFEATUREFILE_MAPPABILITY.out.index.ifEmpty([[:],[]]),
+                                    ch_segmental_duplications,
+                                    GATK4_INDEXFEATUREFILE_SEGDUP.out.index.ifEmpty([[:],[]]))
 
         //
         // Filter out files that lack indices, and generate them
@@ -124,7 +136,7 @@ workflow GERMLINECNVCALLER_COHORT {
         GATK4_COLLECTREADCOUNTS.out.tsv
                                 .mix(GATK4_COLLECTREADCOUNTS.out.hdf5)
                                 .collect { it[1] }
-                                .map {tsv -> [[id:'cohort'],tsv]}
+                                .map {tsv -> [[id:val_pon_name],tsv]}
                                 .set { ch_readcounts_out }
 
 
@@ -164,6 +176,8 @@ workflow GERMLINECNVCALLER_COHORT {
         ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_ANNOTATEINTERVALS.out.versions)
         ch_versions = ch_versions.mix(GATK4_FILTERINTERVALS.out.versions)
+        ch_versions = ch_versions.mix(GATK4_INDEXFEATUREFILE_MAPPABILITY.out.versions)
+        ch_versions = ch_versions.mix(GATK4_INDEXFEATUREFILE_SEGDUP.out.versions)
         ch_versions = ch_versions.mix(GATK4_INTERVALLISTTOOLS.out.versions)
         ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
         ch_versions = ch_versions.mix(GATK4_GERMLINECNVCALLER.out.versions.first())
