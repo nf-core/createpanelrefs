@@ -7,3 +7,4 @@ lint:
   files_unchanged:
     - .gitattributes
     - .gitignore
+  modules_config: False
