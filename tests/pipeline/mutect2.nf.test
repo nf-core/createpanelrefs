@@ -1,0 +1,26 @@
+nextflow_pipeline {
+
+    name "Test MUTECT2_PON"
+    script "main.nf"
+    tag "MUTECT2"
+
+    test("Run MUTECT2 test") {
+
+        when {
+            params {
+                outdir                       = "$outputDir"
+                tools                        = 'mutect2'
+                mutect2_pon_name             = 'test'
+                validationSchemaIgnoreParams = 'genomes,baseDir,base-dir,outputDir,output-dir'
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert new File("$outputDir/multiqc/").exists() },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("software_versions") }
+            )
+        }
+    }
+}

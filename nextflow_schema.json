@@ -5,6 +5,173 @@
     "description": "Generate Panel of Normals, models or other similar references from lots of samples",
     "type": "object",
     "definitions": {
+        "germlinecnvcaller_options": {
+            "title": "Germlinecnvcaller options",
+            "type": "object",
+            "description": "Options used by the germlinecnvcaller subworkflow",
+            "default": "",
+            "properties": {
+                "gcnv_analysis_type": {
+                    "type": "string",
+                    "default": "wgs",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs' or 'wes'.",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["wgs", "wes"]
+                },
+                "gcnv_bin_length": {
+                    "type": "number",
+                    "default": 1000,
+                    "description": "Length (in bp) of the bins. If zero, no binning will be performed.",
+                    "fa_icon": "fas fa-sort-numeric-down",
+                    "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a bin length of 1000 for WGS analysis, and 0 for WES analysis. "
+                },
+                "gcnv_exclude_bed": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed$",
+                    "description": "Path to directory for a bed file containing regions to be exluded from the analysis.",
+                    "help_text": "If the regions you would like to exclude are in bed format, use this option. If you have an interval_list file, use `exclude_interval_list` parameter instead."
+                },
+                "gcnv_exclude_interval_list": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\._interval_list$",
+                    "description": "Path to directory for exclude_interval_list file.",
+                    "help_text": "If the regions you would like to exclude are in interval_list format, use this option. If you have a bed file, use `exclude` parameter instead."
+                },
+                "gcnv_mappable_regions": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to Umap single-read mappability track in .bed or .bed.gz format. Overlapping intervals must be merged.",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "help_text": "Used by GATK's AnnotateIntervals."
+                },
+                "gcnv_padding": {
+                    "type": "number",
+                    "description": "Length (in bp) of the padding regions on each side of the intervals.",
+                    "default": 0,
+                    "fa_icon": "fas fa-sort-numeric-down",
+                    "help_text": "Used by GATK's PreprocessIntervals. GATK recommends a padding of 0 for WGS analysis, and 250 for WES analysis."
+                },
+                "gcnv_model_name": {
+                    "type": "string",
+                    "description": "Name for panel of normals.",
+                    "default": "germlinecnvcaller"
+                },
+                "gcnv_ploidy_priors": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "description": "Path to a file containing ploidy priors table.",
+                    "fa_icon": "fas fa-file",
+                    "help_text": "Used by GATK's DeterminGermlineContigPloidy."
+                },
+                "gcnv_readcount_format": {
+                    "type": "string",
+                    "description": "Output file format for count data",
+                    "default": "HDF5",
+                    "fa_icon": "fas fa-align-left",
+                    "enum": ["HDF5", "TSV"]
+                },
+                "gcnv_scatter_content": {
+                    "type": "number",
+                    "description": "When scattering with this argument, each of the resultant files will (ideally) have this amount of interval-counts.",
+                    "default": 5000,
+                    "fa_icon": "fas fa-sort-numeric-down",
+                    "help_text": "Used by GATK/Picards's IntervalListTools."
+                },
+                "gcnv_segmental_duplications": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to segmental-duplication track in .bed or .bed.gz format. Overlapping intervals must be merged.",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "help_text": "Used by GATK's AnnotateIntervals."
+                },
+                "gcnv_target_bed": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed$",
+                    "description": "Path to directory for target bed file.",
+                    "help_text": "If the regions you would like to analyse are in bed format, use this option. If you have an interval_list file, use `target_interval_list` parameter instead."
+                },
+                "gcnv_target_interval_list": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\._interval_list$",
+                    "description": "Path to directory for target interval_list file.",
+                    "help_text": "If the regions you would like to analyse are in interval_list format, use this option. If you have a bed file, use `target_bed` parameter instead."
+                }
+            }
+        },
+        "gens_options": {
+            "title": "GENS options",
+            "type": "object",
+            "description": "Options used by the gens subworkflow",
+            "default": "",
+            "properties": {
+                "gens_bin_length": {
+                    "type": "number",
+                    "default": 100,
+                    "description": "Length (in bp) of the bins. If zero, no binning will be performed.",
+                    "fa_icon": "fas fa-sort-numeric-down",
+                    "help_text": "Used by GATK's PreprocessIntervals. We recommend a bin length of 100."
+                },
+                "gens_pon_name": {
+                    "type": "string",
+                    "description": "Name for panel of normals.",
+                    "default": "gens"
+                },
+                "gens_readcount_format": {
+                    "type": "string",
+                    "description": "Output file format for count data",
+                    "default": "HDF5",
+                    "fa_icon": "fas fa-align-left",
+                    "enum": ["HDF5", "TSV"]
+                }
+            }
+        },
+        "cnvkit_options": {
+            "title": "CNVkit options",
+            "type": "object",
+            "description": "Options used by the cnvkit subworkflow",
+            "default": "",
+            "properties": {
+                "cnvkit_targets": {
+                    "type": "string"
+                }
+            }
+        },
+        "mutect2_options": {
+            "title": "Mutect2 options",
+            "type": "object",
+            "description": "Options used by the mutect2 subworkflow",
+            "default": "",
+            "properties": {
+                "mutect2_pon_name": {
+                    "type": "string"
+                },
+                "mutect2_target_bed": {
+                    "type": "string",
+                    "description": "Path to target bed file",
+                    "pattern": "^\\S+\\.bed$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "exists": true,
+                    "mimetype": "text/plain"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -13,15 +180,23 @@
             "required": ["input", "outdir"],
             "properties": {
                 "input": {
-                    "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "schema": "assets/schema_input.json",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/createpanelrefs/usage#samplesheet-input).",
-                    "fa_icon": "fas fa-file-csv"
+                    "help_text": "A design file with information about the samples in your experiment. Use this parameter to specify the location of the input files. It has to be a comma-separated file with a header row. See [usage docs](https://nf-co.re/sarek/usage#input).\n\nIf no input file is specified, sarek will attempt to locate one in the `{outdir}` directory.",
+                    "fa_icon": "fas fa-file-csv",
+                    "schema": "assets/schema_input.json",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/csv",
+                            "pattern": "^\\S+\\.csv$"
+                        },
+                        {
+                            "type": "string",
+                            "maxLength": 0
+                        }
+                    ]
                 },
                 "outdir": {
                     "type": "string",
@@ -42,6 +217,23 @@
                     "fa_icon": "fas fa-file-signature"
                 }
             }
+        },
+        "main_options": {
+            "title": "Main options",
+            "type": "object",
+            "description": "Most common options used for the pipeline",
+            "required": ["tools"],
+            "default": "",
+            "properties": {
+                "tools": {
+                    "type": "string",
+                    "fa_icon": "fas fa-toolbox",
+                    "description": "Tools to use for building Panel of Normals or models.",
+                    "help_text": "Multiple tools separated with commas.\n\nTools available: CNVKIT,germlinecnvcaller,gens,mutect2",
+                    "pattern": "^((cnvkit|germlinecnvcaller|gens|mutect2)?,?)*(?<!,)$"
+                }
+            },
+            "fa_icon": "fas fa-user-cog"
         },
         "reference_genome_options": {
             "title": "Reference genome options",
@@ -71,6 +263,24 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
+                },
+                "dict": {
+                    "type": "string",
+                    "description": "Path to sequence dictionary file",
+                    "pattern": "^\\S+\\.dict$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "exists": true,
+                    "mimetype": "text/plain"
+                },
+                "fai": {
+                    "type": "string",
+                    "description": "Path to fasta index file",
+                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "exists": true,
+                    "mimetype": "text/plain"
                 }
             }
         },
@@ -278,7 +488,22 @@
     },
     "allOf": [
         {
+            "$ref": "#/definitions/germlinecnvcaller_options"
+        },
+        {
+            "$ref": "#/definitions/gens_options"
+        },
+        {
+            "$ref": "#/definitions/cnvkit_options"
+        },
+        {
+            "$ref": "#/definitions/mutect2_options"
+        },
+        {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/main_options"
         },
         {
             "$ref": "#/definitions/reference_genome_options"

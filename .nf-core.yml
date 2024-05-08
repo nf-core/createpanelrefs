@@ -1,2 +1,9 @@
 repository_type: pipeline
 nf_core_version: "2.14.0"
+lint:
+  actions_ci: False
+  files_exist:
+    - conf/modules.config
+  files_unchanged:
+    - .gitattributes
+    - .gitignore

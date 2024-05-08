@@ -1,0 +1,53 @@
+default:
+  - conf/**
+  - main.nf
+  - modules/**
+  - nextflow.config
+  - nextflow_schema.json
+  - subworkflows/**
+  - tests/*.nf.test
+  - workflows/**
+
+cnvkit:
+  - conf/modules/cnvkit.config
+  - modules/nf-core/cnvkit/batch/**
+  - tests/cnvkit.nf.test
+
+mutect2:
+  - conf/modules/mutect2.config
+  - modules/nf-core/gatk4/mutect2/**
+  - modules/nf-core/gatk4/genomicsdbimport/**
+  - modules/nf-core/gatk4/createsomaticpanelofnormals/**
+  - subworkflows/nf-core/bam_create_som_pon_gatk/**
+
+germlinecnvcaller_cohort:
+  - conf/modules/germlinecnvcaller_cohort.config
+  - modules/nf-core/gatk4/annotateintervals/**
+  - modules/nf-core/gatk4/bedtointervallist/**
+  - modules/nf-core/gatk4/bedtointervallist/**
+  - modules/nf-core/gatk4/collectreadcounts/**
+  - modules/nf-core/gatk4/determinegermlinecontigploidy/**
+  - modules/nf-core/gatk4/filterintervals/**
+  - modules/nf-core/gatk4/germlinecnvcaller/**
+  - modules/nf-core/gatk4/indexfeaturefile/**
+  - modules/nf-core/gatk4/intervallisttools/**
+  - modules/nf-core/gatk4/preprocessintervals/**
+  - modules/nf-core/picard/createsequencedictionary/**
+  - modules/nf-core/samtools/faidx/**
+  - modules/nf-core/samtools/index/**
+  - subworkflows/local/germlinecnvcaller_cohort.nf
+  - tests/pipeline/germlinecnvcaller_cohort.nf.test
+  - tests/pipeline/germlinecnvcaller_cohort.nf.config
+  - tests/test_assets/germlinecnvcaller_software_versions.yaml
+
+gens_pon:
+  - conf/modules/gens_pon.config
+  - modules/nf-core/gatk4/collectreadcounts/**
+  - modules/nf-core/gatk4/createreadcountpanelofnormals/**
+  - modules/nf-core/gatk4/preprocessintervals/**
+  - modules/nf-core/picard/createsequencedictionary/**
+  - modules/nf-core/samtools/faidx/**
+  - modules/nf-core/samtools/index/**
+  - subworkflows/local/gens_pon.nf
+  - tests/pipeline/gens_pon.nf.test
+  - tests/test_assets/gens_software_versions.yaml
