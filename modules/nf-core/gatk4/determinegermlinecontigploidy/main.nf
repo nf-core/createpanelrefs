@@ -4,7 +4,11 @@ process GATK4_DETERMINEGERMLINECONTIGPLOIDY {
     label 'process_single'
 
     //Conda is not supported at the moment: https://github.com/broadinstitute/gatk/issues/7811
-    container "nf-core/gatk:4.4.0.0" //Biocontainers is missing a package
+    container "docker.io/broadinstitute/gatk:4.5.0.0" //Biocontainers is missing a package
+    //container "quay.io/biocontainers/gatk4:4.4.0.0--py36hdfd78af_0"
+    containerOptions '-u root:root'
+
+    
 
     input:
     tuple val(meta), path(counts), path(bed), path(exclude_beds)
@@ -39,6 +43,7 @@ process GATK4_DETERMINEGERMLINECONTIGPLOIDY {
         avail_mem = (task.memory.mega*0.8).intValue()
     }
     """
+    #source activate gatk
     gatk --java-options "-Xmx${avail_mem}M -XX:-UsePerfData" \\
         DetermineGermlineContigPloidy \\
         ${input_list} \\
