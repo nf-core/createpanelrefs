@@ -58,7 +58,6 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
     - `*_denoised.vcf.gz`: Denoised copy number ratios.
     - `*_genotyped_intervals.vcf.gz`: Most likely copy number calls for each genomic interval included in the interval list.
     - `*_genotyped_segments.vcf.gz`: Coalesce contiguous intervals with the same copy number calls into constant copy number segments .
-    
 
 </details>
 
