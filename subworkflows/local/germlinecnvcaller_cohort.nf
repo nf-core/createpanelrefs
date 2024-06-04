@@ -169,36 +169,32 @@ workflow GERMLINECNVCALLER_COHORT {
 
         GATK4_GERMLINECNVCALLER ( ch_cnvcaller_in )
 
-        
-                
         //
         // create input channels for GATK4_POSTPROCESSGERMLINECNVCALLS
         //
         ch_readcounts_out
-                
-                .map{idx -> idx[1].baseName}
-                .flatten()
-                .map{data -> [id:data]}
-                .set{ch_sample_ids}
-                     
-        GATK4_GERMLINECNVCALLER.out.cohortcalls 
-                             .collect()
-                             .map{meta, calls1, meta2, calls2 -> [calls1, calls2]}
-                             .set{cnv_calls}
+            .map{idx -> idx[1].baseName}
+            .flatten()
+            .map{data -> [id:data]}
+            .set{ch_sample_ids}
+
+        GATK4_GERMLINECNVCALLER.out.cohortcalls
+            .collect()
+            .map{meta, calls1, meta2, calls2 -> [calls1, calls2]}
+            .set{cnv_calls}
 
         GATK4_GERMLINECNVCALLER.out.cohortmodel
-                            .collect()
-                            .map{meta, model, meta2, model2 -> [model, model2]}
-                            .set{cnv_model}
+            .collect()
+            .map{meta, model, meta2, model2 -> [model, model2]}
+            .set{cnv_model}
 
         cnv_calls.concat(cnv_model)
-                 .collect(flat:false) 
-                 .set{cnv_calls_model}
+            .collect(flat:false)
+            .set{cnv_calls_model}
 
         GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls
-                            .map{meta, ploidcalls -> ploidcalls}
-                            .set{ploidy_path}    
-        
+            .map{meta, ploidcalls -> ploidcalls}
+            .set{ploidy_path}
         cnv_calls
             .concat(cnv_model)
             .concat(ploidy_path)
@@ -206,16 +202,15 @@ workflow GERMLINECNVCALLER_COHORT {
             .set{base_cnv_calls}
 
         ch_sample_ids.combine(base_cnv_calls)
-                  .map{data -> [
-                    meta: data[0],
-                    calls: data[1],
-                    model: data[2],
-                    ploidy: data[3]
-                  ]}                
-                  .set{input_channel}
-        
+            .map{data -> [
+                meta: data[0],
+                calls: data[1],
+                model: data[2],
+                ploidy: data[3]
+            ]}               
+            .set{input_channel}
+
     GATK4_POSTPROCESSGERMLINECNVCALLS( input_channel )
-            
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         ch_versions = ch_versions.mix(PICARD_CREATESEQUENCEDICTIONARY.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
