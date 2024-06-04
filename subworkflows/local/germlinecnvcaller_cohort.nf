@@ -207,7 +207,7 @@ workflow GERMLINECNVCALLER_COHORT {
                 calls: data[1],
                 model: data[2],
                 ploidy: data[3]
-            ]}               
+            ]}
             .set{input_channel}
 
     GATK4_POSTPROCESSGERMLINECNVCALLS( input_channel )
