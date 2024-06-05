@@ -9,6 +9,19 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 
 ### `Added`
 
+- [#5](https://github.com/nf-core/createpanelrefs/pull/5) - `CNVKIT` can be used to create a PON
+- [#5](https://github.com/nf-core/createpanelrefs/pull/5) - Usage of nf-validation
+- [#5](https://github.com/nf-core/createpanelrefs/pull/5) - Usage of nf-test
+- [#8](https://github.com/nf-core/createpanelrefs/pull/8) - `Mutect2` can be used to create a PON
+- [#10](https://github.com/nf-core/createpanelrefs/pull/10) - `GATK germlinecnvcaller` can be used to create a PON
+- [#17](https://github.com/nf-core/createpanelrefs/pull/17) - `GENS` can be used to create a PON
+
+### `Updated`
+
+- [#19](https://github.com/nf-core/createpanelrefs/pull/19) - Updates germlinecnvcaller subworkflow to handle exome samples
+- [#24](https://github.com/nf-core/createpanelrefs/pull/24) - Updates germlinecnvcaller subworkflow to use mappability and segmental duplications track
+- [#24](https://github.com/nf-core/createpanelrefs/pull/24) - Updates germlinecnvcaller and gens subworkflows to use custom names for panel of normals.
+
 ### `Fixed`
 
 ### `Dependencies`

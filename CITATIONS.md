@@ -10,9 +10,13 @@
 
 ## Pipeline tools
 
-- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [CNVKIT](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004873)
 
-  > Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online].
+  > Talevich E, Shain AH, Botton T, Bastian BC (2016) CNVkit: Genome-Wide Copy Number Detection and Visualization from Targeted DNA Sequencing. PLoS Comput Biol 12(4): e1004873. doi: 10.1371/journal.pcbi.1004873. PubMed PMID: 27100738. PubMed Central PMCID: PMC4839673.
+
+- [GATK] (https://genome.cshlp.org/content/20/9/1297)
+
+  > McKenna A, Hanna M, Banks E, et al. The Genome Analysis Toolkit: A MapReduce framework for analyzing next-generation DNA sequencing data. Genome Res. 2010;20(9):1297-1303. doi:10.1101/gr.107524.110
 
 - [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
 

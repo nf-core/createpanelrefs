@@ -1,0 +1,26 @@
+nextflow_pipeline {
+
+    name "Test CNVKIT_BATCH"
+    script "main.nf"
+    tag "cnvkit"
+
+    test("Run cnvkit test") {
+
+        when {
+            params {
+                outdir                       = "$outputDir"
+                tools                        = 'cnvkit'
+                validationSchemaIgnoreParams = 'genomes,baseDir,base-dir,outputDir,output-dir'
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert new File("$outputDir/multiqc/").exists() },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("software_versions") },
+                { assert snapshot(path("$outputDir/reference/cnvkit/").list()).match("cnvkit") }
+            )
+        }
+    }
+}
