@@ -21,6 +21,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#19](https://github.com/nf-core/createpanelrefs/pull/19) - Updates germlinecnvcaller subworkflow to handle exome samples
 - [#24](https://github.com/nf-core/createpanelrefs/pull/24) - Updates germlinecnvcaller subworkflow to use mappability and segmental duplications track
 - [#24](https://github.com/nf-core/createpanelrefs/pull/24) - Updates germlinecnvcaller and gens subworkflows to use custom names for panel of normals.
+- [#28](https://github.com/nf-core/createpanelrefs/pull/28) - Updates default args for gens subworkflow and made the parameters available from the command line.
 
 ### `Fixed`
 

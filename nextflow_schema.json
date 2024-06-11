@@ -127,6 +127,17 @@
                     "fa_icon": "fas fa-sort-numeric-down",
                     "help_text": "Used by GATK's PreprocessIntervals. We recommend a bin length of 100."
                 },
+                "gens_maximum_chunk_size": {
+                    "type": "number",
+                    "default": 167772150,
+                    "description": "Maximum chunk size when writing the HDF5 file"
+                },
+                "gens_min_interval_median_percentile": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Minimum interval median percentile for gatk CreateReadCountPanelOfNormals",
+                    "help_text": "Genomic intervals with a median (across samples) of fractional coverage (optionally corrected for GC bias) less than or equal to this percentile are filtered out. (This is the first filter applied.)"
+                },
                 "gens_pon_name": {
                     "type": "string",
                     "description": "Name for panel of normals.",
@@ -475,6 +486,13 @@
                     "description": "Validation of parameters in lenient more.",
                     "hidden": true,
                     "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
+                },
+                "pipelines_testdata_base_path": {
+                    "type": "string",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Base URL or local path to location of pipeline test dataset files",
+                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
+                    "hidden": true
                 }
             }
         }
