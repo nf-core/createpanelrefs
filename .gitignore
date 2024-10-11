@@ -1,10 +1,11 @@
 *.pyc
 .DS_Store
 .nextflow*
-.nf-test/
+.nf-test*
 data/
 results/
 testing*
+null/
 testing/
 work/
 .nf-test.log

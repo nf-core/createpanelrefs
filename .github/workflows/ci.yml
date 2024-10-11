@@ -1,200 +1,127 @@
-# This workflow runs the pipeline with the minimal test dataset to check that it completes without any syntax errors
 name: nf-core CI
+# This workflow runs the pipeline with the minimal test dataset to check that it completes without any syntax errors
 on:
   push:
     branches:
       - dev
   pull_request:
-    branches:
-      - dev
-      - master
   release:
-    types:
-      - "published"
+    types: [published]
+  workflow_dispatch:
 
 env:
+  NFT_DIFF: "pdiff"
+  NFT_DIFF_ARGS: "--line-numbers --width 120 --expand-tabs=2"
+  NFT_VER: "0.9.0"
+  NFT_WORKDIR: "~"
   NXF_ANSI_LOG: false
-  NFTEST_VER: "0.8.4"
+  NXF_SINGULARITY_CACHEDIR: ${{ github.workspace }}/.singularity
+  NXF_SINGULARITY_LIBRARYDIR: ${{ github.workspace }}/.singularity
 
-# Cancel if a newer run is started
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}"
   cancel-in-progress: true
 
 jobs:
-  changes:
-    name: Check for changes
+  test:
+    # Only run on push if this is the nf-core dev branch (merged PRs)
+    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/createpanelrefs') }}"
     runs-on: ubuntu-latest
-    outputs:
-      # Expose matched filters as job 'tags' output variable
-      tags: ${{ steps.filter.outputs.changes }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: "tests/config/tags.yml"
-
-  define_nxf_versions:
-    name: Choose nextflow versions to test against depending on target branch
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.nxf_versions.outputs.matrix }}
-    steps:
-      - id: nxf_versions
-        run: |
-          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.base_ref }}" == "dev" && "${{ matrix.NXF_VER }}" != "latest-everything" ]]; then
-            echo matrix='["latest-everything"]' | tee -a $GITHUB_OUTPUT
-          else
-            echo matrix='["latest-everything", "23.10.0"]' | tee -a $GITHUB_OUTPUT
-          fi
-
-  test-dev:
-    if: (github.base_ref == 'dev' || (github.event_name == 'push'))
-    name: ${{ matrix.tags }} ${{ matrix.profile }} NXF ${{ matrix.NXF_VER }}
-    runs-on: ubuntu-latest
-    needs: changes
+    name: "Test ${{ matrix.filter }} | ${{ matrix.profile }} | ${{ matrix.NXF_VER }} | ${{ matrix.shard }}/5"
     strategy:
       fail-fast: false
       matrix:
-        # Run tests based on changes in code
-        tags: ["${{ fromJson(needs.changes.outputs.tags) }}"]
-        # Only run docker tests on dev branch
-        profile: ["docker"]
-        # Only test minimal version
-        NXF_VER: ["23.10.0"]
-        # Always run default test
-        include:
-          - tags: default
-
+        NXF_VER:
+          - "24.04.2"
+          - "latest-everything"
+        filter: ["workflow", "function", "pipeline"]
+        # filter: ["process", "workflow", "function", "pipeline"]
+        profile: ["conda", "docker", "singularity"]
+        shard: [1, 2, 3, 4]
+        # Exclude conda and singularity on dev
+        isMaster:
+          - ${{ github.base_ref == 'master' }}
+        exclude:
+          - isMaster: false
+            profile: "conda"
+          - isMaster: false
+            profile: "singularity"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
-
-      - uses: actions/cache@v3
         with:
-          path: /usr/local/bin/nextflow
-          key: ${{ runner.os }}
-          restore-keys: |
-            ${{ runner.os }}-nextflow-
+          fetch-depth: 0
 
-      - name: Install nf-test
-        run: |
-          wget -qO- https://code.askimed.com/install/nf-test | bash -s $NFTEST_VER
-          sudo mv nf-test /usr/local/bin/
-
-      - name: Install Nextflow ${{ matrix.NXF_VER }}
-        uses: nf-core/setup-nextflow@v1.2.0
+      - name: Set up Nextflow
+        uses: nf-core/setup-nextflow@v2
         with:
           version: "${{ matrix.NXF_VER }}"
 
-      - name: Disk space cleanup
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-
-      - name: Run nf-test
-        uses: Wandalen/wretry.action@v1.0.11
+      - name: Set up nf-test
+        uses: nf-core/setup-nf-test@v1
         with:
-          command: nf-test test tests/pipeline/${{ matrix.tags }}.nf.test --profile "test,${{ matrix.profile }}" --tap=test.tap
-          attempt_limit: 3
+          version: ${{ env.NFT_VER }}
 
-      - name: Output log on failure
-        if: failure()
+      - name: Cache pdiff
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
+        id: cache-pip-pdiff
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-pdiff
+
+      - name: Set up pdiff to see diff between nf-test snapshots
         run: |
-          sudo apt install bat > /dev/null
-          batcat --decorations=always --color=always /home/runner/pytest_workflow_*/*/log.{out,err}
+          python -m pip install --upgrade pip
+          pip install pdiff cryptography
 
-      - name: Upload logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v2
-        with:
-          name: logs-${{ matrix.profile }}
-          path: |
-            /home/runner/pytest_workflow_*/*/.nextflow.log
-            /home/runner/pytest_workflow_*/*/log.out
-            /home/runner/pytest_workflow_*/*/log.err
-            /home/runner/pytest_workflow_*/*/work
-
-  test-master:
-    # Only run on master branch or when a PR is opened against master
-    if: github.base_ref == 'master'
-    name: ${{ matrix.tags }} ${{ matrix.profile }} NXF ${{ matrix.NXF_VER }}
-    runs-on: ubuntu-latest
-    needs: [changes, define_nxf_versions]
-    strategy:
-      fail-fast: false
-      matrix:
-        # Run tests based on changes in code
-        tags: ["${{ fromJson(needs.changes.outputs.tags) }}"]
-        # Only run docker tests on dev branch
-        profile: ["docker", "singularity", "conda"]
-        NXF_VER: ${{ fromJson(needs.define_nxf_versions.outputs.matrix) }}
-        # Always run default test
-        include:
-          - tags: default
-
-    steps:
-      - name: Check out pipeline code
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
-      - uses: actions/cache@v3
-        with:
-          path: /usr/local/bin/nextflow
-          key: ${{ runner.os }}
-          restore-keys: |
-            ${{ runner.os }}-nextflow-
-
-      - name: Install nf-test
-        run: |
-          wget -qO- https://code.askimed.com/install/nf-test | bash -s $NFTEST_VER
-          sudo mv nf-test /usr/local/bin/
-
-      - name: Install Nextflow ${{ matrix.NXF_VER }}
-        uses: nf-core/setup-nextflow@b9f764e8ba5c76b712ace14ecbfcef0e40ae2dd8 # v1
-        with:
-          version: "${{ matrix.NXF_VER }}"
-
-      - name: Disk space cleanup
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+      - name: Set up Apptainer
+        if: matrix.profile == 'singularity'
+        uses: eWaterCycle/setup-apptainer@main
 
       - name: Set up Singularity
         if: matrix.profile == 'singularity'
-        uses: eWaterCycle/setup-singularity@v5
-        with:
-          singularity-version: 3.7.1
-
-      - name: Set up miniconda
-        if: matrix.profile == 'conda'
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          auto-update-conda: true
-          channels: conda-forge,bioconda,defaults
-          python-version: ${{ matrix.python-version }}
-
-      - name: Conda clean
-        if: matrix.profile == 'conda'
-        run: conda clean -a
-
-      - name: Run nf-test
-        uses: Wandalen/wretry.action@v1.0.11
-        with:
-          command: nf-test test tests/pipeline/${{ matrix.tag }}.nf.test --profile "test,${{ matrix.profile }}" --tap=test.tap
-          attempt_limit: 3
-
-      - name: Output log on failure
-        if: failure()
         run: |
-          sudo apt install bat > /dev/null
-          batcat --decorations=always --color=always /home/runner/pytest_workflow_*/*/log.{out,err}
+          mkdir -p $NXF_SINGULARITY_CACHEDIR
+          mkdir -p $NXF_SINGULARITY_LIBRARYDIR
 
-      - name: Upload logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v2
+      - name: Set up Miniconda
+        if: matrix.profile == 'conda'
+        uses: conda-incubator/setup-miniconda@a4260408e20b96e80095f42ff7f1a15b27dd94ca # v3
         with:
-          name: logs-${{ matrix.profile }}
-          path: |
-            /home/runner/pytest_workflow_*/*/.nextflow.log
-            /home/runner/pytest_workflow_*/*/log.out
-            /home/runner/pytest_workflow_*/*/log.err
-            /home/runner/pytest_workflow_*/*/work
-            !/home/runner/pytest_workflow_*/*/work/conda
-            !/home/runner/pytest_workflow_*/*/work/singularity
+          miniconda-version: "latest"
+          auto-update-conda: true
+          conda-solver: libmamba
+          channels: conda-forge,bioconda
+
+      - name: Set up Conda
+        if: matrix.profile == 'conda'
+        run: |
+          echo $(realpath $CONDA)/condabin >> $GITHUB_PATH
+          echo $(realpath python) >> $GITHUB_PATH
+
+      - name: Clean up Disk space
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+
+      - name: "Run tests | ${{ matrix.filter }}_${{ matrix.profile }} | ${{ matrix.shard }}/4"
+        run: |
+          nf-test test \
+              --ci \
+              --debug \
+              --verbose \
+              --junitxml="TEST-${{ matrix.filter }}_${{ matrix.profile }}_${{ matrix.shard }}.xml" \
+              --shard ${{ matrix.shard }}/5 \
+              --changed-since HEAD^ \
+              --follow-dependencies \
+              --profile "+${{ matrix.profile }}" \
+              --filter ${{ matrix.filter }}
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          report_paths: "TEST-*.xml"
+
+      - name: Clean up
+        if: always()
+        run: |
+          sudo rm -rf /home/ubuntu/tests/

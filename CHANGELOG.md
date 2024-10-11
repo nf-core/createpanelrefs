@@ -23,6 +23,8 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#24](https://github.com/nf-core/createpanelrefs/pull/24) - Updates germlinecnvcaller and gens subworkflows to use custom names for panel of normals.
 - [#28](https://github.com/nf-core/createpanelrefs/pull/28) - Updates default args for gens subworkflow and made the parameters available from the command line.
 - [#31](https://github.com/nf-core/createpanelrefs/pull/31) - Publish interval_list file from gens subworkflow by default.
+- [#35](https://github.com/nf-core/createpanelrefs/pull/35) - Template update for nf-core/tools v3.0.2
+- [#35](https://github.com/nf-core/createpanelrefs/pull/35) - Improve pipeline level tests
 
 ### `Fixed`
 

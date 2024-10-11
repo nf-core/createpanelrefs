@@ -1,9 +1,9 @@
-include { GATK4_COLLECTREADCOUNTS             } from '../../modules/nf-core/gatk4/collectreadcounts/main'
-include { GATK4_CREATEREADCOUNTPANELOFNORMALS } from '../../modules/nf-core/gatk4/createreadcountpanelofnormals/main'
-include { GATK4_PREPROCESSINTERVALS           } from '../../modules/nf-core/gatk4/preprocessintervals/main'
-include { PICARD_CREATESEQUENCEDICTIONARY     } from '../../modules/nf-core/picard/createsequencedictionary/main'
-include { SAMTOOLS_FAIDX                      } from '../../modules/nf-core/samtools/faidx/main'
-include { SAMTOOLS_INDEX                      } from '../../modules/nf-core/samtools/index/main'
+include { GATK4_COLLECTREADCOUNTS             } from '../../../modules/nf-core/gatk4/collectreadcounts/main'
+include { GATK4_CREATEREADCOUNTPANELOFNORMALS } from '../../../modules/nf-core/gatk4/createreadcountpanelofnormals/main'
+include { GATK4_PREPROCESSINTERVALS           } from '../../../modules/nf-core/gatk4/preprocessintervals/main'
+include { PICARD_CREATESEQUENCEDICTIONARY     } from '../../../modules/nf-core/picard/createsequencedictionary/main'
+include { SAMTOOLS_FAIDX                      } from '../../../modules/nf-core/samtools/faidx/main'
+include { SAMTOOLS_INDEX                      } from '../../../modules/nf-core/samtools/index/main'
 
 workflow GENS_PON {
     take:
