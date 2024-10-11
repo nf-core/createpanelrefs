@@ -1,3 +1,6 @@
+gatk4/*.{vcf.gz,vcf.gz.tbi}
+gatk4/test/*
+gatk4/test/**
 multiqc/multiqc_data/multiqc.log
 multiqc/multiqc_data/multiqc_data.json
 multiqc/multiqc_data/multiqc_general_stats.txt
