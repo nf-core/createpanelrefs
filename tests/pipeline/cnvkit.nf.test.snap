@@ -1,0 +1,26 @@
+{
+    "software_versions": {
+        "content": [
+            "{CNVKIT_BATCH={cnvkit=0.9.10}, Workflow={nf-core/createpanelrefs=v1.0dev}}"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "24.04.2"
+        },
+        "timestamp": "2024-02-21T12:34:52.978702536"
+    },
+    "cnvkit": {
+        "content": [
+            "panel.cnn:md5,68028cd2b4e0fc4489bf5bfd0a73440f",
+            "test.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+            "test.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,0067cc3a0e479b23ab3bf056cead31b4",
+            "test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+            "test2.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,1e1012812eb893afd931485cb760294e"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "24.04.2"
+        },
+        "timestamp": "2024-06-11T16:44:31.390826495"
+    }
+}
