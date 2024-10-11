@@ -47,10 +47,6 @@ workflow PIPELINE_INITIALISATION {
         workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1
     )
 
-<<<<<<< HEAD
-=======
-
->>>>>>> upstream/nf-core-template-merge-3.0.1
     //
     // Validate parameters and generate parameter summary to stdout
     //
@@ -59,10 +55,6 @@ workflow PIPELINE_INITIALISATION {
         validate_params,
         null
     )
-<<<<<<< HEAD
-=======
-
->>>>>>> upstream/nf-core-template-merge-3.0.1
 
     //
     // Check config provided to the pipeline
