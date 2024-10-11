@@ -1,0 +1,47 @@
+{
+    "Run with profile test": {
+        "content": [
+            2,
+            {
+                "CNVKIT_BATCH": {
+                    "cnvkit": "0.9.10"
+                },
+                "Workflow": {
+                    "nf-core/createpanelrefs": "v1.0dev"
+                }
+            },
+            [
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_ceatepanelrefs_software_mqc_versions.yml",
+                "reference",
+                "reference/cnvkit",
+                "reference/cnvkit/panel.cnn",
+                "reference/cnvkit/test.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
+                "reference/cnvkit/test.paired_end.recalibrated.sorted.targetcoverage.cnn",
+                "reference/cnvkit/test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
+                "reference/cnvkit/test2.paired_end.recalibrated.sorted.targetcoverage.cnn"
+            ],
+            [
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "panel.cnn:md5,68028cd2b4e0fc4489bf5bfd0a73440f",
+                "test.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "test.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,0067cc3a0e479b23ab3bf056cead31b4",
+                "test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "test2.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,1e1012812eb893afd931485cb760294e"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.09.0"
+        },
+        "timestamp": "2024-10-11T11:10:55.4912"
+    }
+}

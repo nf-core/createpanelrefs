@@ -25,8 +25,8 @@ include { BAM_CREATE_SOM_PON_GATK     } from '../subworkflows/nf-core/bam_create
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { CNVKIT_BATCH                } from '../modules/nf-core/cnvkit/batch/main'
-include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
+include { CNVKIT_BATCH                } from '../modules/nf-core/cnvkit/batch'
+include { MULTIQC                     } from '../modules/nf-core/multiqc'
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
 ch_dict                         = params.dict                        ? Channel.fromPath(params.dict).map { dict -> [[id:dict.baseName], dict]}.collect()
@@ -162,7 +162,7 @@ workflow CREATEPANELREFS {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
+            name: 'nf_core_ceatepanelrefs_software_mqc_versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
