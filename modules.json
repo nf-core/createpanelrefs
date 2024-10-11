@@ -5,20 +5,105 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
-                    "fastqc": {
+                    "cnvkit/batch": {
+                        "branch": "master",
+                        "git_sha": "f53b071421340e6fac0806c86ba030e578e94826",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/annotateintervals": {
+                        "branch": "master",
+                        "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/bedtointervallist": {
+                        "branch": "master",
+                        "git_sha": "d3f215802f696f7993f25c759781d2db91232015",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/collectreadcounts": {
+                        "branch": "master",
+                        "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/createreadcountpanelofnormals": {
+                        "branch": "master",
+                        "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/createsomaticpanelofnormals": {
+                        "branch": "master",
+                        "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
+                        "installed_by": ["bam_create_som_pon_gatk"]
+                    },
+                    "gatk4/determinegermlinecontigploidy": {
+                        "branch": "master",
+                        "git_sha": "60a7dbae179bcfa24c10294cc9a07423a239c19a",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/filterintervals": {
+                        "branch": "master",
+                        "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/genomicsdbimport": {
+                        "branch": "master",
+                        "git_sha": "5caf7640a9ef1d18d765d55339be751bb0969dfa",
+                        "installed_by": ["bam_create_som_pon_gatk"]
+                    },
+                    "gatk4/germlinecnvcaller": {
+                        "branch": "master",
+                        "git_sha": "cf607b7749da0a8f5ca2a1e31233e13e3159e2fe",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/indexfeaturefile": {
+                        "branch": "master",
+                        "git_sha": "108e1f5bafc045ac19890852a41e8d95ae12aa67",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/intervallisttools": {
+                        "branch": "master",
+                        "git_sha": "afb604624abcc2fc67a43d70a2de369a50d16105",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/mutect2": {
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": ["bam_create_som_pon_gatk"]
+                    },
+                    "gatk4/preprocessintervals": {
+                        "branch": "master",
+                        "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
                         "branch": "master",
                         "git_sha": "cf17ca47590cc578dfb47db1c2a44ef86f89976d",
                         "installed_by": ["modules"]
+                    },
+                    "picard/createsequencedictionary": {
+                        "branch": "master",
+                        "git_sha": "20b0918591d4ba20047d7e13e5094bcceba81447",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/faidx": {
+                        "branch": "master",
+                        "git_sha": "04fbbc7c43cebc0b95d5b126f6d9fe4effa33519",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/index": {
+                        "branch": "master",
+                        "git_sha": "04fbbc7c43cebc0b95d5b126f6d9fe4effa33519",
+                        "installed_by": ["modules"]
                     }
                 }
             },
             "subworkflows": {
                 "nf-core": {
+                    "bam_create_som_pon_gatk": {
+                        "branch": "master",
+                        "git_sha": "b0783b07beb65cac505fa6202e8f670437637b45",
+                        "installed_by": ["subworkflows"]
+                    },
                     "utils_nextflow_pipeline": {
                         "branch": "master",
                         "git_sha": "3aa0aec1d52d492fe241919f0c6100ebf0074082",

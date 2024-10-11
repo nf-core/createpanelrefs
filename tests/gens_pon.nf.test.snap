@@ -1,0 +1,61 @@
+{
+    "Run gens test": {
+        "content": [
+            7,
+            {
+                "GATK4_COLLECTREADCOUNTS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_PREPROCESSINTERVALS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "PICARD_CREATESEQUENCEDICTIONARY": {
+                    "picard": "3.1.1"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": 1.2
+                },
+                "Workflow": {
+                    "nf-core/createpanelrefs": "v1.0dev"
+                }
+            },
+            [
+                "gens_pon",
+                "gens_pon/createreadcountpanelofnormals",
+                "gens_pon/createreadcountpanelofnormals/gens_pon.hdf5",
+                "gens_pon/intervals",
+                "gens_pon/intervals/genome.interval_list",
+                "gens_pon/readcounts",
+                "gens_pon/readcounts/sample1.tsv",
+                "gens_pon/readcounts/sample2.tsv",
+                "gens_pon/references",
+                "gens_pon/references/genome.dict",
+                "gens_pon/references/genome.fasta.fai",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_ceatepanelrefs_software_mqc_versions.yml"
+            ],
+            [
+                "sample1.tsv:md5,bfceab35109b04317f38f9cc1cde71ca",
+                "sample2.tsv:md5,7141d08cdc26f6057557be9e23ef4365",
+                "genome.fasta.fai:md5,3520cd30e1b100e55f578db9c855f685",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.09.0"
+        },
+        "timestamp": "2024-10-11T14:12:35.334538"
+    }
+}

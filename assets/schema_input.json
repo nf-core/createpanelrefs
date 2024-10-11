@@ -10,24 +10,70 @@
             "sample": {
                 "type": "string",
                 "pattern": "^\\S+$",
-                "errorMessage": "Sample name must be provided and cannot contain spaces",
-                "meta": ["id"]
+                "meta": ["id"],
+                "errorMessage": "Sample name must be provided and cannot contain spaces"
             },
-            "fastq_1": {
-                "type": "string",
+            "bam": {
+                "errorMessage": "BAM file cannot contain spaces and must have extension '.bam'",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+\\.bam$"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    }
+                ],
                 "format": "file-path",
-                "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "exists": true
             },
-            "fastq_2": {
-                "type": "string",
+            "bai": {
+                "errorMessage": "BAM index file cannot contain spaces and must have extension '.bai'",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+\\.bai$"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    }
+                ],
                 "format": "file-path",
-                "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "exists": true
+            },
+            "cram": {
+                "errorMessage": "CRAM file cannot contain spaces and must have extension '.cram'",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+\\.cram$"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    }
+                ],
+                "format": "file-path",
+                "exists": true
+            },
+            "crai": {
+                "errorMessage": "CRAM index file cannot contain spaces and must have extension '.crai'",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+\\.crai$"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    }
+                ],
+                "format": "file-path",
+                "exists": true
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample"]
     }
 }

@@ -11,25 +11,32 @@
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-include { CREATEPANELREFS  } from './workflows/createpanelrefs'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
-include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// TODO nf-core: Remove this line if you don't need a FASTA file
 //   This is an example of how to use getGenomeAttribute() to fetch parameters
 //   from igenomes.config using `--genome`
-params.fasta = getGenomeAttribute('fasta')
+params.fasta                       = getGenomeAttribute('fasta')
+params.fai                         = getGenomeAttribute('fai')
+params.dict                        = getGenomeAttribute('dict')
+params.gcnv_exclude_bed            = getGenomeAttribute('gcnv_exclude_bed')
+params.gcnv_exclude_interval_list  = getGenomeAttribute('gcnv_exclude_interval_list')
+params.gcnv_mappable_regions       = getGenomeAttribute('gcnv_mappable_regions')
+params.gcnv_segmental_duplications = getGenomeAttribute('gcnv_segmental_duplications')
+params.gcnv_target_bed             = getGenomeAttribute('gcnv_target_bed')
+params.gcnv_target_interval_list   = getGenomeAttribute('gcnv_target_interval_list')
+params.gcnv_ploidy_priors          = getGenomeAttribute('gcnv_ploidy_priors')
+params.mutect2_target_bed          = getGenomeAttribute('mutect2_target_bed')
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+include { CREATEPANELREFS         } from './workflows/createpanelrefs'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,6 +102,25 @@ workflow {
         params.hook_url,
         NFCORE_CREATEPANELREFS.out.multiqc_report
     )
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    DEFINE FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+//
+// Get attribute from genome config file e.g. fasta
+//
+
+def getGenomeAttribute(attribute) {
+    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
+        if (params.genomes[ params.genome ].containsKey(attribute)) {
+            return params.genomes[ params.genome ][ attribute ]
+        }
+    }
+    return null
 }
 
 /*
