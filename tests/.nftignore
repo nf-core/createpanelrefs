@@ -1,6 +1,9 @@
 gatk4/*.{vcf.gz,vcf.gz.tbi}
 gatk4/test/*
 gatk4/test/**
+gens_pon/createreadcountpanelofnormals/gens_pon.hdf5
+gens_pon/intervals/genome.interval_list
+gens_pon/references/genome.dict
 multiqc/multiqc_data/multiqc.log
 multiqc/multiqc_data/multiqc_data.json
 multiqc/multiqc_data/multiqc_general_stats.txt

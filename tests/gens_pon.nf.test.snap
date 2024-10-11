@@ -46,11 +46,8 @@
                 "pipeline_info/nf_core_ceatepanelrefs_software_mqc_versions.yml"
             ],
             [
-                "gens_pon.hdf5:md5,31077d93155c1ffb0ba1904b5056386a",
-                "genome.interval_list:md5,aa0fc11d901dd9b3bbfd788f83d31800",
                 "sample1.tsv:md5,bfceab35109b04317f38f9cc1cde71ca",
                 "sample2.tsv:md5,7141d08cdc26f6057557be9e23ef4365",
-                "genome.dict:md5,07f6990366eb7835eeecae174ad3db6a",
                 "genome.fasta.fai:md5,3520cd30e1b100e55f578db9c855f685",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ]
