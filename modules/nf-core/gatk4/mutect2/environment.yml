@@ -1,7 +1,3 @@
-<<<<<<< HEAD:modules/nf-core/fastqc/environment.yml
-=======
-name: gatk4_mutect2
->>>>>>> dev:modules/nf-core/gatk4/mutect2/environment.yml
 channels:
   - conda-forge
   - bioconda
