@@ -55,6 +55,8 @@ jobs:
             profile: "conda"
           - isMaster: false
             profile: "singularity"
+        include:
+          - tag: default
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
@@ -63,6 +65,11 @@ jobs:
         uses: nf-core/setup-nextflow@v2
         with:
           version: "${{ matrix.NXF_VER }}"
+
+      - name: Install nf-test
+        uses: nf-core/setup-nf-test@v1
+        with:
+          version: ${{ env.NFT_VER }}
 
       - name: Set up apptainer
         if: matrix.profile == 'singularity'
