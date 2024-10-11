@@ -10,10 +10,13 @@ nextflow_pipeline {
 
         when {
             params {
+                dict                 = null
+                fai                  = null
                 fasta                = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta"
                 gcnv_model_name      = 'cohort'
                 gcnv_ploidy_priors   = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/gatk/contig_ploidy_priors_table.tsv"
                 gcnv_scatter_content = 2
+                input                = "${projectDir}/tests/csv/1.0.0/bam_sorted.csv"
                 outdir               = "$outputDir"
                 tools                = 'germlinecnvcaller'
             }
