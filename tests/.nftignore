@@ -1,3 +1,4 @@
+.DS_Store
 gatk4/*.{vcf.gz,vcf.gz.tbi}
 gatk4/test/*
 gatk4/test/**
@@ -19,14 +20,17 @@ germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-call
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/log_q_tau_tk.tsv
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/mu_W_tu.tsv
+germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/mu_ard_u_interval__.tsv
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/mu_ard_u_log__.tsv
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/mu_log_mean_bias_t.tsv
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/mu_psi_t_log__.tsv
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/std_W_tu.tsv
+germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/std_ard_u_interval__.tsv
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/std_ard_u_log__.tsv
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/std_log_mean_bias_t.tsv
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/std_psi_t_log__.tsv
 germlinecnvcaller/readcounts/*.hdf5
+multiqc/multiqc_data/BETA-multiqc.parquet
 multiqc/multiqc_data/multiqc.log
 multiqc/multiqc_data/multiqc_data.json
 multiqc/multiqc_data/multiqc_general_stats.txt

@@ -33,13 +33,23 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#50](https://github.com/nf-core/createpanelrefs/pull/50) - Heavy refactoring of the pipeline
 - [#52](https://github.com/nf-core/createpanelrefs/pull/52) - Template update for nf-core/tools v3.2.1
 - [#54](https://github.com/nf-core/createpanelrefs/pull/54) - Template update for nf-core/tools v3.3.1
+- [#54](https://github.com/nf-core/createpanelrefs/pull/54) - Update nft-utils to 0.0.4
 - [#55](https://github.com/nf-core/createpanelrefs/pull/55) - Prepare relase 1.0.0
 
 ### `Fixed`
 
 - [#50](https://github.com/nf-core/createpanelrefs/pull/50) - Fix mutect2 that wasn't working without a bed file
 - [#53](https://github.com/nf-core/createpanelrefs/pull/53) - Minor syntax fixes due to [#50](https://github.com/nf-core/createpanelrefs/pull/50)
+- [#54](https://github.com/nf-core/createpanelrefs/pull/54) - Fix name for `_mqc_versions.yml` file
 
 ### `Dependencies`
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| `cnvkit`   |             | 0.9.10      |
+| `gatk4`    |             | 4.6.1.0     |
+| `gawk`     |             | 5.3.0       |
+| `multiqc`  |             | 1.29        |
+| `samtools` |             | 1.21        |
 
 ### `Deprecated`

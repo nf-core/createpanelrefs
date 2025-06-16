@@ -38,7 +38,7 @@ workflow PREPARE_GENOME {
         .groupTuple()
         .filter { _meta, files -> !files[1] }
 
-    SAMTOOLS_FAIDX(fasta_for_fai, [[:], []])
+    SAMTOOLS_FAIDX(fasta_for_fai, [[:], []], false)
 
     fai = user_fai.mix(SAMTOOLS_FAIDX.out.fai).collect()
 
