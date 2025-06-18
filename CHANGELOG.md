@@ -3,7 +3,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.0dev - [date]
+## [1.1.0](https://github.com/nf-core/createpanelrefs/releases/tag/1.1.0) - Hell's Gate
+
+Hell's Gate National Park is a national park situated near Lake Naivasha in Kenya.
 
 Initial release of nf-core/createpanelrefs, created with the [nf-core](https://nf-co.re/) template.
 
@@ -34,6 +36,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#52](https://github.com/nf-core/createpanelrefs/pull/52) - Template update for nf-core/tools v3.2.1
 - [#54](https://github.com/nf-core/createpanelrefs/pull/54) - Template update for nf-core/tools v3.3.1
 - [#54](https://github.com/nf-core/createpanelrefs/pull/54) - Update nft-utils to 0.0.4
+- [#55](https://github.com/nf-core/createpanelrefs/pull/55) - Prepare relase 1.0.0
 
 ### `Fixed`
 
