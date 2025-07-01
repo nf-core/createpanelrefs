@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0](https://github.com/nf-core/createpanelrefs/releases/tag/1.1.0) - Hell's Gate
+## [1.0.0](https://github.com/nf-core/createpanelrefs/releases/tag/1.0.0) - Hell's Gate
 
 Hell's Gate National Park is a national park situated near Lake Naivasha in Kenya.
 
@@ -43,6 +43,9 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#50](https://github.com/nf-core/createpanelrefs/pull/50) - Fix mutect2 that wasn't working without a bed file
 - [#53](https://github.com/nf-core/createpanelrefs/pull/53) - Minor syntax fixes due to [#50](https://github.com/nf-core/createpanelrefs/pull/50)
 - [#54](https://github.com/nf-core/createpanelrefs/pull/54) - Fix name for `_mqc_versions.yml` file
+- [#56](https://github.com/nf-core/createpanelrefs/pull/56) - Fix gcnv interval list
+- [#57](https://github.com/nf-core/createpanelrefs/pull/57) - Improve syntax in `assets/schema_input.json` file, from @nvnieuwk in [#46](https://github.com/nf-core/createpanelrefs/pull/46)
+- [#57](https://github.com/nf-core/createpanelrefs/pull/57) - Fix missing documentation for GATK Mutect2 and GENS
 
 ### `Dependencies`
 
