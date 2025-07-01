@@ -11,69 +11,38 @@
                 "type": "string",
                 "pattern": "^\\S+$",
                 "meta": ["id"],
-                "errorMessage": "Sample name must be provided and cannot contain spaces"
+                "errorMessage": "Sample name must be a string has to be provided and cannot contain spaces"
             },
             "bam": {
-                "errorMessage": "BAM file cannot contain spaces and must have extension '.bam'",
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+\\.bam$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
+                "errorMessage": "BAM file cannot contain spaces, has to exist and must have extension '.bam'",
+                "type": "string",
+                "pattern": "^\\S+\\.bam$",
                 "format": "file-path",
                 "exists": true
             },
             "bai": {
                 "errorMessage": "BAM index file cannot contain spaces and must have extension '.bai'",
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+\\.bai$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
+                "type": "string",
+                "pattern": "^\\S+\\.bai$",
                 "format": "file-path",
                 "exists": true
             },
             "cram": {
                 "errorMessage": "CRAM file cannot contain spaces and must have extension '.cram'",
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+\\.cram$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
+                "type": "string",
+                "pattern": "^\\S+\\.cram$",
                 "format": "file-path",
                 "exists": true
             },
             "crai": {
                 "errorMessage": "CRAM index file cannot contain spaces and must have extension '.crai'",
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+\\.crai$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
+                "type": "string",
+                "pattern": "^\\S+\\.crai$",
                 "format": "file-path",
                 "exists": true
             }
         },
-        "required": ["sample"]
+        "required": ["sample"],
+        "oneOf": [{ "required": ["bam"] }, { "required": ["cram"] }]
     }
 }
