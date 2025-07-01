@@ -125,7 +125,7 @@ process {
 
 ### gens
 
-If you are running the pipeline to generate references for the gens workflow, you should ensure that you have provided all the mandatory options specified in the table below.
+If you are running the pipeline to generate references for the GENS workflow, you should ensure that you have provided all the mandatory options specified in the table below.
 
 | Mandatory     | Optional              |
 | ------------- | --------------------- |
@@ -134,6 +134,9 @@ If you are running the pipeline to generate references for the gens workflow, yo
 |               | gens_bin_length       |
 |               | gens_pon_name         |
 |               | gens_readcount_format |
+|               | gens_interval_list    |
+
+The GENS workflow creates a panel of normals for read-count denoising from normal samples. This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection. For more information, see the [GENS documentation](https://github.com/Clinical-Genomics-Lund/gens).
 
 ### germlinecnvcaller
 
@@ -154,6 +157,19 @@ If you are running the pipeline to generate references for the GATK's germlinecn
 |                                | gcnv_segmental_duplications                 |
 
 <sup>1</sup> To learn more about this file, see [this comment](https://gatk.broadinstitute.org/hc/en-us/community/posts/360074399831/comments/13441240230299) on GATK forum.<br />
+
+### mutect2
+
+If you are running the pipeline to generate references for the GATK's Mutect2 somatic variant calling workflow, you should ensure that you have provided all the mandatory options specified in the table below.
+
+| Mandatory     | Optional           |
+| ------------- | ------------------ |
+| fasta/genomes | fai                |
+|               | dict               |
+|               | mutect2_target_bed |
+|               | mutect2_pon_name   |
+
+The Mutect2 workflow creates a panel of normals from normal samples for somatic variant calling. This panel can be used with Mutect2 in case mode via the `--panel-of-normals` parameter to filter out common germline variants and sequencing artifacts. For more information, see the [GATK documentation](https://gatk.broadinstitute.org/hc/en-us/articles/360035894731-Mutect2).
 
 ## Core Nextflow arguments
 
