@@ -6,7 +6,7 @@ lint:
     - .gitattributes
     - .gitignore
   modules_config: false
-nf_core_version: 3.3.1
+nf_core_version: 3.3.2
 repository_type: pipeline
 template:
   author: "@maxulysse"
@@ -17,4 +17,4 @@ template:
   name: createpanelrefs
   org: nf-core
   outdir: .
-  version: 1.0dev
+  version: 1.0.0

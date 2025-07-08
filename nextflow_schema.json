@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/createpanelrefs/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/createpanelrefs/main/nextflow_schema.json",
     "title": "nf-core/createpanelrefs pipeline parameters",
     "description": "Generate Panel of Normals, models or other similar references from lots of samples",
     "type": "object",
