@@ -1,0 +1,52 @@
+{
+    "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV": {
+        "content": [
+            5,
+            {
+                "GATK4_COLLECTREADCOUNTS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_PREPROCESSINTERVALS_GENS": {
+                    "gatk4": "4.6.1.0"
+                }
+            },
+            [
+                "gens_pon",
+                "gens_pon/createreadcountpanelofnormals",
+                "gens_pon/createreadcountpanelofnormals/gens_pon.hdf5",
+                "gens_pon/readcounts",
+                "gens_pon/readcounts/sample1.tsv",
+                "gens_pon/readcounts/sample2.tsv",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/BETA-multiqc.parquet",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/intervals",
+                "references/intervals/gens_pon",
+                "references/intervals/gens_pon/genome.interval_list"
+            ],
+            [
+                "sample1.tsv:md5,bfceab35109b04317f38f9cc1cde71ca",
+                "sample2.tsv:md5,7141d08cdc26f6057557be9e23ef4365",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-07-10T12:43:52.13194791"
+    }
+}

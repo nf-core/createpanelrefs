@@ -1,0 +1,121 @@
+{
+    "-profile test --tools mutect2 --mutect2_target_bed null --mutect2_pon_name test --input tests/csv/1.0.0/cram.csv": {
+        "content": [
+            6,
+            {
+                "BUILD_INTERVALS": {
+                    "gawk": "5.3.0"
+                },
+                "GATK4_CREATESOMATICPANELOFNORMALS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_GENOMICSDBIMPORT": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_MUTECT2": {
+                    "gatk4": "4.6.1.0"
+                }
+            },
+            [
+                "gatk4",
+                "gatk4/sample3.vcf.gz",
+                "gatk4/sample3.vcf.gz.stats",
+                "gatk4/sample3.vcf.gz.tbi",
+                "gatk4/sample4.vcf.gz",
+                "gatk4/sample4.vcf.gz.stats",
+                "gatk4/sample4.vcf.gz.tbi",
+                "gatk4/test",
+                "gatk4/test.vcf.gz",
+                "gatk4/test.vcf.gz.tbi",
+                "gatk4/test/__tiledb_workspace.tdb",
+                "gatk4/test/callset.json",
+                "gatk4/test/chr21$1$46709983",
+                "gatk4/test/vcfheader.vcf",
+                "gatk4/test/vidmap.json",
+                "intervals",
+                "intervals/mutect2_target_bed",
+                "intervals/mutect2_target_bed/genome.bed",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/BETA-multiqc.parquet",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml"
+            ],
+            [
+                "sample3.vcf.gz.stats:md5,a05ace4138fc5cb993ed912d654ec22d",
+                "sample4.vcf.gz.stats:md5,080e6d0e254e582dfb9d5916c9637391",
+                "genome.bed:md5,472d213cfcde96565699779d5bfc0e32",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-07-10T13:01:05.353692257"
+    },
+    "-profile test --tools mutect2 --mutect2_pon_name test": {
+        "content": [
+            5,
+            {
+                "GATK4_CREATESOMATICPANELOFNORMALS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_GENOMICSDBIMPORT": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_MUTECT2": {
+                    "gatk4": "4.6.1.0"
+                }
+            },
+            [
+                "gatk4",
+                "gatk4/sample1.vcf.gz",
+                "gatk4/sample1.vcf.gz.stats",
+                "gatk4/sample1.vcf.gz.tbi",
+                "gatk4/sample2.vcf.gz",
+                "gatk4/sample2.vcf.gz.stats",
+                "gatk4/sample2.vcf.gz.tbi",
+                "gatk4/test",
+                "gatk4/test.vcf.gz",
+                "gatk4/test.vcf.gz.tbi",
+                "gatk4/test/__tiledb_workspace.tdb",
+                "gatk4/test/callset.json",
+                "gatk4/test/chr21$2$23354000",
+                "gatk4/test/chr21$24132500$24910998",
+                "gatk4/test/chr21$25689498$46709983",
+                "gatk4/test/vcfheader.vcf",
+                "gatk4/test/vidmap.json",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/BETA-multiqc.parquet",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml"
+            ],
+            [
+                "sample1.vcf.gz.stats:md5,b569ce66bbffe9588b3d221e821023ee",
+                "sample2.vcf.gz.stats:md5,76f749c53212d72e98801f6030fbf8a6",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-07-10T12:58:21.962056569"
+    }
+}

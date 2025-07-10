@@ -1,97 +1,138 @@
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
+    IMPORT MODULES / SUBWORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN MAIN WORKFLOW
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+include { BAM_CREATE_SOM_PON_GATK  } from '../subworkflows/nf-core/bam_create_som_pon_gatk'
+include { CNVKIT_BATCH             } from '../modules/nf-core/cnvkit/batch'
+include { GENS_PON                 } from '../subworkflows/local/gens_pon'
+include { GERMLINECNVCALLER_COHORT } from '../subworkflows/local/germlinecnvcaller_cohort'
+include { SAMTOOLS_VIEW            } from '../modules/nf-core/samtools/view'
 
 workflow CREATEPANELREFS {
-
     take:
-    ch_samplesheet // channel: samplesheet read in from --input
+    samplesheet                 // channel: samplesheet read in from --input
+    tools                       // array: tools to run, or no_tools if none (it's actually comma separated values string, but close enough)
+    gcnv_model_name             // string: name of gcnv model
+    gens_pon_name               // string: name of gens pon
+    mutect2_pon_name            // string: name of mutect2 pon
+    fasta                       // channel: [meta, fasta]
+    dict                        // channel: [meta, dict]
+    fai                         // channel: [meta, fai]
+    cnvkit_targets              // channel: [meta, cnvkit_targets]
+    gcnv_exclude_bed            // channel: [meta, gcnv_exclude_bed]
+    gcnv_exclude_interval_list  // channel: [meta, gcnv_exclude_interval_list]
+    gcnv_mappable_regions       // channel: [meta, gcnv_mappable_regions]
+    gcnv_ploidy_priors          // channel: [meta, gcnv_ploidy_priors]
+    gcnv_segmental_duplications // channel: [meta, gcnv_segmental_duplications]
+    gcnv_target_bed             // channel: [meta, gcnv_target_bed]
+    gcnv_target_interval_list   // channel: [meta, gcnv_target_interval_list]
+    gens_interval_list          // channel: [meta, gens_interval_list]
+    mutect2_target_bed          // channel: [meta, mutect2_target_bed]
+
     main:
+    versions = Channel.empty()
 
-    ch_versions = Channel.empty()
-    ch_multiqc_files = Channel.empty()
-    //
-    // MODULE: Run FastQC
-    //
-    FASTQC (
-        ch_samplesheet
-    )
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    if (tools.split(',').contains('cnvkit')) {
 
-    //
-    // Collate and save software versions
-    //
-    softwareVersionsToYAML(ch_versions)
-        .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_'  +  'createpanelrefs_software_'  + 'mqc_'  + 'versions.yml',
-            sort: true,
-            newLine: true
-        ).set { ch_collated_versions }
+        input_by_fmt = samplesheet.branch { meta, bam, _bai, cram, crai ->
+            bam: bam
+            return [meta, bam]
+            cram: cram
+            return [meta, cram, crai]
+        }
 
+        cnvkit_input = SAMTOOLS_VIEW(input_by_fmt.cram, fasta, [], "").bam
+            .mix(input_by_fmt.bam)
+            .map { meta, bam ->
+                return [meta + [id: 'panel'], bam]
+            }
+            .groupTuple()
+            .map { meta, bam ->
+                return [meta, [], bam]
+            }
 
-    //
-    // MODULE: MultiQC
-    //
-    ch_multiqc_config        = Channel.fromPath(
-        "$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-    ch_multiqc_custom_config = params.multiqc_config ?
-        Channel.fromPath(params.multiqc_config, checkIfExists: true) :
-        Channel.empty()
-    ch_multiqc_logo          = params.multiqc_logo ?
-        Channel.fromPath(params.multiqc_logo, checkIfExists: true) :
-        Channel.empty()
+        CNVKIT_BATCH(cnvkit_input, fasta, [[:], []], cnvkit_targets, [[:], []], true)
 
-    summary_params      = paramsSummaryMap(
-        workflow, parameters_schema: "nextflow_schema.json")
-    ch_workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
-    ch_multiqc_files = ch_multiqc_files.mix(
-        ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
-        file(params.multiqc_methods_description, checkIfExists: true) :
-        file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
-    ch_methods_description                = Channel.value(
-        methodsDescriptionText(ch_multiqc_custom_methods_description))
+        versions = versions.mix(CNVKIT_BATCH.out.versions)
+    }
 
-    ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
-    ch_multiqc_files = ch_multiqc_files.mix(
-        ch_methods_description.collectFile(
-            name: 'methods_description_mqc.yaml',
-            sort: true
+    if (tools.split(',').contains('germlinecnvcaller')) {
+
+        germlinecnvcaller_input = samplesheet.map { meta, bam, bai, cram, crai ->
+            if (bam) {
+                return [meta + [data_type: 'bam'], bam, bai]
+            }
+            if (cram) {
+                return [meta + [data_type: 'cram'], cram, crai]
+            }
+        }
+
+        GERMLINECNVCALLER_COHORT(
+            germlinecnvcaller_input,
+            gcnv_model_name,
+            dict,
+            fai,
+            fasta,
+            gcnv_exclude_bed,
+            gcnv_exclude_interval_list,
+            gcnv_mappable_regions,
+            gcnv_ploidy_priors,
+            gcnv_segmental_duplications,
+            gcnv_target_bed,
+            gcnv_target_interval_list,
         )
-    )
 
-    MULTIQC (
-        ch_multiqc_files.collect(),
-        ch_multiqc_config.toList(),
-        ch_multiqc_custom_config.toList(),
-        ch_multiqc_logo.toList(),
-        [],
-        []
-    )
+        versions = versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
+    }
 
-    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
+    if (tools.split(',').contains('mutect2')) {
 
+        mutect2_input = samplesheet.map { meta, bam, bai, cram, crai ->
+            if (bam) {
+                return [meta + [data_type: 'bam'], bam, bai, []]
+            }
+            if (cram) {
+                return [meta + [data_type: 'cram'], cram, crai, []]
+            }
+        }
+
+        BAM_CREATE_SOM_PON_GATK(
+            mutect2_input,
+            fasta,
+            fai,
+            dict,
+            mutect2_pon_name,
+            mutect2_target_bed.map { _meta, target -> [target] },
+        )
+
+        versions = versions.mix(BAM_CREATE_SOM_PON_GATK.out.versions)
+    }
+
+    if (tools.split(',').contains('gens')) {
+
+        gens_input = samplesheet.map { meta, bam, bai, cram, crai ->
+            if (bam) {
+                return [meta + [data_type: 'bam'], bam, bai]
+            }
+            if (cram) {
+                return [meta + [data_type: 'cram'], cram, crai]
+            }
+        }
+
+        GENS_PON(
+            gens_input,
+            gens_pon_name,
+            dict,
+            fai,
+            fasta,
+            gens_interval_list,
+        )
+
+        versions = versions.mix(GENS_PON.out.versions)
+    }
+
+    emit:
+    versions // channel: [ path(versions.yml) ]
 }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
