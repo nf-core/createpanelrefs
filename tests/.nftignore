@@ -31,6 +31,7 @@ germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-mode
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/std_psi_t_log__.tsv
 germlinecnvcaller/readcounts/*.hdf5
 multiqc/multiqc_data/BETA-multiqc.parquet
+multiqc/multiqc_data/llms-full.txt
 multiqc/multiqc_data/multiqc.log
 multiqc/multiqc_data/multiqc_data.json
 multiqc/multiqc_data/multiqc_general_stats.txt
