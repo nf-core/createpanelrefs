@@ -15,15 +15,15 @@ process GATK4_PREPROCESSINTERVALS {
     tuple val(meta5), path(exclude_intervals)
 
     output:
-    tuple val(meta), path("*.interval_list"), emit: interval_list
-    path "versions.yml"                     , emit: versions
+    tuple val(meta), path("${prefix}.interval_list"), emit: interval_list
+    path "versions.yml"                             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
     def args   = task.ext.args   ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    prefix = task.ext.prefix ?: "${meta.id}"
     def include_command = intervals         ? "--intervals $intervals"                 : ""
     def exclude_command = exclude_intervals ? "--exclude-intervals $exclude_intervals" : ""
 
