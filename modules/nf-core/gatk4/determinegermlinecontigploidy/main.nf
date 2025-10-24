@@ -41,6 +41,7 @@ process GATK4_DETERMINEGERMLINECONTIGPLOIDY {
     export PYTENSOR_FLAGS="base_compiledir=\$PWD"
     export OMP_NUM_THREADS=${task.cpus}
     export MKL_NUM_THREADS=${task.cpus}
+    export MPLCONFIGDIR="\$PWD"
 
     gatk --java-options "-Xmx${avail_mem}M -XX:-UsePerfData" \\
         DetermineGermlineContigPloidy \\
