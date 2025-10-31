@@ -3,13 +3,13 @@
         "content": [
             {
                 "GATK4_COLLECTREADCOUNTS": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_PREPROCESSINTERVALS_GENS": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 }
             },
             [
@@ -46,6 +46,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-31T12:25:38.351926986"
+        "timestamp": "2025-10-31T14:33:30.730355032"
     }
 }

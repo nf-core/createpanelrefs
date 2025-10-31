@@ -4,15 +4,15 @@ include { SAMTOOLS_INDEX                      } from '../../../modules/nf-core/s
 
 workflow GENS_PON {
     take:
-    ch_input         // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
-    val_pon_name     //  string: [optional] name for panel of normals
-    ch_dict          // channel: [optional] [ val(meta), path(dict) ]
-    ch_fai           // channel: [optional] [ val(meta), path(fai) ]
-    ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
+    ch_input // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
+    val_pon_name //  string: [optional] name for panel of normals
+    ch_dict // channel: [optional] [ val(meta), path(dict) ]
+    ch_fai // channel: [optional] [ val(meta), path(fai) ]
+    ch_fasta // channel: [mandatory] [ val(meta), path(fasta) ]
     ch_interval_list // channel: [mandatory] [ val(meta), path(interval_list) ]
 
     main:
-    versions = Channel.empty()
+    versions = channel.empty()
 
     // Filter out files that lack indices, and generate them
     ch_input

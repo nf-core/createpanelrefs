@@ -13,21 +13,21 @@ include { SAMTOOLS_INDEX                                               } from '.
 
 workflow GERMLINECNVCALLER_COHORT {
     take:
-    ch_input                      // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
-    val_pon_name                  //  string: [optional] name for panel of normals
-    ch_dict                       // channel: [optional] [ val(meta), path(dict) ]
-    ch_fai                        // channel: [optional] [ val(meta), path(fai) ]
-    ch_fasta                      // channel: [mandatory] [ val(meta), path(fasta) ]
-    ch_exclude_bed                // channel: [optional] [ val(meta), path(bed) ]
+    ch_input // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
+    val_pon_name //  string: [optional] name for panel of normals
+    ch_dict // channel: [optional] [ val(meta), path(dict) ]
+    ch_fai // channel: [optional] [ val(meta), path(fai) ]
+    ch_fasta // channel: [mandatory] [ val(meta), path(fasta) ]
+    ch_exclude_bed // channel: [optional] [ val(meta), path(bed) ]
     ch_user_exclude_interval_list // channel: [optional] [ val(meta), path(intervals) ]
-    ch_mappable_regions           // channel: [optional] [ val(meta), path(bed) ]
-    ch_ploidy_priors              // channel: [mandatory] [ path(tsv) ]
-    ch_segmental_duplications     // channel: [optional] [ val(meta), path(bed) ]
-    ch_target_bed                 // channel: [optional] [ val(meta), path(bed) ]
-    ch_user_target_interval_list  // channel: [optional] [ val(meta), path(intervals) ]
+    ch_mappable_regions // channel: [optional] [ val(meta), path(bed) ]
+    ch_ploidy_priors // channel: [mandatory] [ path(tsv) ]
+    ch_segmental_duplications // channel: [optional] [ val(meta), path(bed) ]
+    ch_target_bed // channel: [optional] [ val(meta), path(bed) ]
+    ch_user_target_interval_list // channel: [optional] [ val(meta), path(intervals) ]
 
     main:
-    versions = Channel.empty()
+    versions = channel.empty()
 
     //  Prepare references
     GATK4_INDEXFEATUREFILE_MAPPABILITY(ch_mappable_regions)
