@@ -125,7 +125,6 @@ workflow {
     gens_interval_list = PREPARE_GENOME.out.gens_interval_list
     mutect2_target_bed = PREPARE_GENOME.out.mutect2_target_bed
 
-
     multiqc_config = channel.fromPath("${projectDir}/assets/multiqc_config.yml", checkIfExists: true)
     multiqc_custom_config = params.multiqc_config ? channel.fromPath(params.multiqc_config, checkIfExists: true) : channel.empty()
     multiqc_logo = params.multiqc_logo ? channel.fromPath(params.multiqc_logo, checkIfExists: true) : channel.empty()

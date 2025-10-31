@@ -53,7 +53,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 | cnvkit     |             | 0.9.10      |
 | gatk4      |             | 4.6.1.0     |
 | gawk       |             | 5.3.0       |
-| multiqc    |             | 1.30        |
+| multiqc    |             | 1.32        |
 | samtools   |             | 1.21        |
 
 ### `Deprecated`

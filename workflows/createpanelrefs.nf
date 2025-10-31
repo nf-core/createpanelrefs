@@ -12,27 +12,27 @@ include { SAMTOOLS_VIEW            } from '../modules/nf-core/samtools/view'
 
 workflow CREATEPANELREFS {
     take:
-    samplesheet                 // channel: samplesheet read in from --input
-    tools                       // array: tools to run, or no_tools if none (it's actually comma separated values string, but close enough)
-    gcnv_model_name             // string: name of gcnv model
-    gens_pon_name               // string: name of gens pon
-    mutect2_pon_name            // string: name of mutect2 pon
-    fasta                       // channel: [meta, fasta]
-    dict                        // channel: [meta, dict]
-    fai                         // channel: [meta, fai]
-    cnvkit_targets              // channel: [meta, cnvkit_targets]
-    gcnv_exclude_bed            // channel: [meta, gcnv_exclude_bed]
-    gcnv_exclude_interval_list  // channel: [meta, gcnv_exclude_interval_list]
-    gcnv_mappable_regions       // channel: [meta, gcnv_mappable_regions]
-    gcnv_ploidy_priors          // channel: [meta, gcnv_ploidy_priors]
+    samplesheet // channel: samplesheet read in from --input
+    tools // array: tools to run, or no_tools if none (it's actually comma separated values string, but close enough)
+    gcnv_model_name // string: name of gcnv model
+    gens_pon_name // string: name of gens pon
+    mutect2_pon_name // string: name of mutect2 pon
+    fasta // channel: [meta, fasta]
+    dict // channel: [meta, dict]
+    fai // channel: [meta, fai]
+    cnvkit_targets // channel: [meta, cnvkit_targets]
+    gcnv_exclude_bed // channel: [meta, gcnv_exclude_bed]
+    gcnv_exclude_interval_list // channel: [meta, gcnv_exclude_interval_list]
+    gcnv_mappable_regions // channel: [meta, gcnv_mappable_regions]
+    gcnv_ploidy_priors // channel: [meta, gcnv_ploidy_priors]
     gcnv_segmental_duplications // channel: [meta, gcnv_segmental_duplications]
-    gcnv_target_bed             // channel: [meta, gcnv_target_bed]
-    gcnv_target_interval_list   // channel: [meta, gcnv_target_interval_list]
-    gens_interval_list          // channel: [meta, gens_interval_list]
-    mutect2_target_bed          // channel: [meta, mutect2_target_bed]
+    gcnv_target_bed // channel: [meta, gcnv_target_bed]
+    gcnv_target_interval_list // channel: [meta, gcnv_target_interval_list]
+    gens_interval_list // channel: [meta, gens_interval_list]
+    mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
-    versions = Channel.empty()
+    versions = channel.empty()
 
     if (tools.split(',').contains('cnvkit')) {
 
