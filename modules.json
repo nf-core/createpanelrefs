@@ -52,7 +52,7 @@
                     },
                     "gatk4/genomicsdbimport": {
                         "branch": "master",
-                        "git_sha": "ae8cd884f895585c6799ab4eb6a2c9f44df03336",
+                        "git_sha": "6baf1c4cb0e05d7167c3d9280a03972f7fcbbbcb",
                         "installed_by": ["bam_create_som_pon_gatk", "modules"]
                     },
                     "gatk4/germlinecnvcaller": {
@@ -72,7 +72,7 @@
                     },
                     "gatk4/mutect2": {
                         "branch": "master",
-                        "git_sha": "59a5cb7332c37182afa246a2ffdbdeb7cc4e6b75",
+                        "git_sha": "6baf1c4cb0e05d7167c3d9280a03972f7fcbbbcb",
                         "installed_by": ["bam_create_som_pon_gatk", "modules"]
                     },
                     "gatk4/preprocessintervals": {
@@ -111,7 +111,7 @@
                 "nf-core": {
                     "bam_create_som_pon_gatk": {
                         "branch": "master",
-                        "git_sha": "59a5cb7332c37182afa246a2ffdbdeb7cc4e6b75",
+                        "git_sha": "6baf1c4cb0e05d7167c3d9280a03972f7fcbbbcb",
                         "installed_by": ["subworkflows"]
                     },
                     "utils_nextflow_pipeline": {
