@@ -51,59 +51,59 @@ include { methodsDescriptionText  } from './subworkflows/local/utils_nfcore_crea
 */
 
 workflow {
-    versions = Channel.empty()
-    multiqc_files = Channel.empty()
+    versions = channel.empty()
+    multiqc_files = channel.empty()
 
     // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
     user_dict = params.dict
-        ? Channel.fromPath(params.dict).map { dict -> [[id: 'genome'], dict] }.collect()
-        : Channel.empty()
+        ? channel.fromPath(params.dict).map { dict -> [[id: 'genome'], dict] }.collect()
+        : channel.empty()
 
     user_fai = params.fai
-        ? Channel.fromPath(params.fai).map { fai -> [[id: 'genome'], fai] }.collect()
-        : Channel.empty()
+        ? channel.fromPath(params.fai).map { fai -> [[id: 'genome'], fai] }.collect()
+        : channel.empty()
 
     fasta = params.fasta
-        ? Channel.fromPath(params.fasta).map { fasta -> [[id: 'genome'], fasta] }.collect()
-        : Channel.empty()
+        ? channel.fromPath(params.fasta).map { fasta -> [[id: 'genome'], fasta] }.collect()
+        : channel.empty()
 
     // Initialize cnvkit specific parameters
     cnvkit_targets = params.cnvkit_targets
-        ? Channel.fromPath(params.cnvkit_targets).map { targets -> [[id: 'genome'], targets] }.collect()
-        : Channel.value([[id: 'genome'], []])
+        ? channel.fromPath(params.cnvkit_targets).map { targets -> [[id: 'genome'], targets] }.collect()
+        : channel.value([[id: 'genome'], []])
 
     // Initialize gens interval list specific parameters
     user_gens_interval_list = params.gens_interval_list
-        ? Channel.fromPath(params.gens_interval_list).map { gens_interval_list -> [[id: 'genome'], gens_interval_list] }.collect()
-        : Channel.empty()
+        ? channel.fromPath(params.gens_interval_list).map { gens_interval_list -> [[id: 'genome'], gens_interval_list] }.collect()
+        : channel.empty()
 
     // Initialize germlinecnvcaller specific parameters
     gcnv_exclude_bed = params.gcnv_exclude_bed
-        ? Channel.fromPath(params.gcnv_exclude_bed).map { exclude -> [[id: 'genome'], exclude] }.collect()
-        : Channel.value([[id: 'genome'], []])
+        ? channel.fromPath(params.gcnv_exclude_bed).map { exclude -> [[id: 'genome'], exclude] }.collect()
+        : channel.value([[id: 'genome'], []])
     gcnv_exclude_interval_list = params.gcnv_exclude_interval_list
-        ? Channel.fromPath(params.gcnv_exclude_interval_list).map { exclude -> [[id: 'genome'], exclude] }.collect()
-        : Channel.value([[id: 'genome'], []])
+        ? channel.fromPath(params.gcnv_exclude_interval_list).map { exclude -> [[id: 'genome'], exclude] }.collect()
+        : channel.value([[id: 'genome'], []])
     gcnv_mappable_regions = params.gcnv_mappable_regions
-        ? Channel.fromPath(params.gcnv_mappable_regions).collect()
-        : Channel.value([[id: 'genome'], []])
+        ? channel.fromPath(params.gcnv_mappable_regions).collect()
+        : channel.value([[id: 'genome'], []])
     gcnv_ploidy_priors = params.gcnv_ploidy_priors
-        ? Channel.fromPath(params.gcnv_ploidy_priors).collect()
-        : Channel.empty()
+        ? channel.fromPath(params.gcnv_ploidy_priors).collect()
+        : channel.empty()
     gcnv_target_bed = params.gcnv_target_bed
-        ? Channel.fromPath(params.gcnv_target_bed).map { targets -> [[id: 'genome'], targets] }.collect()
-        : Channel.value([[id: 'genome'], []])
+        ? channel.fromPath(params.gcnv_target_bed).map { targets -> [[id: 'genome'], targets] }.collect()
+        : channel.value([[id: 'genome'], []])
     gcnv_target_interval_list = params.gcnv_target_interval_list
-        ? Channel.fromPath(params.gcnv_target_interval_list).map { targets -> [[id: 'genome'], targets] }.collect()
-        : Channel.value([[id: 'genome'], []])
+        ? channel.fromPath(params.gcnv_target_interval_list).map { targets -> [[id: 'genome'], targets] }.collect()
+        : channel.value([[id: 'genome'], []])
     gcnv_segmental_duplications = params.gcnv_segmental_duplications
-        ? Channel.fromPath(params.gcnv_segmental_duplications).collect()
-        : Channel.value([[id: 'genome'], []])
+        ? channel.fromPath(params.gcnv_segmental_duplications).collect()
+        : channel.value([[id: 'genome'], []])
 
     // Initialize mutect2 specific parameters
     user_mutect2_target_bed = params.mutect2_target_bed
-        ? Channel.fromPath(params.mutect2_target_bed).map { targets -> [[id: 'genome'], targets] }.collect()
-        : Channel.empty()
+        ? channel.fromPath(params.mutect2_target_bed).map { targets -> [[id: 'genome'], targets] }.collect()
+        : channel.empty()
 
     // SUBWORKFLOW: Run initialisation tasks
     PIPELINE_INITIALISATION(
@@ -113,6 +113,9 @@ workflow {
         args,
         params.outdir,
         params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden,
     )
 
     PREPARE_GENOME(fasta, user_dict, user_fai, user_gens_interval_list, user_mutect2_target_bed, params.tools ?: "no_tools")
@@ -122,10 +125,9 @@ workflow {
     gens_interval_list = PREPARE_GENOME.out.gens_interval_list
     mutect2_target_bed = PREPARE_GENOME.out.mutect2_target_bed
 
-
-    multiqc_config = Channel.fromPath("${projectDir}/assets/multiqc_config.yml", checkIfExists: true)
-    multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
-    multiqc_logo = params.multiqc_logo ? Channel.fromPath(params.multiqc_logo, checkIfExists: true) : Channel.empty()
+    multiqc_config = channel.fromPath("${projectDir}/assets/multiqc_config.yml", checkIfExists: true)
+    multiqc_custom_config = params.multiqc_config ? channel.fromPath(params.multiqc_config, checkIfExists: true) : channel.empty()
+    multiqc_logo = params.multiqc_logo ? channel.fromPath(params.multiqc_logo, checkIfExists: true) : channel.empty()
     multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
 
     versions = versions.mix(PREPARE_GENOME.out.versions)
@@ -163,29 +165,29 @@ workflow {
     )
 
     // MODULE: MultiQC
-    multiqc_config = Channel.fromPath(
+    multiqc_config = channel.fromPath(
         "${projectDir}/assets/multiqc_config.yml",
         checkIfExists: true
     )
     multiqc_custom_config = params.multiqc_config
-        ? Channel.fromPath(params.multiqc_config, checkIfExists: true)
-        : Channel.empty()
+        ? channel.fromPath(params.multiqc_config, checkIfExists: true)
+        : channel.empty()
     multiqc_logo = params.multiqc_logo
-        ? Channel.fromPath(params.multiqc_logo, checkIfExists: true)
-        : Channel.empty()
+        ? channel.fromPath(params.multiqc_logo, checkIfExists: true)
+        : channel.empty()
 
     summary_params = paramsSummaryMap(
         workflow,
         parameters_schema: "nextflow_schema.json"
     )
-    workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
+    workflow_summary = channel.value(paramsSummaryMultiqc(summary_params))
     multiqc_files = multiqc_files.mix(
         workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml')
     )
     multiqc_custom_methods_description = params.multiqc_methods_description
         ? file(params.multiqc_methods_description, checkIfExists: true)
         : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
-    methods_description = Channel.value(
+    methods_description = channel.value(
         methodsDescriptionText(multiqc_custom_methods_description)
     )
 
@@ -227,24 +229,24 @@ workflow {
 // WORKFLOW: Run main analysis pipeline depending on type of input
 workflow NFCORE_CREATEPANELREFS {
     take:
-    samplesheet                 // channel: samplesheet read in from --input
-    tools                       // string: comma separated list of tools to run
-    gcnv_model_name             // string: name of gcnv model
-    gens_pon_name               // string: name of gens pon
-    mutect2_pon_name            // string: name of mutect2 pon
-    fasta                       // channel: [meta, fasta]
-    dict                        // channel: [meta, dict]
-    fai                         // channel: [meta, fai]
-    cnvkit_targets              // channel: [meta, cnvkit_targets]
-    gcnv_exclude_bed            // channel: [meta, gcnv_exclude_bed]
-    gcnv_exclude_interval_list  // channel: [meta, gcnv_exclude_interval_list]
-    gcnv_mappable_regions       // channel: [meta, gcnv_mappable_regions]
-    gcnv_ploidy_priors          // channel: [meta, gcnv_ploidy_priors]
+    samplesheet // channel: samplesheet read in from --input
+    tools // string: comma separated list of tools to run
+    gcnv_model_name // string: name of gcnv model
+    gens_pon_name // string: name of gens pon
+    mutect2_pon_name // string: name of mutect2 pon
+    fasta // channel: [meta, fasta]
+    dict // channel: [meta, dict]
+    fai // channel: [meta, fai]
+    cnvkit_targets // channel: [meta, cnvkit_targets]
+    gcnv_exclude_bed // channel: [meta, gcnv_exclude_bed]
+    gcnv_exclude_interval_list // channel: [meta, gcnv_exclude_interval_list]
+    gcnv_mappable_regions // channel: [meta, gcnv_mappable_regions]
+    gcnv_ploidy_priors // channel: [meta, gcnv_ploidy_priors]
     gcnv_segmental_duplications // channel: [meta, gcnv_segmental_duplications]
-    gcnv_target_bed             // channel: [meta, gcnv_target_bed]
-    gcnv_target_interval_list   // channel: [meta, gcnv_target_interval_list]
-    gens_interval_list          // channel: [meta, gens_interval_list]
-    mutect2_target_bed          // channel: [meta, mutect2_target_bed]
+    gcnv_target_bed // channel: [meta, gcnv_target_bed]
+    gcnv_target_interval_list // channel: [meta, gcnv_target_interval_list]
+    gens_interval_list // channel: [meta, gens_interval_list]
+    mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
     // WORKFLOW: Run pipeline
