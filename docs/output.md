@@ -10,11 +10,29 @@ The directories listed below will be created in the results directory after the 
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
+- [CNVKit](#cnvkit) - Create reference files for copy number variant detection from sequencing data.
 - [GATK's germlinecnvcaller](#germlinecnvcaller) - Publish read counts, ploidy and cnvcalling models that can be used to call cnv's in the case mode.
 - [GATK's Mutect2](#gatk-mutect2) - Create panel of normals for somatic variant calling.
 - [GENS](#gens) - Create panel of normals for read-count denoising.
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+
+### CNVKit
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `results/reference/cnvkit/`
+  - "panel.cnn": Panel reference file containing coverage information for copy number.
+  - "<SAMPLE>.antitargetcoverage.cnn": Antitarget coverage file for each sample.
+  - "<SAMPLE>.targetcoverage.cnn": Target coverage file for each sample.
+
+</details>
+
+[CNVKit](https://cnvkit.readthedocs.io/en/stable/index.html) is a Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data.
+In this pipeline, CNVKit creates reference files that can be used for copy number variant detection.
+The workflow processes normal samples to generate a reference CNN file that captures the baseline coverage patterns, which can then be used for tumor-only or tumor-normal CNV analysis in downstream applications.
+The reference file contains coverage information normalized across the cohort and is essential for accurate copy number calling.
 
 ### GATK germlinecnvcaller
 
