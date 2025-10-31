@@ -6,13 +6,13 @@
                     "gawk": "5.3.0"
                 },
                 "GATK4_CREATESOMATICPANELOFNORMALS": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_GENOMICSDBIMPORT": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_MUTECT2": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 }
             },
             [
@@ -58,19 +58,19 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-31T12:32:20.086767028"
+        "timestamp": "2025-10-31T15:11:32.603760513"
     },
     "-profile test --tools mutect2 --mutect2_pon_name test": {
         "content": [
             {
                 "GATK4_CREATESOMATICPANELOFNORMALS": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_GENOMICSDBIMPORT": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_MUTECT2": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 }
             },
             [
@@ -114,6 +114,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-31T12:29:50.79446037"
+        "timestamp": "2025-10-31T15:08:35.629022911"
     }
 }

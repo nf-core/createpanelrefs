@@ -101,7 +101,7 @@ workflow CREATEPANELREFS {
         BAM_CREATE_SOM_PON_GATK(
             mutect2_input,
             fasta,
-            fai,
+            fai.map { meta, fai_ -> [meta, fai_, []] },
             dict,
             mutect2_pon_name,
             mutect2_target_bed.map { _meta, target -> [target] },
