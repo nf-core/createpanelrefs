@@ -72,7 +72,7 @@
                     },
                     "gatk4/mutect2": {
                         "branch": "master",
-                        "git_sha": "3e3ffe7f2a3bd3d9140619c74bfe2316194311e1",
+                        "git_sha": "59a5cb7332c37182afa246a2ffdbdeb7cc4e6b75",
                         "installed_by": ["bam_create_som_pon_gatk", "modules"]
                     },
                     "gatk4/preprocessintervals": {
@@ -111,7 +111,7 @@
                 "nf-core": {
                     "bam_create_som_pon_gatk": {
                         "branch": "master",
-                        "git_sha": "3e3ffe7f2a3bd3d9140619c74bfe2316194311e1",
+                        "git_sha": "59a5cb7332c37182afa246a2ffdbdeb7cc4e6b75",
                         "installed_by": ["subworkflows"]
                     },
                     "utils_nextflow_pipeline": {
