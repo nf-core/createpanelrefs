@@ -3,6 +3,7 @@ nextflow_pipeline {
     name "Test pipeline"
     script "../main.nf"
     tag "pipeline"
+<<<<<<< HEAD
     tag "pipeline_createpanelrefs"
 
     test("-profile test --tools cnvkit --input tests/csv/1.0.0/bam_cram.csv") {
@@ -10,6 +11,13 @@ nextflow_pipeline {
         when {
             params {
                 input  = "${projectDir}/tests/csv/1.0.0/bam_cram.csv"
+=======
+
+    test("-profile test") {
+
+        when {
+            params {
+>>>>>>> TEMPLATE
                 outdir = "$outputDir"
             }
         }
@@ -19,11 +27,19 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+<<<<<<< HEAD
             assert workflow.success
             assertAll(
                 { assert snapshot(
                     // pipeline versions.yml file for multiqc from which Nextflow and pipeline versions are removed (all from the workflow key)
                     removeFromYamlMap("${outputDir}/pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml", "Workflow"),
+=======
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml"),
+>>>>>>> TEMPLATE
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents

@@ -109,11 +109,6 @@
             },
             "subworkflows": {
                 "nf-core": {
-                    "bam_create_som_pon_gatk": {
-                        "branch": "master",
-                        "git_sha": "6baf1c4cb0e05d7167c3d9280a03972f7fcbbbcb",
-                        "installed_by": ["subworkflows"]
-                    },
                     "utils_nextflow_pipeline": {
                         "branch": "master",
                         "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
