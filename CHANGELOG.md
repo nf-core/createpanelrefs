@@ -37,6 +37,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#54](https://github.com/nf-core/createpanelrefs/pull/54) - Template update for nf-core/tools v3.3.1
 - [#54](https://github.com/nf-core/createpanelrefs/pull/54) - Update nft-utils to 0.0.4
 - [#55](https://github.com/nf-core/createpanelrefs/pull/55) - Prepare relase 1.0.0
+- [#63](https://github.com/nf-core/createpanelrefs/pull/63) - Template update for nf-core/tools v3.5.0dev
 
 ### `Fixed`
 
