@@ -17,6 +17,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#10](https://github.com/nf-core/createpanelrefs/pull/10) - `GATK germlinecnvcaller` can be used to create a PON
 - [#17](https://github.com/nf-core/createpanelrefs/pull/17) - `GENS` can be used to create a PON
 - [#50](https://github.com/nf-core/createpanelrefs/pull/50) - Add auto creation of interval_list file from gens, and bed file for mutect2
+- [#62](https://github.com/nf-core/createpanelrefs/pull/62) - Add megatests
 
 ### `Updated`
 
