@@ -1,18 +1,17 @@
 {
     "-profile test --tools cnvkit --input tests/csv/1.0.0/bam_cram.csv": {
         "content": [
-            4,
             {
                 "CNVKIT_BATCH": {
-                    "cnvkit": "0.9.10"
+                    "cnvkit": "0.9.12"
                 }
             },
             [
                 "multiqc",
                 "multiqc/multiqc_data",
-                "multiqc/multiqc_data/BETA-multiqc.parquet",
                 "multiqc/multiqc_data/llms-full.txt",
                 "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
                 "multiqc/multiqc_data/multiqc_citations.txt",
                 "multiqc/multiqc_data/multiqc_data.json",
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
@@ -37,7 +36,7 @@
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "panel.cnn:md5,1443acdb3bb430b0c144ec100ef8a514",
+                "panel.cnn:md5,bb11c7ec8b2a5679fcabc4dbfa83294a",
                 "sample3.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
                 "sample3.targetcoverage.cnn:md5,814200aceed64f3e0c4a69dab64553c4",
                 "sample4.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
@@ -46,14 +45,14 @@
                 "test.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,814200aceed64f3e0c4a69dab64553c4",
                 "test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
                 "test2.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,ae3bfc49096f86e48c37bc9b997982fb",
-                "sample3.bam:md5,28d7b627bcc8a220253ce2a950b18b56",
-                "sample4.bam:md5,d221a5042fd4cdec4fcb91e89e8bb92e"
+                "sample3.bam:md5,945810b0063a00721d75ff8fbfec2e82",
+                "sample4.bam:md5,03417a2d44a2da7a2b7ae3be276c273e"
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2025-07-10T12:38:23.662942116"
+        "timestamp": "2025-10-31T14:28:40.413006402"
     }
 }

@@ -13,21 +13,21 @@ include { SAMTOOLS_INDEX                                               } from '.
 
 workflow GERMLINECNVCALLER_COHORT {
     take:
-    ch_input                      // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
-    val_pon_name                  //  string: [optional] name for panel of normals
-    ch_dict                       // channel: [optional] [ val(meta), path(dict) ]
-    ch_fai                        // channel: [optional] [ val(meta), path(fai) ]
-    ch_fasta                      // channel: [mandatory] [ val(meta), path(fasta) ]
-    ch_exclude_bed                // channel: [optional] [ val(meta), path(bed) ]
+    ch_input // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
+    val_pon_name //  string: [optional] name for panel of normals
+    ch_dict // channel: [optional] [ val(meta), path(dict) ]
+    ch_fai // channel: [optional] [ val(meta), path(fai) ]
+    ch_fasta // channel: [mandatory] [ val(meta), path(fasta) ]
+    ch_exclude_bed // channel: [optional] [ val(meta), path(bed) ]
     ch_user_exclude_interval_list // channel: [optional] [ val(meta), path(intervals) ]
-    ch_mappable_regions           // channel: [optional] [ val(meta), path(bed) ]
-    ch_ploidy_priors              // channel: [mandatory] [ path(tsv) ]
-    ch_segmental_duplications     // channel: [optional] [ val(meta), path(bed) ]
-    ch_target_bed                 // channel: [optional] [ val(meta), path(bed) ]
-    ch_user_target_interval_list  // channel: [optional] [ val(meta), path(intervals) ]
+    ch_mappable_regions // channel: [optional] [ val(meta), path(bed) ]
+    ch_ploidy_priors // channel: [mandatory] [ path(tsv) ]
+    ch_segmental_duplications // channel: [optional] [ val(meta), path(bed) ]
+    ch_target_bed // channel: [optional] [ val(meta), path(bed) ]
+    ch_user_target_interval_list // channel: [optional] [ val(meta), path(intervals) ]
 
     main:
-    versions = Channel.empty()
+    versions = channel.empty()
 
     //  Prepare references
     GATK4_INDEXFEATUREFILE_MAPPABILITY(ch_mappable_regions)
@@ -132,11 +132,11 @@ workflow GERMLINECNVCALLER_COHORT {
         GATK4_ANNOTATEINTERVALS.out.annotated_intervals,
     )
 
-    GATK4_INTERVALLISTTOOLS(GATK4_FILTERINTERVALS.out.interval_list).interval_list.map { meta, it -> it }.flatten().set { ch_intervallist_out }
+    GATK4_INTERVALLISTTOOLS(GATK4_FILTERINTERVALS.out.interval_list).interval_list.map { _meta, it -> it }.flatten().set { ch_intervallist_out }
 
     ch_readcounts_out
         .combine(GATK4_FILTERINTERVALS.out.interval_list)
-        .map { meta, counts, meta2, il -> [meta, counts, il, []] }
+        .map { meta, counts, _meta2, il -> [meta, counts, il, []] }
         .set { ch_contigploidy_in }
 
     GATK4_DETERMINEGERMLINECONTIGPLOIDY(
@@ -148,7 +148,7 @@ workflow GERMLINECNVCALLER_COHORT {
     ch_readcounts_out
         .combine(ch_intervallist_out)
         .combine(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
-        .map { meta, counts, il, meta2, calls -> [meta + [id: il.baseName], counts, il, calls, []] }
+        .map { meta, counts, il, _meta2, calls -> [meta + [id: il.baseName], counts, il, calls, []] }
         .set { ch_cnvcaller_in }
 
     GATK4_GERMLINECNVCALLER(ch_cnvcaller_in)

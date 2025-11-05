@@ -46,14 +46,21 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#57](https://github.com/nf-core/createpanelrefs/pull/57) - Improve syntax in `assets/schema_input.json` file, from @nvnieuwk in [#46](https://github.com/nf-core/createpanelrefs/pull/46)
 - [#57](https://github.com/nf-core/createpanelrefs/pull/57) - Fix missing documentation for GATK Mutect2 and GENS
 
-### `Dependencies`
+### `Dependencies` - modules
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
-| cnvkit     |             | 0.9.10      |
-| gatk4      |             | 4.6.1.0     |
+| cnvkit     |             | 0.9.12      |
+| gatk4      |             | 4.6.2.0     |
 | gawk       |             | 5.3.0       |
-| multiqc    |             | 1.30        |
-| samtools   |             | 1.21        |
+| htslib     |             | 1.22.1      |
+| multiqc    |             | 1.32        |
+| samtools   |             | 1.22.1      |
+
+### `Dependencies` - Nextflow plugins
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| nf-schema  |             | 2.5.1       |
 
 ### `Deprecated`
