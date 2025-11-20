@@ -1,0 +1,58 @@
+{
+    "-profile test --tools cnvkit --input tests/csv/1.0.0/bam_cram.csv": {
+        "content": [
+            {
+                "CNVKIT_BATCH": {
+                    "cnvkit": "0.9.12"
+                }
+            },
+            [
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "reference",
+                "reference/cnvkit",
+                "reference/cnvkit/panel.cnn",
+                "reference/cnvkit/sample3.antitargetcoverage.cnn",
+                "reference/cnvkit/sample3.targetcoverage.cnn",
+                "reference/cnvkit/sample4.antitargetcoverage.cnn",
+                "reference/cnvkit/sample4.targetcoverage.cnn",
+                "reference/cnvkit/test.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
+                "reference/cnvkit/test.paired_end.recalibrated.sorted.targetcoverage.cnn",
+                "reference/cnvkit/test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
+                "reference/cnvkit/test2.paired_end.recalibrated.sorted.targetcoverage.cnn",
+                "samtools",
+                "samtools/sample3.bam",
+                "samtools/sample4.bam"
+            ],
+            [
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "panel.cnn:md5,bb11c7ec8b2a5679fcabc4dbfa83294a",
+                "sample3.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "sample3.targetcoverage.cnn:md5,814200aceed64f3e0c4a69dab64553c4",
+                "sample4.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "sample4.targetcoverage.cnn:md5,ae3bfc49096f86e48c37bc9b997982fb",
+                "test.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "test.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,814200aceed64f3e0c4a69dab64553c4",
+                "test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "test2.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,ae3bfc49096f86e48c37bc9b997982fb",
+                "sample3.bam:md5,945810b0063a00721d75ff8fbfec2e82",
+                "sample4.bam:md5,03417a2d44a2da7a2b7ae3be276c273e"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-10-31T14:28:40.413006402"
+    }
+}
