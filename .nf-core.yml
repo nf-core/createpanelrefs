@@ -2,7 +2,7 @@ lint:
   files_exist:
     - conf/modules.config
   modules_config: false
-nf_core_version: 3.4.1
+nf_core_version: 3.5.1
 repository_type: pipeline
 template:
   author: "@maxulysse"
