@@ -15,6 +15,7 @@ workflow CREATEPANELREFS {
     samplesheet // channel: samplesheet read in from --input
     tools // array: tools to run, or no_tools if none (it's actually comma separated values string, but close enough)
     gcnv_model_name // string: name of gcnv model
+    gens_pon_analysis_type // string: type of analysis for gens pon ('lrs' or 'srs')
     gens_pon_name // string: name of gens pon
     mutect2_pon_name // string: name of mutect2 pon
     fasta // channel: [meta, fasta]
@@ -123,6 +124,7 @@ workflow CREATEPANELREFS {
 
         GENS_PON(
             gens_input,
+            gens_pon_analysis_type,
             gens_pon_name,
             dict,
             fai,
