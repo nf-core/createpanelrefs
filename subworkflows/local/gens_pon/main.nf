@@ -103,7 +103,7 @@ workflow GENS_PON {
         versions = versions.mix(MOSDEPTH_GATK_FORMAT.out.versions)
 
         // Prepare GATK inputs
-        MOSDEPTH_GATK_HEADER.out.output.view()
+        MOSDEPTH_GATK_HEADER.out.output
             .join(MOSDEPTH_GATK_FORMAT.out.output)
             .map { meta, header, body -> [meta, [header, body]] }
             .set { ch_cat_in }
