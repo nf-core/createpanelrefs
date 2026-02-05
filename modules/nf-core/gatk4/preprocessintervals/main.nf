@@ -15,7 +15,7 @@ process GATK4_PREPROCESSINTERVALS {
     tuple val(meta5), path(exclude_intervals)
 
     output:
-    tuple val(meta), path("*.interval_list"), emit: interval_list
+    tuple val(meta), path("*.preprocessed.interval_list"), emit: interval_list
     path "versions.yml",                      emit: versions
 
     when:
@@ -41,7 +41,7 @@ process GATK4_PREPROCESSINTERVALS {
         ${include_command} \\
         ${exclude_command} \\
         --reference ${fasta} \\
-        --output ${prefix}.interval_list \\
+        --output ${prefix}.preprocessed.interval_list \\
         ${args}
 
     cat <<-END_VERSIONS > versions.yml
