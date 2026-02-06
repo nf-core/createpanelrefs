@@ -131,6 +131,7 @@ If you are running the pipeline to generate references for the GENS workflow, yo
 | ------------- | --------------------- |
 | fasta/genomes | fai                   |
 |               | dict                  |
+|               | gens_analysis_type    |
 |               | gens_bin_length       |
 |               | gens_pon_name         |
 |               | gens_readcount_format |

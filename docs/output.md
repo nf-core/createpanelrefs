@@ -88,10 +88,13 @@ The reference file contains coverage information normalized across the cohort an
     - `{pon_name}.hdf5`: Final panel of normals file in HDF5 format.
   - `references/intervals/gens_pon/`
     - `*.interval_list`: Interval list file used for read count collection.
+    - `*.bed`: BED versions of interval list file used for read count collection for long-reads.
 
 </details>
 
 [GENS](https://github.com/Clinical-Genomics-Lund/gens) creates a panel of normals for read-count denoising to improve somatic variant detection. The workflow: (1) indexes BAM/CRAM files if needed, (2) collects read counts at specified intervals using GATK's CollectReadCounts, and (3) creates a panel of normals using GATK's CreateReadCountPanelOfNormals. This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection sensitivity.
+
+When `gens_analysis_type` is set to 'lrs', a modified version of the workflow above is run where coverage calculated by mosdepth is used instead of read counts.
 
 ### MultiQC
 
