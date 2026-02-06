@@ -217,6 +217,12 @@
             "description": "Options used by the gens subworkflow",
             "default": "",
             "properties": {
+                "gens_analysis_type": {
+                    "type": "string",
+                    "description": "GENS panel of normals analysis type ('srs' or 'lrs').",
+                    "default": "srs",
+                    "enum": ["srs", "lrs"]
+                },
                 "gens_bin_length": {
                     "type": "number",
                     "default": 100,
@@ -234,12 +240,6 @@
                     "default": 5,
                     "description": "Minimum interval median percentile for gatk CreateReadCountPanelOfNormals",
                     "help_text": "Genomic intervals with a median (across samples) of fractional coverage (optionally corrected for GC bias) less than or equal to this percentile are filtered out. (This is the first filter applied.)"
-                },
-                "gens_pon_analysis_type": {
-                    "type": "string",
-                    "description": "GENS panel of normals analysis type ('srs' or 'lrs').",
-                    "default": "srs",
-                    "enum": ["srs", "lrs"]
                 },
                 "gens_pon_name": {
                     "type": "string",

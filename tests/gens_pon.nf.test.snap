@@ -1,4 +1,59 @@
 {
+    "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV --gens_analysis_type lrs": {
+        "content": [
+            {
+                "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_PREPROCESSINTERVALS_GENS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "INTERVAL_LIST_TO_BED": {
+                    "gawk": "5.3.0"
+                },
+                "MOSDEPTH_GATK_FORMAT": {
+                    "gawk": "5.3.0"
+                },
+                "MOSDEPTH_GATK_HEADER": {
+                    "gawk": "5.3.0"
+                },
+                "SAMTOOLS_VIEW": {
+                    "samtools": "1.22.1"
+                }
+            },
+            [
+                "gens_pon",
+                "gens_pon/createreadcountpanelofnormals",
+                "gens_pon/createreadcountpanelofnormals/gens_pon.hdf5",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/intervals",
+                "references/intervals/gens_pon",
+                "references/intervals/gens_pon/genome.interval_list",
+                "references/intervals/gens_pon/gens_coverage_bins.bed"
+            ],
+            [
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.12.0"
+        },
+        "timestamp": "2026-02-06T14:48:19.423593928"
+    },
     "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV": {
         "content": [
             {
@@ -17,8 +72,8 @@
                 "gens_pon/createreadcountpanelofnormals",
                 "gens_pon/createreadcountpanelofnormals/gens_pon.hdf5",
                 "gens_pon/readcounts",
-                "gens_pon/readcounts/sample1.tsv",
-                "gens_pon/readcounts/sample2.tsv",
+                "gens_pon/readcounts/testN.tsv",
+                "gens_pon/readcounts/testT.tsv",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -37,15 +92,15 @@
                 "references/intervals/gens_pon/genome.interval_list"
             ],
             [
-                "sample1.tsv:md5,bfceab35109b04317f38f9cc1cde71ca",
-                "sample2.tsv:md5,7141d08cdc26f6057557be9e23ef4365",
+                "testN.tsv:md5,bfceab35109b04317f38f9cc1cde71ca",
+                "testT.tsv:md5,7141d08cdc26f6057557be9e23ef4365",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ]
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.0"
+            "nextflow": "25.12.0"
         },
-        "timestamp": "2025-10-31T14:33:30.730355032"
+        "timestamp": "2026-02-06T14:49:45.524921421"
     }
 }
