@@ -217,6 +217,12 @@
             "description": "Options used by the gens subworkflow",
             "default": "",
             "properties": {
+                "gens_analysis_type": {
+                    "type": "string",
+                    "description": "GENS panel of normals analysis type ('srs' or 'lrs').",
+                    "default": "srs",
+                    "enum": ["srs", "lrs"]
+                },
                 "gens_bin_length": {
                     "type": "number",
                     "default": 100,

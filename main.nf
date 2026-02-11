@@ -137,6 +137,7 @@ workflow {
         PIPELINE_INITIALISATION.out.samplesheet,
         params.tools ?: "no_tools",
         params.gcnv_model_name,
+        params.gens_analysis_type,
         params.gens_pon_name,
         params.mutect2_pon_name,
         fasta,
@@ -232,6 +233,7 @@ workflow NFCORE_CREATEPANELREFS {
     samplesheet // channel: samplesheet read in from --input
     tools // string: comma separated list of tools to run
     gcnv_model_name // string: name of gcnv model
+    gens_analysis_type // string: type of analysis for gens pon ('lrs' or 'srs')
     gens_pon_name // string: name of gens pon
     mutect2_pon_name // string: name of mutect2 pon
     fasta // channel: [meta, fasta]
@@ -250,7 +252,7 @@ workflow NFCORE_CREATEPANELREFS {
 
     main:
     // WORKFLOW: Run pipeline
-    CREATEPANELREFS(samplesheet, tools, gcnv_model_name, gens_pon_name, mutect2_pon_name, fasta, dict, fai, cnvkit_targets, gcnv_exclude_bed, gcnv_exclude_interval_list, gcnv_mappable_regions, gcnv_ploidy_priors, gcnv_segmental_duplications, gcnv_target_bed, gcnv_target_interval_list, gens_interval_list, mutect2_target_bed)
+    CREATEPANELREFS(samplesheet, tools, gcnv_model_name, gens_analysis_type, gens_pon_name, mutect2_pon_name, fasta, dict, fai, cnvkit_targets, gcnv_exclude_bed, gcnv_exclude_interval_list, gcnv_mappable_regions, gcnv_ploidy_priors, gcnv_segmental_duplications, gcnv_target_bed, gcnv_target_interval_list, gens_interval_list, mutect2_target_bed)
 
     emit:
     versions = CREATEPANELREFS.out.versions // channel: versions.yml

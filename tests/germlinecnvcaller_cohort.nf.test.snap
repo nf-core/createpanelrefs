@@ -130,8 +130,8 @@
                 "germlinecnvcaller/germlinecnvcaller/2scattered-cnv-model/2scattered-model/std_log_mean_bias_t.tsv",
                 "germlinecnvcaller/germlinecnvcaller/2scattered-cnv-model/2scattered-model/std_psi_t_log__.tsv",
                 "germlinecnvcaller/readcounts",
-                "germlinecnvcaller/readcounts/sample1.hdf5",
-                "germlinecnvcaller/readcounts/sample2.hdf5",
+                "germlinecnvcaller/readcounts/testN.hdf5",
+                "germlinecnvcaller/readcounts/testT.hdf5",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -173,8 +173,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.0"
+            "nextflow": "25.12.0"
         },
-        "timestamp": "2025-10-31T15:58:51.382285872"
+        "timestamp": "2026-02-06T15:12:44.760563402"
     }
 }

@@ -5,6 +5,11 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "cat/cat": {
+                        "branch": "master",
+                        "git_sha": "69614d4579a6bd9b8a2ecffb35959809d9c36559",
+                        "installed_by": ["modules"]
+                    },
                     "cnvkit/batch": {
                         "branch": "master",
                         "git_sha": "09223d6de1dab602242c4c57ab2a4599d460e528",
@@ -83,6 +88,11 @@
                     "gawk": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": ["modules"]
+                    },
+                    "mosdepth": {
+                        "branch": "master",
+                        "git_sha": "6832b69ef7f98c54876d6436360b6b945370c615",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
