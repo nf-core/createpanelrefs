@@ -38,6 +38,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#54](https://github.com/nf-core/createpanelrefs/pull/54) - Update nft-utils to 0.0.4
 - [#55](https://github.com/nf-core/createpanelrefs/pull/55) - Prepare relase 1.0.0
 - [#63](https://github.com/nf-core/createpanelrefs/pull/63) - Template update for nf-core/tools v3.5.0dev
+- [#66](https://github.com/nf-core/createpanelrefs/pull/66) - Update `GENS` to allow for creating a long-read PON
 
 ### `Fixed`
 
@@ -56,6 +57,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 | gatk4      |             | 4.6.2.0     |
 | gawk       |             | 5.3.0       |
 | htslib     |             | 1.22.1      |
+| mosdepth   |             | 0.3.11      |
 | multiqc    |             | 1.32        |
 | samtools   |             | 1.22.1      |
 
