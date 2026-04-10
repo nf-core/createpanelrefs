@@ -30,9 +30,28 @@ jobs:
           compute_env: ${{ vars.TOWER_COMPUTE_ENV }}
           revision: ${{ steps.revision.outputs.revision }}
           workdir: s3://${{ vars.AWS_S3_BUCKET }}/work/createpanelrefs/work-${{ steps.revision.outputs.revision }}
+          nextflow_config: |
+            plugins {
+              id 'nf-slack@0.5.0'
+            }
+            slack {
+              enabled = true
+              bot {
+                token = '${{ secrets.NFSLACK_BOT_TOKEN }}'
+                channel = 'createpanelrefs'
+              }
+              onStart {
+                enabled = false
+              }
+              onComplete {
+                message = ':white_check_mark: *createpanelrefs/test_full* completed successfully! :tada:'
+              }
+              onError {
+                message = ':x: *createpanelrefs/createpanelrefs/test_full* failed :crying_cat_face:'
+              }
+            }
           parameters: |
             {
-              "hook_url": "${{ secrets.MEGATESTS_ALERTS_SLACK_HOOK_URL }}",
               "outdir": "s3://${{ vars.AWS_S3_BUCKET }}/createpanelrefs/results-${{ steps.revision.outputs.revision }}"
             }
           profiles: test_full

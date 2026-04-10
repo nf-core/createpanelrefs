@@ -27,8 +27,6 @@ workflow GERMLINECNVCALLER_COHORT {
     ch_user_target_interval_list // channel: [optional] [ val(meta), path(intervals) ]
 
     main:
-    versions = channel.empty()
-
     //  Prepare references
     GATK4_INDEXFEATUREFILE_MAPPABILITY(ch_mappable_regions)
     GATK4_INDEXFEATUREFILE_SEGDUP(ch_segmental_duplications)
@@ -100,9 +98,7 @@ workflow GERMLINECNVCALLER_COHORT {
 
     SAMTOOLS_INDEX(ch_for_mix.alignment_without_index)
 
-    SAMTOOLS_INDEX.out.bai
-        .mix(SAMTOOLS_INDEX.out.crai)
-        .set { ch_index }
+    ch_index = SAMTOOLS_INDEX.out.index
 
     // Collect alignment files and their indices
     ch_for_mix.alignment_without_index
@@ -121,7 +117,7 @@ workflow GERMLINECNVCALLER_COHORT {
 
     GATK4_COLLECTREADCOUNTS.out.tsv
         .mix(GATK4_COLLECTREADCOUNTS.out.hdf5)
-        .collect { it[1] }
+        .collect { _meta, file -> [file] }
         .map { tsv -> [[id: val_pon_name], tsv] }
         .set { ch_readcounts_out }
 
@@ -153,22 +149,8 @@ workflow GERMLINECNVCALLER_COHORT {
 
     GATK4_GERMLINECNVCALLER(ch_cnvcaller_in)
 
-    versions = versions.mix(SAMTOOLS_INDEX.out.versions)
-    versions = versions.mix(GATK4_PREPROCESSINTERVALS.out.versions)
-    versions = versions.mix(GATK4_BEDTOINTERVALLIST_TARGETS.out.versions)
-    versions = versions.mix(GATK4_BEDTOINTERVALLIST_EXCLUDE.out.versions)
-    versions = versions.mix(GATK4_COLLECTREADCOUNTS.out.versions)
-    versions = versions.mix(GATK4_ANNOTATEINTERVALS.out.versions)
-    versions = versions.mix(GATK4_FILTERINTERVALS.out.versions)
-    versions = versions.mix(GATK4_INDEXFEATUREFILE_MAPPABILITY.out.versions)
-    versions = versions.mix(GATK4_INDEXFEATUREFILE_SEGDUP.out.versions)
-    versions = versions.mix(GATK4_INTERVALLISTTOOLS.out.versions)
-    versions = versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
-    versions = versions.mix(GATK4_GERMLINECNVCALLER.out.versions)
-
     emit:
     cnvmodel    = GATK4_GERMLINECNVCALLER.out.cohortmodel
     ploidymodel = GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.model
     readcounts  = ch_readcounts_out
-    versions
 }

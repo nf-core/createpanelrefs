@@ -33,8 +33,6 @@ workflow CREATEPANELREFS {
     mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
-    versions = channel.empty()
-
     if (tools.split(',').contains('cnvkit')) {
 
         input_by_fmt = samplesheet.branch { meta, bam, _bai, cram, crai ->
@@ -44,19 +42,19 @@ workflow CREATEPANELREFS {
             return [meta, cram, crai]
         }
 
-        cnvkit_input = SAMTOOLS_VIEW(input_by_fmt.cram, fasta, [], "").bam
-            .mix(input_by_fmt.bam)
-            .map { meta, bam ->
-                return [meta + [id: 'panel'], bam]
-            }
-            .groupTuple()
-            .map { meta, bam ->
-                return [meta, [], bam]
-            }
+        cnvkit_input = SAMTOOLS_VIEW(
+            input_by_fmt.cram,
+            fasta.map { meta, fasta_ -> [meta, fasta_, []] },
+            [[:], []],
+            [[:], []],
+            false,
+        ).bam.mix(input_by_fmt.bam).map { meta, bam ->
+            return [meta + [id: 'panel'], bam]
+        }.groupTuple().map { meta, bam ->
+            return [meta, [], bam]
+        }
 
         CNVKIT_BATCH(cnvkit_input, fasta, [[:], []], cnvkit_targets, [[:], []], true)
-
-        versions = versions.mix(CNVKIT_BATCH.out.versions)
     }
 
     if (tools.split(',').contains('germlinecnvcaller')) {
@@ -84,8 +82,6 @@ workflow CREATEPANELREFS {
             gcnv_target_bed,
             gcnv_target_interval_list,
         )
-
-        versions = versions.mix(GERMLINECNVCALLER_COHORT.out.versions)
     }
 
     if (tools.split(',').contains('mutect2')) {
@@ -107,8 +103,6 @@ workflow CREATEPANELREFS {
             mutect2_pon_name,
             mutect2_target_bed.map { _meta, target -> [target] },
         )
-
-        versions = versions.mix(BAM_CREATE_SOM_PON_GATK.out.versions)
     }
 
     if (tools.split(',').contains('gens')) {
@@ -131,10 +125,5 @@ workflow CREATEPANELREFS {
             fasta,
             gens_interval_list,
         )
-
-        versions = versions.mix(GENS_PON.out.versions)
     }
-
-    emit:
-    versions // channel: [ path(versions.yml) ]
 }

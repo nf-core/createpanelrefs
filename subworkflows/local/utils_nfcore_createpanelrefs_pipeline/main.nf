@@ -14,7 +14,6 @@ include { samplesheetToList       } from 'plugin/nf-schema'
 include { paramsHelp              } from 'plugin/nf-schema'
 include { completionEmail         } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary       } from '../../nf-core/utils_nfcore_pipeline'
-include { imNotification          } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE   } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE } from '../../nf-core/utils_nextflow_pipeline'
 
@@ -28,7 +27,6 @@ workflow PIPELINE_INITIALISATION {
     take:
     version // boolean: Display version and exit
     validate_params // boolean: Boolean whether to validate parameters against the schema at runtime
-    monochrome_logs // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir //  string: The output directory where the results will be saved
     input //  string: Path to input samplesheet
@@ -37,8 +35,6 @@ workflow PIPELINE_INITIALISATION {
     show_hidden // boolean: Show hidden parameters in the help message
 
     main:
-
-    ch_versions = channel.empty()
 
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
@@ -63,7 +59,7 @@ workflow PIPELINE_INITIALISATION {
 \033[0;35m  nf-core/createpanelrefs ${workflow.manifest.version}\033[0m
 -\033[2m----------------------------------------------------\033[0m-
 """
-    after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+    after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/', '')}" }.join("\n")}${workflow.manifest.doi ? "\n" : ""}
 * The nf-core framework
     https://doi.org/10.1038/s41587-020-0439-x
 
@@ -104,7 +100,6 @@ workflow PIPELINE_INITIALISATION {
 
     emit:
     samplesheet = ch_samplesheet
-    versions    = ch_versions
 }
 
 /*
@@ -120,7 +115,6 @@ workflow PIPELINE_COMPLETION {
     plaintext_email // boolean: Send plain-text email instead of HTML
     outdir //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
-    hook_url //  string: hook URL for notifications
     multiqc_report //  string: Path to MultiQC report
 
     main:
@@ -144,9 +138,6 @@ workflow PIPELINE_COMPLETION {
         }
 
         completionSummary(monochrome_logs)
-        if (hook_url) {
-            imNotification(summary_params, hook_url)
-        }
     }
 
     workflow.onError {

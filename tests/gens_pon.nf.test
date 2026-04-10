@@ -40,7 +40,7 @@ nextflow_pipeline {
         }
     }
 
-     test("-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV --gens_analysis_type lrs") {
+    test("-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV --gens_analysis_type lrs") {
 
         when {
             params {
