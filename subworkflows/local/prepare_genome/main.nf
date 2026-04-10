@@ -18,7 +18,6 @@ workflow PREPARE_GENOME {
     fai = channel.empty()
     gens_interval_list = channel.empty()
     mutect2_target_bed = channel.empty()
-    versions = channel.empty()
 
     // If a user_dict is provided, no fasta will be used to generate a dict
     // Otherwise, GATK4_CREATESEQUENCEDICTIONARY will be run to generate a dict
@@ -37,8 +36,9 @@ workflow PREPARE_GENOME {
         .mix(user_fai)
         .groupTuple()
         .filter { _meta, files -> !files[1] }
+        .map { meta, fasta_ -> [meta, fasta_, []] }
 
-    SAMTOOLS_FAIDX(fasta_for_fai, [[:], []], false)
+    SAMTOOLS_FAIDX(fasta_for_fai, false)
 
     fai = user_fai.mix(SAMTOOLS_FAIDX.out.fai).collect()
 
@@ -64,15 +64,9 @@ workflow PREPARE_GENOME {
 
     mutect2_target_bed = user_mutect2_target_bed.mix(BUILD_INTERVALS.out.output).collect()
 
-    versions = versions.mix(BUILD_INTERVALS.out.versions)
-    versions = versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
-    versions = versions.mix(GATK4_PREPROCESSINTERVALS_GENS.out.versions)
-    versions = versions.mix(SAMTOOLS_FAIDX.out.versions)
-
     emit:
     dict // channel: [ val(meta), path(dict) ]
     fai // channel: [ val(meta), path(fai) ]
     gens_interval_list // channel: [ val(meta), path(gens_interval_list) ]
     mutect2_target_bed // channel: [ val(meta), path(mutect2_target_bed) ]
-    versions // channel: [ path(versions.yml)]
 }

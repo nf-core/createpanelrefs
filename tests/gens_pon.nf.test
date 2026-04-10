@@ -1,77 +1,43 @@
+def projectDir = new File('.').absolutePath
+
 nextflow_pipeline {
 
-    name "Test pipeline | gens"
+    name "Test pipeline"
     script "../main.nf"
     tag "pipeline"
     tag "pipeline_createpanelrefs"
     config "./gens_pon.config"
 
-    test("-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV") {
+    def test_scenario = [
+        [
+            name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV",
+            params: [
+                genome: 'GRCh38.chr22.testdata',
+                gens_bin_length: 100,
+                gens_interval_list: null,
+                gens_pon_name: 'gens_pon',
+                gens_readcount_format: "TSV",
+                input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
+                tools: 'gens',
+            ],
+        ],
+        [
+            name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV --gens_analysis_type lrs",
+            params: [
+                genome: 'GRCh38.chr22.testdata',
+                gens_analysis_type: 'lrs',
+                gens_bin_length: 100,
+                gens_interval_list: null,
+                gens_pon_name: 'gens_pon',
+                gens_readcount_format: "TSV",
+                input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
+                tools: 'gens',
+            ],
+        ],
+    ]
 
-        when {
-            params {
-                genome                = 'GRCh38.chr22.testdata'
-                gens_bin_length       = 100
-                gens_interval_list    = null
-                gens_pon_name         = 'gens_pon'
-                gens_readcount_format = "TSV"
-                input                 = "${projectDir}/tests/csv/1.0.0/bam_sorted.csv"
-                outdir                = "$outputDir"
-                tools                 = 'gens'
-            }
-        }
-
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    // pipeline versions.yml file for multiqc from which Nextflow and pipeline versions are removed (all from the workflow key)
-                    removeFromYamlMap("${outputDir}/pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml", "Workflow"),
-                    // All stable path name, with a relative path
-                    stable_name,
-                    // All files with stable contents
-                    stable_path
-                ).match() }
-            )
-        }
-    }
-
-     test("-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV --gens_analysis_type lrs") {
-
-        when {
-            params {
-                genome                = 'GRCh38.chr22.testdata'
-                gens_analysis_type    = 'lrs'
-                gens_bin_length       = 100
-                gens_interval_list    = null
-                gens_pon_name         = 'gens_pon'
-                gens_readcount_format = "TSV"
-                input                 = "${projectDir}/tests/csv/1.0.0/bam_sorted.csv"
-                outdir                = "$outputDir"
-                tools                 = 'gens'
-            }
-        }
-
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    // pipeline versions.yml file for multiqc from which Nextflow and pipeline versions are removed (all from the workflow key)
-                    removeFromYamlMap("${outputDir}/pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml", "Workflow"),
-                    // All stable path name, with a relative path
-                    stable_name,
-                    // All files with stable contents
-                    stable_path
-                ).match() }
-            )
-        }
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
     }
 }

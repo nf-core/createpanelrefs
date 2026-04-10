@@ -1,40 +1,27 @@
+def projectDir = new File('.').absolutePath
+
 nextflow_pipeline {
 
-    name "Test pipeline | germlinecnvcaller"
+    name "Test pipeline"
     script "../main.nf"
     tag "pipeline"
     tag "pipeline_createpanelrefs"
-    config "./germlinecnvcaller_cohort.config"
 
-    test("-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --gcnv_model_name cohort --gcnv_ploidy_priors --gcnv_scatter_content 2") {
+    def test_scenario = [
+        [
+            name: "-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --gcnv_model_name cohort --gcnv_ploidy_priors --gcnv_scatter_content 2",
+            params: [
+                genome: 'GRCh38.chr22.testdata',
+                gcnv_model_name: 'cohort',
+                gcnv_scatter_content: 2,
+                input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
+                tools: 'germlinecnvcaller',
+            ],
+        ],
+    ]
 
-        when {
-            params {
-                genome               = 'GRCh38.chr22.testdata'
-                gcnv_model_name      = 'cohort'
-                gcnv_scatter_content = 2
-                input                = "${projectDir}/tests/csv/1.0.0/bam_sorted.csv"
-                outdir               = "$outputDir"
-                tools                = 'germlinecnvcaller'
-            }
-        }
-
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    // pipeline versions.yml file for multiqc from which Nextflow and pipeline versions are removed (all from the workflow key)
-                    removeFromYamlMap("${outputDir}/pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml", "Workflow"),
-                    // All stable path name, with a relative path
-                    stable_name,
-                    // All files with stable contents
-                    stable_path
-                ).match() }
-            )
-        }
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
     }
 }

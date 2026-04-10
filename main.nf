@@ -11,6 +11,23 @@
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+include { CREATEPANELREFS         } from './workflows/createpanelrefs'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
+include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
+include { MULTIQC                 } from './modules/nf-core/multiqc'
+include { paramsSummaryMap        } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc    } from './subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText  } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
+include { getGenomeAttribute      } from 'plugin/nf-core-utils'
+include { softwareVersionsToYAML  } from 'plugin/nf-core-utils'
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -30,30 +47,11 @@ params.mutect2_target_bed          = getGenomeAttribute('mutect2_target_bed')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-include { CREATEPANELREFS         } from './workflows/createpanelrefs'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
-include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
-include { MULTIQC                 } from './modules/nf-core/multiqc'
-include { paramsSummaryMap        } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc    } from './subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML  } from './subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText  } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
 workflow {
-    versions = channel.empty()
-    multiqc_files = channel.empty()
-
     // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
     user_dict = params.dict
         ? channel.fromPath(params.dict).map { dict -> [[id: 'genome'], dict] }.collect()
@@ -109,7 +107,6 @@ workflow {
     PIPELINE_INITIALISATION(
         params.version,
         params.validate_params,
-        params.monochrome_logs,
         args,
         params.outdir,
         params.input,
@@ -118,19 +115,14 @@ workflow {
         params.show_hidden,
     )
 
-    PREPARE_GENOME(fasta, user_dict, user_fai, user_gens_interval_list, user_mutect2_target_bed, params.tools ?: "no_tools")
-
-    dict = PREPARE_GENOME.out.dict
-    fai = PREPARE_GENOME.out.fai
-    gens_interval_list = PREPARE_GENOME.out.gens_interval_list
-    mutect2_target_bed = PREPARE_GENOME.out.mutect2_target_bed
-
-    multiqc_config = channel.fromPath("${projectDir}/assets/multiqc_config.yml", checkIfExists: true)
-    multiqc_custom_config = params.multiqc_config ? channel.fromPath(params.multiqc_config, checkIfExists: true) : channel.empty()
-    multiqc_logo = params.multiqc_logo ? channel.fromPath(params.multiqc_logo, checkIfExists: true) : channel.empty()
-    multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
-
-    versions = versions.mix(PREPARE_GENOME.out.versions)
+    PREPARE_GENOME(
+        fasta,
+        user_dict,
+        user_fai,
+        user_gens_interval_list,
+        user_mutect2_target_bed,
+        params.tools ?: "no_tools",
+    )
 
     // WORKFLOW: Run main workflow
     NFCORE_CREATEPANELREFS(
@@ -141,8 +133,8 @@ workflow {
         params.gens_pon_name,
         params.mutect2_pon_name,
         fasta,
-        dict,
-        fai,
+        PREPARE_GENOME.out.dict,
+        PREPARE_GENOME.out.fai,
         cnvkit_targets,
         gcnv_exclude_bed,
         gcnv_exclude_interval_list,
@@ -151,63 +143,56 @@ workflow {
         gcnv_segmental_duplications,
         gcnv_target_bed,
         gcnv_target_interval_list,
-        gens_interval_list,
-        mutect2_target_bed,
+        PREPARE_GENOME.out.gens_interval_list,
+        PREPARE_GENOME.out.mutect2_target_bed,
     )
 
-    versions = versions.mix(NFCORE_CREATEPANELREFS.out.versions)
-
-    // Collate and save software versions
-    collated_versions = softwareVersionsToYAML(versions).collectFile(
+    def collated_versions = softwareVersionsToYAML(
+        softwareVersions: channel.topic("versions"),
+        nextflowVersion: workflow.nextflow.version,
+    ).collectFile(
         storeDir: "${params.outdir}/pipeline_info",
-        name: 'nf_core_createpanelrefs_software_mqc_versions.yml',
+        name: 'nf_core_' + 'createpanelrefs_software_' + 'mqc_' + 'versions.yml',
         sort: true,
         newLine: true,
     )
 
-    // MODULE: MultiQC
-    multiqc_config = channel.fromPath(
-        "${projectDir}/assets/multiqc_config.yml",
-        checkIfExists: true
-    )
-    multiqc_custom_config = params.multiqc_config
-        ? channel.fromPath(params.multiqc_config, checkIfExists: true)
-        : channel.empty()
-    multiqc_logo = params.multiqc_logo
-        ? channel.fromPath(params.multiqc_logo, checkIfExists: true)
-        : channel.empty()
+    def collated_reports = channel.topic("multiqc_files")
+        .map { _meta, _process, _tool, reports -> reports }
 
-    summary_params = paramsSummaryMap(
-        workflow,
-        parameters_schema: "nextflow_schema.json"
-    )
-    workflow_summary = channel.value(paramsSummaryMultiqc(summary_params))
-    multiqc_files = multiqc_files.mix(
-        workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml')
-    )
-    multiqc_custom_methods_description = params.multiqc_methods_description
-        ? file(params.multiqc_methods_description, checkIfExists: true)
-        : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
-    methods_description = channel.value(
-        methodsDescriptionText(multiqc_custom_methods_description)
-    )
+    // MODULE: MultiQC
+    // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
+    def multiqc_report = channel.empty()
+
+    // MULTIQC
+    def multiqc_files = channel.empty()
 
     multiqc_files = multiqc_files.mix(collated_versions)
-    multiqc_files = multiqc_files.mix(
-        methods_description.collectFile(
-            name: 'methods_description_mqc.yaml',
-            sort: true,
-        )
-    )
+    multiqc_files = multiqc_files.mix(collated_reports)
+
+    def summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    def workflow_summary = channel.value(paramsSummaryMultiqc(summary_params))
+    def multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
+    def methods_description = channel.value(methodsDescriptionText(multiqc_custom_methods_description))
+
+    multiqc_files = multiqc_files.mix(workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+    multiqc_files = multiqc_files.mix(methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
 
     MULTIQC(
-        multiqc_files.collect(),
-        multiqc_config.toList(),
-        multiqc_custom_config.toList(),
-        multiqc_logo.toList(),
-        [],
-        [],
+        multiqc_files.flatten().collect().map { files ->
+            [
+                [id: 'createpanelrefs'],
+                files,
+                params.multiqc_config
+                    ? file(params.multiqc_config, checkIfExists: true)
+                    : file("${projectDir}/assets/multiqc_config.yml", checkIfExists: true),
+                params.multiqc_logo ? file(params.multiqc_logo, checkIfExists: true) : [],
+                [],
+                [],
+            ]
+        }
     )
+    multiqc_report = MULTIQC.out.report.map { _meta, report -> [report] }.toList()
 
     // SUBWORKFLOW: Run completion tasks
     PIPELINE_COMPLETION(
@@ -216,7 +201,6 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url,
         MULTIQC.out.report.toList(),
     )
 }
@@ -252,24 +236,25 @@ workflow NFCORE_CREATEPANELREFS {
 
     main:
     // WORKFLOW: Run pipeline
-    CREATEPANELREFS(samplesheet, tools, gcnv_model_name, gens_analysis_type, gens_pon_name, mutect2_pon_name, fasta, dict, fai, cnvkit_targets, gcnv_exclude_bed, gcnv_exclude_interval_list, gcnv_mappable_regions, gcnv_ploidy_priors, gcnv_segmental_duplications, gcnv_target_bed, gcnv_target_interval_list, gens_interval_list, mutect2_target_bed)
-
-    emit:
-    versions = CREATEPANELREFS.out.versions // channel: versions.yml
-}
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    DEFINE FUNCTIONS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-// Get attribute from genome config file e.g. fasta
-def getGenomeAttribute(attribute) {
-    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
-        if (params.genomes[params.genome].containsKey(attribute)) {
-            return params.genomes[params.genome][attribute]
-        }
-    }
-    return null
+    CREATEPANELREFS(
+        samplesheet,
+        tools,
+        gcnv_model_name,
+        gens_analysis_type,
+        gens_pon_name,
+        mutect2_pon_name,
+        fasta,
+        dict,
+        fai,
+        cnvkit_targets,
+        gcnv_exclude_bed,
+        gcnv_exclude_interval_list,
+        gcnv_mappable_regions,
+        gcnv_ploidy_priors,
+        gcnv_segmental_duplications,
+        gcnv_target_bed,
+        gcnv_target_interval_list,
+        gens_interval_list,
+        mutect2_target_bed,
+    )
 }

@@ -19,7 +19,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#50](https://github.com/nf-core/createpanelrefs/pull/50) - Add auto creation of interval_list file from gens, and bed file for mutect2
 - [#62](https://github.com/nf-core/createpanelrefs/pull/62) - Add megatests
 
-### `Updated`
+### `Changed`
 
 - [#19](https://github.com/nf-core/createpanelrefs/pull/19) - Updates germlinecnvcaller subworkflow to handle exome samples
 - [#24](https://github.com/nf-core/createpanelrefs/pull/24) - Updates germlinecnvcaller subworkflow to use mappability and segmental duplications track
@@ -39,6 +39,8 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#55](https://github.com/nf-core/createpanelrefs/pull/55) - Prepare relase 1.0.0
 - [#63](https://github.com/nf-core/createpanelrefs/pull/63) - Template update for nf-core/tools v3.5.0dev
 - [#66](https://github.com/nf-core/createpanelrefs/pull/66) - Update `GENS` to allow for creating a long-read PON
+- [#69](https://github.com/nf-core/createpanelrefs/pull/69) - Update all dependencies (modules, subworfklows and plugins)
+- [#69](https://github.com/nf-core/createpanelrefs/pull/69) - Replace `CAT_CAT` by `FIND_CONCATENATE`
 
 ### `Fixed`
 
@@ -55,16 +57,17 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 | ---------- | ----------- | ----------- |
 | cnvkit     |             | 0.9.12      |
 | gatk4      |             | 4.6.2.0     |
-| gawk       |             | 5.3.0       |
-| htslib     |             | 1.22.1      |
+| gawk       |             | 5.3.1       |
+| htslib     |             | 1.23.1      |
 | mosdepth   |             | 0.3.11      |
 | multiqc    |             | 1.32        |
-| samtools   |             | 1.22.1      |
+| samtools   |             | 1.23.1      |
 
 ### `Dependencies` - Nextflow plugins
 
-| Dependency | Old version | New version |
-| ---------- | ----------- | ----------- |
-| nf-schema  |             | 2.5.1       |
+| Dependency    | Old version | New version |
+| ------------- | ----------- | ----------- |
+| nf-core-utils |             | 0.4.0       |
+| nf-schema     |             | 2.7.1       |
 
 ### `Deprecated`

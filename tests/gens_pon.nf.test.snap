@@ -1,7 +1,13 @@
 {
     "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV --gens_analysis_type lrs": {
         "content": [
+            14,
             {
+                "FIND_CONCATENATE": {
+                    "coreutils": "9.4",
+                    "find": "4.6.0",
+                    "pigz": "2.8"
+                },
                 "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
                     "gatk4": "4.6.2.0"
                 },
@@ -9,16 +15,19 @@
                     "gatk4": "4.6.2.0"
                 },
                 "INTERVAL_LIST_TO_BED": {
-                    "gawk": "5.3.0"
+                    "gawk": "5.3.1"
+                },
+                "MOSDEPTH": {
+                    "mosdepth": "0.3.11"
                 },
                 "MOSDEPTH_GATK_FORMAT": {
-                    "gawk": "5.3.0"
+                    "gawk": "5.3.1"
                 },
                 "MOSDEPTH_GATK_HEADER": {
-                    "gawk": "5.3.0"
+                    "gawk": "5.3.1"
                 },
                 "SAMTOOLS_VIEW": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 }
             },
             [
@@ -43,19 +52,22 @@
                 "references/intervals/gens_pon/genome.interval_list",
                 "references/intervals/gens_pon/gens_coverage_bins.bed"
             ],
+            "No VCF files",
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649"
-            ]
+            ],
+            "No warnings"
         ],
+        "timestamp": "2026-04-10T14:43:27.988484437",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.12.0"
-        },
-        "timestamp": "2026-02-06T14:48:19.423593928"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.2"
+        }
     },
     "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV": {
         "content": [
+            5,
             {
                 "GATK4_COLLECTREADCOUNTS": {
                     "gatk4": "4.6.2.0"
@@ -91,16 +103,18 @@
                 "references/intervals/gens_pon",
                 "references/intervals/gens_pon/genome.interval_list"
             ],
+            "No VCF files",
             [
                 "testN.tsv:md5,bfceab35109b04317f38f9cc1cde71ca",
                 "testT.tsv:md5,7141d08cdc26f6057557be9e23ef4365",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
-            ]
+            ],
+            "No warnings"
         ],
+        "timestamp": "2026-04-10T14:42:52.904323557",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.12.0"
-        },
-        "timestamp": "2026-02-06T14:49:45.524921421"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.2"
+        }
     }
 }
