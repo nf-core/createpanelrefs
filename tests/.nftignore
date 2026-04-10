@@ -1,7 +1,5 @@
 .DS_Store
-gatk4/*.{vcf.gz,vcf.gz.tbi}
-gatk4/test/*
-gatk4/test/**
+gatk4/**/*.{vcf.gz,vcf.gz.tbi}
 gens_pon/createreadcountpanelofnormals/gens_pon.hdf5
 germlinecnvcaller/determinegermlinecontigploidy/cohort-model/*_psi_j_log__.tsv
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-calls/*/*.tsv

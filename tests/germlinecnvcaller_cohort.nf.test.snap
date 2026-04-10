@@ -146,6 +146,7 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml"
             ],
+            "No VCF files",
             [
                 "contig_ploidy_prior.tsv:md5,7a2f5444b09a1f635a540bbcd23176cf",
                 "gcnvkernel_version.json:md5,aa0ad91e0ff23be94e09e909cf2286d8",
@@ -178,7 +179,7 @@
                 "WARN: Access to undefined parameter `gcnv_segmental_duplications` -- Initialise it to a default value eg. `params.gcnv_segmental_duplications = some_value`"
             ]
         ],
-        "timestamp": "2026-04-10T13:35:57.064101023",
+        "timestamp": "2026-04-10T14:49:54.285694361",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.2"

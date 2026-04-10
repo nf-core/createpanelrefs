@@ -39,6 +39,7 @@
                 "samtools/sample3.bam",
                 "samtools/sample4.bam"
             ],
+            "No VCF files",
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "panel.cnn:md5,bb11c7ec8b2a5679fcabc4dbfa83294a",
@@ -55,7 +56,7 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-04-10T13:25:53.77587772",
+        "timestamp": "2026-04-10T14:38:32.407455165",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.2"

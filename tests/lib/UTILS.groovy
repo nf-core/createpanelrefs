@@ -27,6 +27,8 @@ class UTILS {
         def stable_name = getAllFilesFromDir(outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
         // stable_content: All files in ${outdir}/ with stable content
         def stable_content = getAllFilesFromDir(outdir, ignoreFile: 'tests/.nftignore', ignore: [scenario.ignoreFiles])
+        // vcf_files: All vcf files
+        def vcf_files = getAllFilesFromDir(outdir, include: ['**/*.vcf{,.gz}'], ignore: [scenario.ignoreFiles])
 
         def assertion = []
 
@@ -39,6 +41,7 @@ class UTILS {
         assertion.add(stable_name)
 
         if (!scenario.stub) {
+            assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.getName() + ":md5," + path(file.toString()).vcf.variantsMD5 })
             assertion.add(stable_content.isEmpty() ? 'No stable content' : stable_content)
         }
 
