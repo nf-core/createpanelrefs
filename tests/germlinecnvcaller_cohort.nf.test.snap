@@ -1,6 +1,7 @@
 {
     "-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --gcnv_model_name cohort --gcnv_ploidy_priors --gcnv_scatter_content 2": {
         "content": [
+            10,
             {
                 "GATK4_ANNOTATEINTERVALS": {
                     "gatk4": "4.6.2.0"
@@ -171,9 +172,13 @@
                 "denoising_config.json:md5,d2171570b7c746be4d2ce35d9b8db18c",
                 "gcnvkernel_version.json:md5,aa0ad91e0ff23be94e09e909cf2286d8",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            [
+                "WARN: Access to undefined parameter `gcnv_mappable_regions` -- Initialise it to a default value eg. `params.gcnv_mappable_regions = some_value`",
+                "WARN: Access to undefined parameter `gcnv_segmental_duplications` -- Initialise it to a default value eg. `params.gcnv_segmental_duplications = some_value`"
             ]
         ],
-        "timestamp": "2026-04-10T11:31:11.331763103",
+        "timestamp": "2026-04-10T13:35:57.064101023",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.2"

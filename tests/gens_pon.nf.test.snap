@@ -1,6 +1,7 @@
 {
     "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV --gens_analysis_type lrs": {
         "content": [
+            14,
             {
                 "FIND_CONCATENATE": {
                     "coreutils": "9.4",
@@ -54,9 +55,10 @@
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649"
-            ]
+            ],
+            "No warnings"
         ],
-        "timestamp": "2026-04-10T11:24:03.577509473",
+        "timestamp": "2026-04-10T13:28:02.88724498",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.2"
@@ -64,6 +66,7 @@
     },
     "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV": {
         "content": [
+            5,
             {
                 "GATK4_COLLECTREADCOUNTS": {
                     "gatk4": "4.6.2.0"
@@ -103,12 +106,13 @@
                 "testN.tsv:md5,bfceab35109b04317f38f9cc1cde71ca",
                 "testT.tsv:md5,7141d08cdc26f6057557be9e23ef4365",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
-            ]
+            ],
+            "No warnings"
         ],
-        "timestamp": "2026-02-06T14:49:45.524921421",
+        "timestamp": "2026-04-10T13:27:29.88491188",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.12.0"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.2"
         }
     }
 }
