@@ -32,7 +32,7 @@
                     },
                     "gatk4/createreadcountpanelofnormals": {
                         "branch": "master",
-                        "git_sha": "86308d628760125908c5c77540517effe0f8880f",
+                        "git_sha": "b46ab06bcd5de9df0a354f044b7f179b80bfb5b7",
                         "installed_by": ["modules"]
                     },
                     "gatk4/createsequencedictionary": {
@@ -82,7 +82,7 @@
                     },
                     "gatk4/preprocessintervals": {
                         "branch": "master",
-                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
+                        "git_sha": "b46ab06bcd5de9df0a354f044b7f179b80bfb5b7",
                         "installed_by": ["modules"]
                     },
                     "gawk": {
