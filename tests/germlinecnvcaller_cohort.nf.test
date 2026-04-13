@@ -17,6 +17,7 @@ nextflow_pipeline {
                 input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
                 tools: 'germlinecnvcaller',
             ],
+            no_conda: true,
         ],
     ]
 
