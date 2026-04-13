@@ -50,6 +50,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#56](https://github.com/nf-core/createpanelrefs/pull/56) - Fix gcnv interval list
 - [#57](https://github.com/nf-core/createpanelrefs/pull/57) - Improve syntax in `assets/schema_input.json` file, from @nvnieuwk in [#46](https://github.com/nf-core/createpanelrefs/pull/46)
 - [#57](https://github.com/nf-core/createpanelrefs/pull/57) - Fix missing documentation for GATK Mutect2 and GENS
+- [#70](https://github.com/nf-core/createpanelrefs/pull/70) - Fix CI issues with conda
 
 ### `Dependencies` - modules
 
