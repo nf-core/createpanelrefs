@@ -52,6 +52,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#57](https://github.com/nf-core/createpanelrefs/pull/57) - Fix missing documentation for GATK Mutect2 and GENS
 - [#70](https://github.com/nf-core/createpanelrefs/pull/70) - Fix CI issues with conda
 - [#71](https://github.com/nf-core/createpanelrefs/pull/71) - Fix time resource requirement
+- [#72](https://github.com/nf-core/createpanelrefs/pull/72) - Adjust time resource requirement for MUTECT2
 
 ### `Dependencies` - modules
 
