@@ -49,12 +49,18 @@ workflow CREATEPANELREFS {
             [[:], []],
             false,
         ).bam.mix(input_by_fmt.bam).map { meta, bam ->
-            return [meta + [id: 'panel'], bam]
+            [meta + [id: 'panel'], bam]
         }.groupTuple().map { meta, bam ->
-            return [meta, [], bam]
+            [meta, [], [], bam, []]
         }
 
-        CNVKIT_BATCH(cnvkit_input, fasta, [[:], []], cnvkit_targets, [[:], []], true)
+        CNVKIT_BATCH(
+            cnvkit_input,
+            fasta.map { meta, fasta_ -> [meta, fasta_, []] },
+            cnvkit_targets,
+            [[:], []],
+            true,
+        )
     }
 
     if (tools.split(',').contains('germlinecnvcaller')) {
