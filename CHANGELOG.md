@@ -41,6 +41,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#66](https://github.com/nf-core/createpanelrefs/pull/66) - Update `GENS` to allow for creating a long-read PON
 - [#69](https://github.com/nf-core/createpanelrefs/pull/69) - Update all dependencies (modules, subworfklows and plugins)
 - [#69](https://github.com/nf-core/createpanelrefs/pull/69) - Replace `CAT_CAT` by `FIND_CONCATENATE`
+- [#74](https://github.com/nf-core/createpanelrefs/pull/74) - Update all modules to work with singularity and apptainer
 
 ### `Fixed`
 
