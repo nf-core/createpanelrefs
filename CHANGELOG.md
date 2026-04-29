@@ -65,8 +65,8 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 | gatk4      |             | 4.6.2.0     |
 | gawk       |             | 5.3.1       |
 | htslib     |             | 1.23.1      |
-| mosdepth   |             | 0.3.11      |
-| multiqc    |             | 1.32        |
+| mosdepth   |             | 0.3.14      |
+| multiqc    |             | 1.34        |
 | samtools   |             | 1.23.1      |
 
 ### `Dependencies` - Nextflow plugins
