@@ -18,7 +18,8 @@
                     "gawk": "5.3.1"
                 },
                 "MOSDEPTH": {
-                    "mosdepth": "0.3.11"
+                    "gzip": "1.14",
+                    "mosdepth": "0.3.14"
                 },
                 "MOSDEPTH_GATK_FORMAT": {
                     "gawk": "5.3.1"
@@ -59,10 +60,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-04-10T14:43:27.988484437",
+        "timestamp": "2026-04-29T14:37:41.182596269",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.2"
+            "nextflow": "26.03.3"
         }
     },
     "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV": {
