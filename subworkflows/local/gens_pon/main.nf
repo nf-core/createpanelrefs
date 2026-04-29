@@ -72,6 +72,7 @@ workflow GENS_PON {
         MOSDEPTH(
             ch_mosdepth_in,
             [[], []],
+            false,
         )
 
         // Prepare the header

@@ -42,6 +42,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#69](https://github.com/nf-core/createpanelrefs/pull/69) - Update all dependencies (modules, subworfklows and plugins)
 - [#69](https://github.com/nf-core/createpanelrefs/pull/69) - Replace `CAT_CAT` by `FIND_CONCATENATE`
 - [#74](https://github.com/nf-core/createpanelrefs/pull/74) - Update all modules to work with singularity and apptainer
+- [#76](https://github.com/nf-core/createpanelrefs/pull/76) - Template update for nf-core/tools v4.0.1
 
 ### `Fixed`
 
@@ -64,8 +65,8 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 | gatk4      |             | 4.6.2.0     |
 | gawk       |             | 5.3.1       |
 | htslib     |             | 1.23.1      |
-| mosdepth   |             | 0.3.11      |
-| multiqc    |             | 1.32        |
+| mosdepth   |             | 0.3.14      |
+| multiqc    |             | 1.34        |
 | samtools   |             | 1.23.1      |
 
 ### `Dependencies` - Nextflow plugins
