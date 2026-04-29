@@ -1,0 +1,34 @@
+def projectDir = new File('.').absolutePath
+
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_createpanelrefs"
+    tag "MUTECT2"
+
+    def test_scenario = [
+        [
+            name: "-profile test --tools mutect2 --mutect2_pon_name test",
+            params: [
+                mutect2_pon_name: 'test',
+                tools: 'mutect2',
+            ],
+        ],
+        [
+            name: "-profile test --tools mutect2 --mutect2_target_bed null --mutect2_pon_name test --input tests/csv/1.0.0/cram.csv",
+            params: [
+                input: "${projectDir}/tests/csv/1.0.0/cram.csv",
+                mutect2_pon_name: 'test',
+                mutect2_target_bed: null,
+                tools: 'mutect2',
+            ],
+        ],
+    ]
+
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
+    }
+}
