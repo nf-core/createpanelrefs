@@ -1,9 +1,11 @@
 lint:
   files_exist:
     - conf/modules.config
+  files_unchanged:
+    - .github/PULL_REQUEST_TEMPLATE.md
   modules_config: false
   nf_test_content: false
-nf_core_version: 4.0.1
+nf_core_version: 4.0.2
 repository_type: pipeline
 template:
   author: "@maxulysse"
