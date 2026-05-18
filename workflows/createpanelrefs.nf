@@ -1,101 +1,135 @@
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
+    IMPORT MODULES / SUBWORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN MAIN WORKFLOW
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+include { BAM_CREATE_SOM_PON_GATK  } from '../subworkflows/nf-core/bam_create_som_pon_gatk'
+include { CNVKIT_BATCH             } from '../modules/nf-core/cnvkit/batch'
+include { GENS_PON                 } from '../subworkflows/local/gens_pon'
+include { GERMLINECNVCALLER_COHORT } from '../subworkflows/local/germlinecnvcaller_cohort'
+include { SAMTOOLS_VIEW            } from '../modules/nf-core/samtools/view'
 
 workflow CREATEPANELREFS {
-
     take:
-    ch_samplesheet // channel: samplesheet read in from --input
-    multiqc_config
-    multiqc_logo
-    multiqc_methods_description
-    outdir
+    samplesheet // channel: samplesheet read in from --input
+    tools // array: tools to run, or no_tools if none (it's actually comma separated values string, but close enough)
+    gcnv_model_name // string: name of gcnv model
+    gens_analysis_type // string: type of analysis for gens pon ('lrs' or 'srs')
+    gens_pon_name // string: name of gens pon
+    mutect2_pon_name // string: name of mutect2 pon
+    fasta // channel: [meta, fasta]
+    dict // channel: [meta, dict]
+    fai // channel: [meta, fai]
+    cnvkit_targets // channel: [meta, cnvkit_targets]
+    gcnv_exclude_bed // channel: [meta, gcnv_exclude_bed]
+    gcnv_exclude_interval_list // channel: [meta, gcnv_exclude_interval_list]
+    gcnv_mappable_regions // channel: [meta, gcnv_mappable_regions]
+    gcnv_ploidy_priors // channel: [meta, gcnv_ploidy_priors]
+    gcnv_segmental_duplications // channel: [meta, gcnv_segmental_duplications]
+    gcnv_target_bed // channel: [meta, gcnv_target_bed]
+    gcnv_target_interval_list // channel: [meta, gcnv_target_interval_list]
+    gens_interval_list // channel: [meta, gens_interval_list]
+    mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
+    if (tools.split(',').contains('cnvkit')) {
 
-    def ch_versions = channel.empty()
-    def ch_multiqc_files = channel.empty()
-    //
-    // MODULE: Run FastQC
-    //
-    FASTQC(ch_samplesheet)
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.map{ _meta, file -> file })
-
-    //
-    // Collate and save software versions
-    //
-    def topic_versions = channel.topic("versions")
-        .distinct()
-        .branch { entry ->
-            versions_file: entry instanceof Path
-            versions_tuple: true
+        input_by_fmt = samplesheet.branch { meta, bam, _bai, cram, crai ->
+            bam: bam
+            return [meta, bam]
+            cram: cram
+            return [meta, cram, crai]
         }
 
-    def topic_versions_string = topic_versions.versions_tuple
-        .map { process, tool, version ->
-            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: ${version}" ]
-        }
-        .groupTuple(by:0)
-        .map { process, tool_versions ->
-            tool_versions.unique().sort()
-            "${process}:\n${tool_versions.join('\n')}"
+        cnvkit_input = SAMTOOLS_VIEW(
+            input_by_fmt.cram,
+            fasta.map { meta, fasta_ -> [meta, fasta_, []] },
+            [[:], []],
+            [[:], []],
+            false,
+        ).bam.mix(input_by_fmt.bam).map { meta, bam ->
+            [meta + [id: 'panel'], bam]
+        }.groupTuple().map { meta, bam ->
+            [meta, [], [], bam, []]
         }
 
-    def ch_collated_versions = softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
-        .mix(topic_versions_string)
-        .collectFile(
-            storeDir: "${outdir}/pipeline_info",
-            name: 'nf_core_'  +  'createpanelrefs_software_'  + 'mqc_'  + 'versions.yml',
-            sort: true,
-            newLine: true
+        CNVKIT_BATCH(
+            cnvkit_input,
+            fasta.map { meta, fasta_ -> [meta, fasta_, []] },
+            cnvkit_targets,
+            [[:], []],
+            true,
         )
+    }
 
-    //
-    // MODULE: MultiQC
-    //
-    ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
-    def ch_summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
-    def ch_workflow_summary = channel.value(paramsSummaryMultiqc(ch_summary_params))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    def ch_multiqc_custom_methods_description = multiqc_methods_description
-        ? file(multiqc_methods_description, checkIfExists: true)
-        : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
-    def ch_methods_description = channel.value(methodsDescriptionText(ch_multiqc_custom_methods_description))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
-    MULTIQC(
-        ch_multiqc_files.flatten().collect().map { files ->
-            [
-                [id: 'createpanelrefs'],
-                files,
-                multiqc_config
-                    ? file(multiqc_config, checkIfExists: true)
-                    : file("${projectDir}/assets/multiqc_config.yml", checkIfExists: true),
-                multiqc_logo ? file(multiqc_logo, checkIfExists: true) : [],
-                [],
-                [],
-            ]
+    if (tools.split(',').contains('germlinecnvcaller')) {
+
+        germlinecnvcaller_input = samplesheet.map { meta, bam, bai, cram, crai ->
+            if (bam) {
+                return [meta + [data_type: 'bam'], bam, bai]
+            }
+            if (cram) {
+                return [meta + [data_type: 'cram'], cram, crai]
+            }
         }
-    )
-    emit:multiqc_report = MULTIQC.out.report.map { _meta, report -> [report] }.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
-}
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+        GERMLINECNVCALLER_COHORT(
+            germlinecnvcaller_input,
+            gcnv_model_name,
+            dict,
+            fai,
+            fasta,
+            gcnv_exclude_bed,
+            gcnv_exclude_interval_list,
+            gcnv_mappable_regions,
+            gcnv_ploidy_priors,
+            gcnv_segmental_duplications,
+            gcnv_target_bed,
+            gcnv_target_interval_list,
+        )
+    }
+
+    if (tools.split(',').contains('mutect2')) {
+
+        mutect2_input = samplesheet.map { meta, bam, bai, cram, crai ->
+            if (bam) {
+                return [meta + [data_type: 'bam'], bam, bai, []]
+            }
+            if (cram) {
+                return [meta + [data_type: 'cram'], cram, crai, []]
+            }
+        }
+
+        BAM_CREATE_SOM_PON_GATK(
+            mutect2_input,
+            fasta,
+            fai.map { meta, fai_ -> [meta, fai_, []] },
+            dict,
+            mutect2_pon_name,
+            mutect2_target_bed.map { _meta, target -> [target] },
+        )
+    }
+
+    if (tools.split(',').contains('gens')) {
+
+        gens_input = samplesheet.map { meta, bam, bai, cram, crai ->
+            if (bam) {
+                return [meta + [data_type: 'bam'], bam, bai]
+            }
+            if (cram) {
+                return [meta + [data_type: 'cram'], cram, crai]
+            }
+        }
+
+        GENS_PON(
+            gens_input,
+            gens_analysis_type,
+            gens_pon_name,
+            dict,
+            fai,
+            fasta,
+            gens_interval_list,
+        )
+    }
+}

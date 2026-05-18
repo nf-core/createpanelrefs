@@ -1,33 +1,24 @@
+def projectDir = new File('.').absolutePath
+
 nextflow_pipeline {
 
     name "Test pipeline"
     script "../main.nf"
     tag "pipeline"
+    tag "pipeline_createpanelrefs"
 
-    test("-profile test") {
+    def test_scenario = [
+        [
+            name: "-profile test --tools cnvkit --input tests/csv/1.0.0/bam_cram.csv",
+            params: [
+                input: "${projectDir}/tests/csv/1.0.0/bam_cram.csv",
+                tools: 'cnvkit',
+            ],
+        ],
+    ]
 
-        when {
-            params {
-                outdir = "$outputDir"
-            }
-        }
-
-        then {
-            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
-            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_content: All files in ${params.outdir}/ with stable content
-            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_path,
-                    // All files with stable contents
-                    stable_content
-                ).match() }
-            )
-        }
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
     }
 }

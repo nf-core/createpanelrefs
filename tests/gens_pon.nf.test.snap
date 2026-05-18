@@ -1,0 +1,121 @@
+{
+    "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV --gens_analysis_type lrs": {
+        "content": [
+            14,
+            {
+                "FIND_CONCATENATE": {
+                    "coreutils": "9.4",
+                    "find": "4.6.0",
+                    "pigz": "2.8"
+                },
+                "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_PREPROCESSINTERVALS_GENS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "INTERVAL_LIST_TO_BED": {
+                    "gawk": "5.3.1"
+                },
+                "MOSDEPTH": {
+                    "gzip": "1.14",
+                    "mosdepth": "0.3.14"
+                },
+                "MOSDEPTH_GATK_FORMAT": {
+                    "gawk": "5.3.1"
+                },
+                "MOSDEPTH_GATK_HEADER": {
+                    "gawk": "5.3.1"
+                },
+                "SAMTOOLS_VIEW": {
+                    "samtools": "1.23.1"
+                }
+            },
+            [
+                "gens_pon",
+                "gens_pon/createreadcountpanelofnormals",
+                "gens_pon/createreadcountpanelofnormals/gens_pon.hdf5",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/intervals",
+                "references/intervals/gens_pon",
+                "references/intervals/gens_pon/genome.interval_list",
+                "references/intervals/gens_pon/gens_coverage_bins.bed"
+            ],
+            "No VCF files",
+            [
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649"
+            ],
+            "No warnings"
+        ],
+        "timestamp": "2026-04-29T14:37:41.182596269",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.3"
+        }
+    },
+    "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV": {
+        "content": [
+            5,
+            {
+                "GATK4_COLLECTREADCOUNTS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_PREPROCESSINTERVALS_GENS": {
+                    "gatk4": "4.6.2.0"
+                }
+            },
+            [
+                "gens_pon",
+                "gens_pon/createreadcountpanelofnormals",
+                "gens_pon/createreadcountpanelofnormals/gens_pon.hdf5",
+                "gens_pon/readcounts",
+                "gens_pon/readcounts/testN.tsv",
+                "gens_pon/readcounts/testT.tsv",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/intervals",
+                "references/intervals/gens_pon",
+                "references/intervals/gens_pon/genome.interval_list"
+            ],
+            "No VCF files",
+            [
+                "testN.tsv:md5,bfceab35109b04317f38f9cc1cde71ca",
+                "testT.tsv:md5,7141d08cdc26f6057557be9e23ef4365",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            "No warnings"
+        ],
+        "timestamp": "2026-04-10T14:42:52.904323557",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.2"
+        }
+    }
+}
