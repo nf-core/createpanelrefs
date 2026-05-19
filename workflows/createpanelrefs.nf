@@ -6,7 +6,6 @@
 
 include { BAM_CREATE_SOM_PON_GATK  } from '../subworkflows/nf-core/bam_create_som_pon_gatk'
 include { CNVKIT_BATCH             } from '../modules/nf-core/cnvkit/batch'
-include { GATK4_SPLITINTERVALS     } from '../modules/nf-core/gatk4/splitintervals'
 include { GENS_PON                 } from '../subworkflows/local/gens_pon'
 include { GERMLINECNVCALLER_COHORT } from '../subworkflows/local/germlinecnvcaller_cohort'
 include { SAMTOOLS_VIEW            } from '../modules/nf-core/samtools/view'
@@ -31,7 +30,7 @@ workflow CREATEPANELREFS {
     gcnv_target_bed // channel: [meta, gcnv_target_bed]
     gcnv_target_interval_list // channel: [meta, gcnv_target_interval_list]
     gens_interval_list // channel: [meta, gens_interval_list]
-    mutect2_intervals_num
+    intervals_num // channel: [ path(intervals), val(num_intervals) ]
     mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
@@ -103,23 +102,6 @@ workflow CREATEPANELREFS {
             }
         }
 
-        // Split intervals for scatter/gather strategy
-        // ch_intervals_num: [ path(intervals), val(num_intervals) ]
-        // num_intervals > 1 triggers per-interval scatter and merge of outputs
-        if (mutect2_intervals_num > 1) {
-            GATK4_SPLITINTERVALS(
-                mutect2_target_bed,
-                fasta,
-                fai,
-                dict,
-            )
-
-            ch_intervals_num = GATK4_SPLITINTERVALS.out.split_intervals.flatMap { _meta, intervals -> intervals.collect { interval -> [interval, intervals.size()] } }
-        }
-        else {
-            ch_intervals_num = channel.of([[], 1])
-        }
-
         BAM_CREATE_SOM_PON_GATK(
             mutect2_input,
             fasta,
@@ -127,7 +109,7 @@ workflow CREATEPANELREFS {
             dict,
             mutect2_pon_name,
             mutect2_target_bed.map { _meta, target -> [target] },
-            ch_intervals_num,
+            intervals_num,
         )
     }
 

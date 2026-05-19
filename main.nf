@@ -123,6 +123,7 @@ workflow {
         user_fai,
         user_gens_interval_list,
         user_mutect2_target_bed,
+        params.mutect2_intervals_num,
         params.tools ?: "no_tools",
     )
 
@@ -146,7 +147,7 @@ workflow {
         gcnv_target_bed,
         gcnv_target_interval_list,
         PREPARE_GENOME.out.gens_interval_list,
-        params.mutect2_intervals_num,
+        PREPARE_GENOME.out.intervals_num,
         PREPARE_GENOME.out.mutect2_target_bed,
     )
 
