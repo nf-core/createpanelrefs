@@ -313,7 +313,8 @@
                     "description": "Number of intervals.",
                     "default": 20,
                     "fa_icon": "fas fa-sort-numeric-down",
-                    "help_text": "Used by GATK4_SPLITINTERVALS."
+                    "help_text": "Used by GATK4_SPLITINTERVALS.",
+                    "minimum": 1
                 },
                 "mutect2_pon_name": {
                     "type": "string",
