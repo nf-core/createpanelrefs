@@ -1,80 +1,73 @@
-name: gatk4_createsomaticpanelofnormals
-description: Create a panel of normals constraining germline and artifactual sites
-  for use with mutect2.
+name: gatk4_splitintervals
+description: Split intervals into sub-interval files.
 keywords:
-  - createsomaticpanelofnormals
+  - bed
   - gatk4
-  - panelofnormals
+  - interval
+  - splitintervals
 tools:
   - gatk4:
-      description: |
-        Developed in the Data Sciences Platform at the Broad Institute, the toolkit offers a wide variety of tools
-        with a primary focus on variant discovery and genotyping. Its powerful processing engine
-        and high-performance computing features make it capable of taking on projects of any size.
+      description: Genome Analysis Toolkit (GATK4)
       homepage: https://gatk.broadinstitute.org/hc/en-us
       documentation: https://gatk.broadinstitute.org/hc/en-us/categories/360002369672s
-      doi: 10.1158/1538-7445.AM2017-3590
+      tool_dev_url: https://github.com/broadinstitute/gatk
+      doi: "10.1158/1538-7445.AM2017-3590"
+      licence: ["BSD-3-clause"]
       identifier: ""
 input:
   - - meta:
         type: map
         description: |
           Groovy Map containing sample information
-          e.g. [ id:'test']
-    - genomicsdb:
+          e.g. [ id:'test' ]
+    - intervals:
         type: file
-        description: GenomicsDB database
+        description: Interval file
         ontologies: []
   - - meta2:
         type: map
         description: |
           Groovy Map containing reference information
-          e.g. [ id:'test']
+          e.g. [ id:'genome' ]
     - fasta:
         type: file
-        description: The reference fasta file
-        pattern: "*.fasta"
+        description: Reference FASTA
+        pattern: "*.{fa,fasta}"
         ontologies: []
   - - meta3:
         type: map
         description: |
           Groovy Map containing reference information
-          e.g. [ id:'test']
+          e.g. [ id:'genome' ]
     - fai:
         type: file
-        description: Index of reference fasta file
-        pattern: "*.fasta.fai"
+        description: Reference FASTA index
+        pattern: "*.fai"
         ontologies: []
   - - meta4:
         type: map
         description: |
           Groovy Map containing reference information
-          e.g. [ id:'test']
+          e.g. [ id:'genome' ]
     - dict:
         type: file
-        description: GATK sequence dictionary
+        description: Reference sequence dictionary
         pattern: "*.dict"
         ontologies: []
 output:
-  vcf:
+  split_intervals:
     - - meta:
           type: map
-          description: A Groovy map containing sample information
-      - "${prefix}.vcf.gz":
-          type: file
-          description: panel of normal as compressed vcf file
-          pattern: "*.vcf.gz"
-          ontologies:
-            - edam: http://edamontology.org/format_3989 # GZIP format
-  tbi:
-    - - meta:
+          description: |
+            Groovy Map containing sample information
+            e.g. [ id:'test' ]
+          pattern: "*.interval_list"
+      - "**.interval_list":
           type: map
-          description: A Groovy map containing sample information
-      - "${prefix}.vcf.gz.tbi":
-          type: file
-          description: Tabix index of vcf file
-          pattern: "*vcf.gz.tbi"
-          ontologies: []
+          description: |
+            Groovy Map containing sample information
+            e.g. [ id:'test' ]
+          pattern: "*.interval_list"
   versions_gatk4:
     - - ${task.process}:
           type: string
@@ -97,6 +90,8 @@ topics:
           type: eval
           description: The expression to obtain the version of the tool
 authors:
-  - "@GCJMackenzie"
+  - "@nvnieuwk"
+  - "@ramprasadn"
 maintainers:
-  - "@GCJMackenzie"
+  - "@nvnieuwk"
+  - "@ramprasadn"

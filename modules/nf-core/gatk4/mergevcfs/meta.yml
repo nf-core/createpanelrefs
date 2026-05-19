@@ -1,10 +1,9 @@
-name: gatk4_createsomaticpanelofnormals
-description: Create a panel of normals constraining germline and artifactual sites
-  for use with mutect2.
+name: gatk4_mergevcfs
+description: Merges several vcf files
 keywords:
-  - createsomaticpanelofnormals
   - gatk4
-  - panelofnormals
+  - merge
+  - vcf
 tools:
   - gatk4:
       description: |
@@ -14,6 +13,7 @@ tools:
       homepage: https://gatk.broadinstitute.org/hc/en-us
       documentation: https://gatk.broadinstitute.org/hc/en-us/categories/360002369672s
       doi: 10.1158/1538-7445.AM2017-3590
+      licence: ["Apache-2.0"]
       identifier: ""
 input:
   - - meta:
@@ -21,59 +21,45 @@ input:
         description: |
           Groovy Map containing sample information
           e.g. [ id:'test']
-    - genomicsdb:
-        type: file
-        description: GenomicsDB database
-        ontologies: []
+    - vcf:
+        type: list
+        description: Two or more VCF files
+        pattern: "*.{vcf,vcf.gz}"
   - - meta2:
         type: map
         description: |
           Groovy Map containing reference information
-          e.g. [ id:'test']
-    - fasta:
-        type: file
-        description: The reference fasta file
-        pattern: "*.fasta"
-        ontologies: []
-  - - meta3:
-        type: map
-        description: |
-          Groovy Map containing reference information
-          e.g. [ id:'test']
-    - fai:
-        type: file
-        description: Index of reference fasta file
-        pattern: "*.fasta.fai"
-        ontologies: []
-  - - meta4:
-        type: map
-        description: |
-          Groovy Map containing reference information
-          e.g. [ id:'test']
+          e.g. [ id:'genome']
     - dict:
         type: file
-        description: GATK sequence dictionary
+        description: Optional Sequence Dictionary as input
         pattern: "*.dict"
         ontologies: []
 output:
   vcf:
     - - meta:
-          type: map
-          description: A Groovy map containing sample information
-      - "${prefix}.vcf.gz":
           type: file
-          description: panel of normal as compressed vcf file
+          description: merged vcf file
+          pattern: "*.vcf.gz"
+          ontologies:
+            - edam: http://edamontology.org/format_3989 # GZIP format
+      - "*.vcf.gz":
+          type: file
+          description: merged vcf file
           pattern: "*.vcf.gz"
           ontologies:
             - edam: http://edamontology.org/format_3989 # GZIP format
   tbi:
     - - meta:
-          type: map
-          description: A Groovy map containing sample information
-      - "${prefix}.vcf.gz.tbi":
           type: file
-          description: Tabix index of vcf file
-          pattern: "*vcf.gz.tbi"
+          description: merged vcf file
+          pattern: "*.vcf.gz"
+          ontologies:
+            - edam: http://edamontology.org/format_3989 # GZIP format
+      - "*.tbi":
+          type: file
+          description: index files for the merged vcf files
+          pattern: "*.tbi"
           ontologies: []
   versions_gatk4:
     - - ${task.process}:
@@ -97,6 +83,6 @@ topics:
           type: eval
           description: The expression to obtain the version of the tool
 authors:
-  - "@GCJMackenzie"
+  - "@kevinmenden"
 maintainers:
-  - "@GCJMackenzie"
+  - "@kevinmenden"

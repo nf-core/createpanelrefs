@@ -146,6 +146,7 @@ workflow {
         gcnv_target_bed,
         gcnv_target_interval_list,
         PREPARE_GENOME.out.gens_interval_list,
+        params.mutect2_intervals_num,
         PREPARE_GENOME.out.mutect2_target_bed,
     )
 
@@ -234,6 +235,7 @@ workflow NFCORE_CREATEPANELREFS {
     gcnv_target_bed // channel: [meta, gcnv_target_bed]
     gcnv_target_interval_list // channel: [meta, gcnv_target_interval_list]
     gens_interval_list // channel: [meta, gens_interval_list]
+    mutect2_intervals_num
     mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
@@ -257,6 +259,7 @@ workflow NFCORE_CREATEPANELREFS {
         gcnv_target_bed,
         gcnv_target_interval_list,
         gens_interval_list,
+        mutect2_intervals_num,
         mutect2_target_bed,
     )
 }

@@ -25,6 +25,14 @@ nextflow_pipeline {
                 tools: 'mutect2',
             ],
         ],
+        [
+            name: "-profile test --tools mutect2 --mutect2_pon_name test --mutect2_intervals_num 2",
+            params: [
+                mutect2_pon_name: 'test',
+                mutect2_intervals_num: 2,
+                tools: 'mutect2',
+            ],
+        ],
     ]
 
     // Generate tests for each scenario
