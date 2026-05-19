@@ -63,6 +63,72 @@
             "nextflow": "26.03.2"
         }
     },
+    "-profile test --tools mutect2 --mutect2_pon_name test --mutect2_intervals_num 2": {
+        "content": [
+            12,
+            {
+                "GATK4_CREATESOMATICPANELOFNORMALS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_GENOMICSDBIMPORT": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_MERGEMUTECTSTATS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_MERGEVCFS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_MUTECT2": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_SPLITINTERVALS": {
+                    "gatk4": "4.6.2.0"
+                }
+            },
+            [
+                "gatk4",
+                "gatk4/mutect2",
+                "gatk4/mutect2/normal.mutect2.vcf.gz",
+                "gatk4/mutect2/normal.mutect2.vcf.gz.stats",
+                "gatk4/mutect2/normal.mutect2.vcf.gz.tbi",
+                "gatk4/mutect2/tumour.mutect2.vcf.gz",
+                "gatk4/mutect2/tumour.mutect2.vcf.gz.stats",
+                "gatk4/mutect2/tumour.mutect2.vcf.gz.tbi",
+                "gatk4/somaticpanelofnormals",
+                "gatk4/somaticpanelofnormals/test.vcf.gz",
+                "gatk4/somaticpanelofnormals/test.vcf.gz.tbi",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml"
+            ],
+            [
+                "normal.mutect2.vcf.gz:md5,bd2895070c41e27dee3210e5646bfb11",
+                "tumour.mutect2.vcf.gz:md5,f701dbd4591d009e56477928f971b804",
+                "test.vcf.gz:md5,dd63499034d2d81f07eca224b0cd309"
+            ],
+            [
+                "normal.mutect2.vcf.gz.stats:md5,d6e5dc6bbc2d388a23d68d1df3894b56",
+                "tumour.mutect2.vcf.gz.stats:md5,38e93a2641469e6401a1e5727d9ab0d2",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            "No warnings"
+        ],
+        "timestamp": "2026-05-19T14:42:05.364787154",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.1"
+        }
+    },
     "-profile test --tools mutect2 --mutect2_pon_name test": {
         "content": [
             5,

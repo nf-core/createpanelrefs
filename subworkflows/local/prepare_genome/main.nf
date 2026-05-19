@@ -1,5 +1,6 @@
 include { GATK4_CREATESEQUENCEDICTIONARY                              } from '../../../modules/nf-core/gatk4/createsequencedictionary'
 include { GATK4_PREPROCESSINTERVALS as GATK4_PREPROCESSINTERVALS_GENS } from '../../../modules/nf-core/gatk4/preprocessintervals'
+include { GATK4_SPLITINTERVALS                                        } from '../../../modules/nf-core/gatk4/splitintervals'
 include { GAWK as BUILD_INTERVALS                                     } from '../../../modules/nf-core/gawk'
 include { SAMTOOLS_FAIDX                                              } from '../../../modules/nf-core/samtools/faidx'
 
@@ -11,12 +12,14 @@ workflow PREPARE_GENOME {
     user_fai // channel: [optional]  [ val(meta), path(fai) ]
     user_gens_interval_list // channel: [optional]  [ val(meta), path(gens_interval_list) ]
     user_mutect2_target_bed // channel: [optional]  [ val(meta), path(mutect2_target_bed) ]
+    mutect2_intervals_num //   value: [optional] number of intervals for mutect2 scatter
     tools //   array: [mandatory] [ tools ]
 
     main:
     dict = channel.empty()
     fai = channel.empty()
     gens_interval_list = channel.empty()
+    intervals_num = channel.empty()
     mutect2_target_bed = channel.empty()
 
     // If a user_dict is provided, no fasta will be used to generate a dict
@@ -64,9 +67,27 @@ workflow PREPARE_GENOME {
 
     mutect2_target_bed = user_mutect2_target_bed.mix(BUILD_INTERVALS.out.output).collect()
 
+    // If mutect2 is in tools and mutect2_intervals_num > 1, split intervals for scatter/gather strategy
+    // ch_intervals_num: [ path(intervals), val(num_intervals) ]
+    // num_intervals > 1 triggers per-interval scatter and merge of outputs
+    if (tools.split(',').contains('mutect2') && mutect2_intervals_num > 1) {
+        GATK4_SPLITINTERVALS(
+            mutect2_target_bed,
+            fasta,
+            fai,
+            dict,
+        )
+
+        intervals_num = GATK4_SPLITINTERVALS.out.split_intervals.flatMap { _meta, intervals -> intervals.collect { interval -> [interval, intervals.size()] } }
+    }
+    else {
+        intervals_num = channel.of([[], 1])
+    }
+
     emit:
     dict // channel: [ val(meta), path(dict) ]
     fai // channel: [ val(meta), path(fai) ]
     gens_interval_list // channel: [ val(meta), path(gens_interval_list) ]
+    intervals_num // channel: [ path(intervals), val(num_intervals) ]
     mutect2_target_bed // channel: [ val(meta), path(mutect2_target_bed) ]
 }

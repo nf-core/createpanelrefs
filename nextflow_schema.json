@@ -308,6 +308,14 @@
             "description": "Options used by the mutect2 subworkflow",
             "default": "",
             "properties": {
+                "mutect2_intervals_num": {
+                    "type": "number",
+                    "description": "Number of intervals.",
+                    "default": 20,
+                    "fa_icon": "fas fa-sort-numeric-down",
+                    "help_text": "Used by GATK4_SPLITINTERVALS.",
+                    "minimum": 1
+                },
                 "mutect2_pon_name": {
                     "type": "string",
                     "description": "Name for panel of normals."

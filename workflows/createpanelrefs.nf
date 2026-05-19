@@ -30,6 +30,7 @@ workflow CREATEPANELREFS {
     gcnv_target_bed // channel: [meta, gcnv_target_bed]
     gcnv_target_interval_list // channel: [meta, gcnv_target_interval_list]
     gens_interval_list // channel: [meta, gens_interval_list]
+    intervals_num // channel: [ path(intervals), val(num_intervals) ]
     mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
@@ -94,10 +95,10 @@ workflow CREATEPANELREFS {
 
         mutect2_input = samplesheet.map { meta, bam, bai, cram, crai ->
             if (bam) {
-                return [meta + [data_type: 'bam'], bam, bai, []]
+                return [meta + [data_type: 'bam'], bam, bai]
             }
             if (cram) {
-                return [meta + [data_type: 'cram'], cram, crai, []]
+                return [meta + [data_type: 'cram'], cram, crai]
             }
         }
 
@@ -108,6 +109,7 @@ workflow CREATEPANELREFS {
             dict,
             mutect2_pon_name,
             mutect2_target_bed.map { _meta, target -> [target] },
+            intervals_num,
         )
     }
 
