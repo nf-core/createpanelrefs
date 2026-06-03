@@ -5,7 +5,6 @@ include { GAWK as INTERVAL_LIST_TO_BED        } from '../../../modules/nf-core/g
 include { GAWK as MOSDEPTH_GATK_FORMAT        } from '../../../modules/nf-core/gawk'
 include { GAWK as MOSDEPTH_GATK_HEADER        } from '../../../modules/nf-core/gawk'
 include { MOSDEPTH                            } from '../../../modules/nf-core/mosdepth'
-include { SAMTOOLS_INDEX                      } from '../../../modules/nf-core/samtools/index'
 include { SAMTOOLS_VIEW                       } from '../../../modules/nf-core/samtools/view'
 
 workflow GENS_PON {
@@ -21,25 +20,7 @@ workflow GENS_PON {
     main:
     ch_readcounts_out = channel.empty()
 
-    // Filter out files that lack indices, and generate them
-    ch_input
-        .branch { meta, alignment, index ->
-            alignment_with_index: index.size() > 0
-            return [meta, alignment, index]
-            alignment_without_index: index.size() == 0
-            return [meta, alignment]
-        }
-        .set { ch_for_mix }
-
-    SAMTOOLS_INDEX(ch_for_mix.alignment_without_index)
-
-    ch_index = SAMTOOLS_INDEX.out.index
-
-    // Collect alignment files and their indices
-    ch_for_mix.alignment_without_index
-        .join(ch_index)
-        .mix(ch_for_mix.alignment_with_index)
-        .set { ch_bam_bai }
+    ch_input.set { ch_bam_bai }
 
     if (val_analysis_type == 'srs') {
         ch_bam_bai

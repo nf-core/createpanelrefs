@@ -8,6 +8,7 @@ include { BAM_CREATE_SOM_PON_GATK  } from '../subworkflows/nf-core/bam_create_so
 include { CNVKIT_BATCH             } from '../modules/nf-core/cnvkit/batch'
 include { GENS_PON                 } from '../subworkflows/local/gens_pon'
 include { GERMLINECNVCALLER_COHORT } from '../subworkflows/local/germlinecnvcaller_cohort'
+include { PREPARE_ALIGNMENT        } from '../subworkflows/local/prepare_alignment'
 include { SAMTOOLS_VIEW            } from '../modules/nf-core/samtools/view'
 
 workflow CREATEPANELREFS {
@@ -34,29 +35,21 @@ workflow CREATEPANELREFS {
     mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
+    // Auto-index alignment files if indexes are missing from the samplesheet
+    PREPARE_ALIGNMENT(samplesheet, tools)
+
     if (tools.split(',').contains('cnvkit')) {
 
-        input_by_fmt = samplesheet.branch { meta, bam, _bai, cram, crai ->
-            bam: bam
-            return [meta, bam]
-            cram: cram
-            return [meta, cram, crai]
-        }
-
-        cnvkit_input = SAMTOOLS_VIEW(
-            input_by_fmt.cram,
+        SAMTOOLS_VIEW(
+            PREPARE_ALIGNMENT.out.cram_index,
             fasta.map { meta, fasta_ -> [meta, fasta_, []] },
             [[:], []],
             [[:], []],
             false,
-        ).bam.mix(input_by_fmt.bam).map { meta, bam ->
-            [meta + [id: 'panel'], bam]
-        }.groupTuple().map { meta, bam ->
-            [meta, [], [], bam, []]
-        }
+        )
 
         CNVKIT_BATCH(
-            cnvkit_input,
+            PREPARE_ALIGNMENT.out.bam_index.map { meta, bam, _bai -> [meta, bam] }.mix(SAMTOOLS_VIEW.out.bam).map { meta, bam -> [meta + [id: 'panel'], bam] }.groupTuple().map { meta, bam -> [meta, [], [], bam, []] },
             fasta.map { meta, fasta_ -> [meta, fasta_, []] },
             cnvkit_targets,
             [[:], []],
@@ -64,16 +57,24 @@ workflow CREATEPANELREFS {
         )
     }
 
+    if (tools.split(',').contains('gens')) {
+
+        gens_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
+
+        GENS_PON(
+            gens_input,
+            gens_analysis_type,
+            gens_pon_name,
+            dict,
+            fai,
+            fasta,
+            gens_interval_list,
+        )
+    }
+
     if (tools.split(',').contains('germlinecnvcaller')) {
 
-        germlinecnvcaller_input = samplesheet.map { meta, bam, bai, cram, crai ->
-            if (bam) {
-                return [meta + [data_type: 'bam'], bam, bai]
-            }
-            if (cram) {
-                return [meta + [data_type: 'cram'], cram, crai]
-            }
-        }
+        germlinecnvcaller_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
 
         GERMLINECNVCALLER_COHORT(
             germlinecnvcaller_input,
@@ -93,14 +94,7 @@ workflow CREATEPANELREFS {
 
     if (tools.split(',').contains('mutect2')) {
 
-        mutect2_input = samplesheet.map { meta, bam, bai, cram, crai ->
-            if (bam) {
-                return [meta + [data_type: 'bam'], bam, bai]
-            }
-            if (cram) {
-                return [meta + [data_type: 'cram'], cram, crai]
-            }
-        }
+        mutect2_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
 
         BAM_CREATE_SOM_PON_GATK(
             mutect2_input,
@@ -110,28 +104,6 @@ workflow CREATEPANELREFS {
             mutect2_pon_name,
             mutect2_target_bed.map { _meta, target -> [target] },
             intervals_num,
-        )
-    }
-
-    if (tools.split(',').contains('gens')) {
-
-        gens_input = samplesheet.map { meta, bam, bai, cram, crai ->
-            if (bam) {
-                return [meta + [data_type: 'bam'], bam, bai]
-            }
-            if (cram) {
-                return [meta + [data_type: 'cram'], cram, crai]
-            }
-        }
-
-        GENS_PON(
-            gens_input,
-            gens_analysis_type,
-            gens_pon_name,
-            dict,
-            fai,
-            fasta,
-            gens_interval_list,
         )
     }
 }

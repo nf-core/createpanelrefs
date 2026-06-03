@@ -46,6 +46,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#76](https://github.com/nf-core/createpanelrefs/pull/76) - Template update for nf-core/tools v4.0.1
 - [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Add intervals for Mutect2 in PON creation
 - [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Update MultiQC
+- [#79](https://github.com/nf-core/createpanelrefs/pull/79) - Extract alignment indexing into a dedicated `prepare_alignment` subworkflow used across all tools
 
 ### `Fixed`
 
