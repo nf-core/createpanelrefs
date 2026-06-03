@@ -34,6 +34,7 @@ workflow PIPELINE_INITIALISATION {
     help // boolean: Display help message and exit
     help_full // boolean: Show the full help message
     show_hidden // boolean: Show hidden parameters in the help message
+    tools
 
     main:
 
@@ -88,6 +89,18 @@ workflow PIPELINE_INITIALISATION {
         command,
         null,
     )
+
+    extra_text = """
+\033[1;37mExtra informations\033[0m
+\033[0;34m  Tools selected to be run  :\033[0;32m ${tools.join(",")} \033[0m
+-\033[2m----------------------------------------------------\033[0m-
+"""
+
+    if (monochrome_logs) {
+        extra_text = extra_text.replaceAll(/\033\[[0-9;]*m/, '')
+    }
+
+    log.info(extra_text)
 
     //
     // Check config provided to the pipeline
@@ -175,6 +188,14 @@ def genomeExistsError() {
         error(error_string)
     }
 }
+//
+// Define list of tools to run
+//
+def defineToolsList(input_tools) {
+    def tools_list = input_tools ? input_tools.tokenize(',') : []
+    return tools_list.sort().unique()
+}
+
 //
 // Generate methods description for MultiQC
 //

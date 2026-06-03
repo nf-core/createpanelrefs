@@ -47,6 +47,8 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Add intervals for Mutect2 in PON creation
 - [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Update MultiQC
 - [#79](https://github.com/nf-core/createpanelrefs/pull/79) - Extract alignment indexing into a dedicated `prepare_alignment` subworkflow used across all tools
+- [#80](https://github.com/nf-core/createpanelrefs/pull/80) - Update all modules/subworkflows to latest
+- [#81](https://github.com/nf-core/createpanelrefs/pull/81) - Refactored tools handling to use a centralized `defineToolsList()` function, aligned with the pattern used in nf-core/rnavar and nf-core/seqinspector
 
 ### `Fixed`
 

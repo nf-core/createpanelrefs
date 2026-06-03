@@ -20,6 +20,7 @@ include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_crea
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
 include { MULTIQC                 } from './modules/nf-core/multiqc'
+include { defineToolsList         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { paramsSummaryMap        } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc    } from './subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText  } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
@@ -53,6 +54,9 @@ params.mutect2_target_bed          = getGenomeAttribute('mutect2_target_bed')
 */
 
 workflow {
+    // Define list of tools to run
+    def tools = defineToolsList(params.tools)
+
     // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
     user_dict = params.dict
         ? channel.fromPath(params.dict).map { dict -> [[id: 'genome'], dict] }.collect()
@@ -115,6 +119,7 @@ workflow {
         params.help,
         params.help_full,
         params.show_hidden,
+        tools,
     )
 
     PREPARE_GENOME(
@@ -124,13 +129,13 @@ workflow {
         user_gens_interval_list,
         user_mutect2_target_bed,
         params.mutect2_intervals_num,
-        params.tools ?: "no_tools",
+        tools,
     )
 
     // WORKFLOW: Run main workflow
     NFCORE_CREATEPANELREFS(
         PIPELINE_INITIALISATION.out.samplesheet,
-        params.tools ?: "no_tools",
+        tools,
         params.gcnv_model_name,
         params.gens_analysis_type,
         params.gens_pon_name,
@@ -219,7 +224,7 @@ workflow {
 workflow NFCORE_CREATEPANELREFS {
     take:
     samplesheet // channel: samplesheet read in from --input
-    tools // string: comma separated list of tools to run
+    tools // list: tools to run
     gcnv_model_name // string: name of gcnv model
     gens_analysis_type // string: type of analysis for gens pon ('lrs' or 'srs')
     gens_pon_name // string: name of gens pon
