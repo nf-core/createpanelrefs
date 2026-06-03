@@ -307,6 +307,7 @@
             "type": "object",
             "description": "Options used by the mutect2 subworkflow",
             "default": "",
+            "required": ["mutect2_pon_name"],
             "properties": {
                 "mutect2_intervals_num": {
                     "type": "number",

@@ -77,7 +77,7 @@ workflow BAM_CREATE_SOM_PON_GATK {
         .mix(GATK4_MERGEMUTECTSTATS.out.stats)
         .map { meta, stats -> [meta - meta.subMap('num_intervals'), stats] }
 
-    ch_gendb_input = channel.of([id: val_pon_norm ?: 'mutect2_pon'])
+    ch_gendb_input = channel.of([id: val_pon_norm])
         .combine(ch_vcf.collect { _meta, vcf -> [vcf] }.toList())
         .combine(ch_tbi.collect { _meta, tbi -> [tbi] }.toList())
         .combine(ch_intervals_gendb)
