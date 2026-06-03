@@ -11,8 +11,8 @@ workflow PREPARE_ALIGNMENT {
     tools // string: comma-separated list of tools
 
     main:
-    def index_bams = tools.split(',').find { it in ['germlinecnvcaller', 'gens', 'mutect2'] } != null
-    def index_crams = tools.split(',').find { it in ['germlinecnvcaller', 'gens', 'mutect2'] } != null
+    def index_bams = tools.split(',').find { tool -> tool in ['germlinecnvcaller', 'gens', 'mutect2'] } != null
+    def index_crams = tools.split(',').find { tool -> tool in ['germlinecnvcaller', 'gens', 'mutect2'] } != null
 
     def input_reads = bam
         .mix(cram)
@@ -23,16 +23,10 @@ workflow PREPARE_ALIGNMENT {
             return [meta, reads]
         }
 
-    def to_index = input_reads.not_indexed.filter { meta, reads ->
-        (reads.extension == "bam" && index_bams) || (reads.extension == "cram" && index_crams)
-    }
+    def to_index = input_reads.not_indexed.filter { _meta, reads -> (reads.extension == "bam" && index_bams) || (reads.extension == "cram" && index_crams) }
 
     SAMTOOLS_INDEX(to_index)
 
     emit:
-    reads_index = input_reads.indexed
-        .mix(input_reads.not_indexed.filter { meta, reads ->
-            !((reads.extension == "bam" && index_bams) || (reads.extension == "cram" && index_crams))
-        }.map { meta, reads -> [meta, reads, []] })
-        .mix(to_index.join(SAMTOOLS_INDEX.out.index, failOnMismatch: true, failOnDuplicate: true)) // [ val(meta), path(bam|cram), path(bai|crai) ]
+    reads_index = input_reads.indexed.mix(input_reads.not_indexed.filter { _meta, reads -> !((reads.extension == "bam" && index_bams) || (reads.extension == "cram" && index_crams)) }.map { meta, reads -> [meta, reads, []] }).mix(to_index.join(SAMTOOLS_INDEX.out.index, failOnMismatch: true, failOnDuplicate: true)) // [ val(meta), path(bam|cram), path(bai|crai) ]
 }

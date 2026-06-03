@@ -3,12 +3,6 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
-
-### `Changed`
-
-- [#79](https://github.com/nf-core/createpanelrefs/pull/79) - Extract alignment indexing into a dedicated `prepare_alignment` subworkflow used across all tools
-
 ## [1.0.0](https://github.com/nf-core/createpanelrefs/releases/tag/1.0.0) - Hell's Gate
 
 Hell's Gate National Park is a national park situated near Lake Naivasha in Kenya.
@@ -52,6 +46,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#76](https://github.com/nf-core/createpanelrefs/pull/76) - Template update for nf-core/tools v4.0.1
 - [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Add intervals for Mutect2 in PON creation
 - [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Update MultiQC
+- [#79](https://github.com/nf-core/createpanelrefs/pull/79) - Extract alignment indexing into a dedicated `prepare_alignment` subworkflow used across all tools
 
 ### `Fixed`
 
