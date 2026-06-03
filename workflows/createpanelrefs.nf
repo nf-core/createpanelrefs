@@ -40,26 +40,35 @@ workflow CREATEPANELREFS {
 
     if (tools.split(',').contains('cnvkit')) {
 
-        ch_bam = PREPARE_ALIGNMENT.out.bam_index.map { meta, bam, _bai -> [meta, bam] }
-
-        ch_cram_bam = SAMTOOLS_VIEW(
+        SAMTOOLS_VIEW(
             PREPARE_ALIGNMENT.out.cram_index,
             fasta.map { meta, fasta_ -> [meta, fasta_, []] },
             [[:], []],
             [[:], []],
             false,
-        ).bam
+        )
 
         CNVKIT_BATCH(
-            ch_bam
-                .mix(ch_cram_bam)
-                .map { meta, bam -> [meta + [id: 'panel'], bam] }
-                .groupTuple()
-                .map { meta, bam -> [meta, [], [], bam, []] },
+            PREPARE_ALIGNMENT.out.bam_index.map { meta, bam, _bai -> [meta, bam] }.mix(SAMTOOLS_VIEW.out.bam).map { meta, bam -> [meta + [id: 'panel'], bam] }.groupTuple().map { meta, bam -> [meta, [], [], bam, []] },
             fasta.map { meta, fasta_ -> [meta, fasta_, []] },
             cnvkit_targets,
             [[:], []],
             true,
+        )
+    }
+
+    if (tools.split(',').contains('gens')) {
+
+        gens_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
+
+        GENS_PON(
+            gens_input,
+            gens_analysis_type,
+            gens_pon_name,
+            dict,
+            fai,
+            fasta,
+            gens_interval_list,
         )
     }
 
@@ -85,7 +94,7 @@ workflow CREATEPANELREFS {
 
     if (tools.split(',').contains('mutect2')) {
 
-        mutect2_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index, []] }
+        mutect2_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
 
         BAM_CREATE_SOM_PON_GATK(
             mutect2_input,
@@ -95,21 +104,6 @@ workflow CREATEPANELREFS {
             mutect2_pon_name,
             mutect2_target_bed.map { _meta, target -> [target] },
             intervals_num,
-        )
-    }
-
-    if (tools.split(',').contains('gens')) {
-
-        gens_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
-
-        GENS_PON(
-            gens_input,
-            gens_analysis_type,
-            gens_pon_name,
-            dict,
-            fai,
-            fasta,
-            gens_interval_list,
         )
     }
 }
