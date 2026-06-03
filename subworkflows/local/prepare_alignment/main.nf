@@ -6,16 +6,23 @@ include { SAMTOOLS_INDEX } from '../../../modules/nf-core/samtools/index'
 
 workflow PREPARE_ALIGNMENT {
     take:
-    bam // [ val(meta), path(bam), path(bai) ]
-    cram // [ val(meta), path(cram), path(crai) ]
+    samplesheet // [ val(meta), path(bam), path(bai), path(cram), path(crai) ]
     tools // string: comma-separated list of tools
 
     main:
     def index_bams = tools.split(',').find { tool -> tool in ['germlinecnvcaller', 'gens', 'mutect2'] } != null
     def index_crams = tools.split(',').find { tool -> tool in ['germlinecnvcaller', 'gens', 'mutect2'] } != null
 
-    def input_reads = bam
-        .mix(cram)
+    ch_bam = samplesheet
+        .filter { _meta, bam, _bai, _cram, _crai -> bam }
+        .map { meta, bam, bai, _cram, _crai -> [meta, bam, bai] }
+
+    ch_cram = samplesheet
+        .filter { _meta, _bam, _bai, cram, _crai -> cram }
+        .map { meta, _bam, _bai, cram, crai -> [meta, cram, crai] }
+
+    def input_reads = ch_bam
+        .mix(ch_cram)
         .branch { meta, reads, index ->
             indexed: index
             return [meta, reads, index]
