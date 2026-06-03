@@ -40,27 +40,22 @@ workflow CREATEPANELREFS {
 
     if (tools.split(',').contains('cnvkit')) {
 
-        input_by_fmt = PREPARE_ALIGNMENT.out.reads_index.branch { meta, reads, index ->
-            bam: reads.extension == "bam"
-            return [meta, reads]
-            cram: reads.extension == "cram"
-            return [meta, reads, index]
-        }
+        ch_bam = PREPARE_ALIGNMENT.out.bam_index.map { meta, bam, _bai -> [meta, bam] }
 
-        cnvkit_input = SAMTOOLS_VIEW(
-            input_by_fmt.cram,
+        ch_cram_bam = SAMTOOLS_VIEW(
+            PREPARE_ALIGNMENT.out.cram_index,
             fasta.map { meta, fasta_ -> [meta, fasta_, []] },
             [[:], []],
             [[:], []],
             false,
-        ).bam.mix(input_by_fmt.bam).map { meta, bam ->
-            [meta + [id: 'panel'], bam]
-        }.groupTuple().map { meta, bam ->
-            [meta, [], [], bam, []]
-        }
+        ).bam
 
         CNVKIT_BATCH(
-            cnvkit_input,
+            ch_bam
+                .mix(ch_cram_bam)
+                .map { meta, bam -> [meta + [id: 'panel'], bam] }
+                .groupTuple()
+                .map { meta, bam -> [meta, [], [], bam, []] },
             fasta.map { meta, fasta_ -> [meta, fasta_, []] },
             cnvkit_targets,
             [[:], []],
