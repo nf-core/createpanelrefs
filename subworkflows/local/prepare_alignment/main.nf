@@ -34,6 +34,10 @@ workflow PREPARE_ALIGNMENT {
 
     SAMTOOLS_INDEX(to_index)
 
+    ch_reads_index = input_reads.indexed.mix(input_reads.not_indexed.filter { _meta, reads -> !((reads.extension == "bam" && index_bams) || (reads.extension == "cram" && index_crams)) }.map { meta, reads -> [meta, reads, []] }).mix(to_index.join(SAMTOOLS_INDEX.out.index, failOnMismatch: true, failOnDuplicate: true)) // [ val(meta), path(bam|cram), path(bai|crai) ]
+
     emit:
-    reads_index = input_reads.indexed.mix(input_reads.not_indexed.filter { _meta, reads -> !((reads.extension == "bam" && index_bams) || (reads.extension == "cram" && index_crams)) }.map { meta, reads -> [meta, reads, []] }).mix(to_index.join(SAMTOOLS_INDEX.out.index, failOnMismatch: true, failOnDuplicate: true)) // [ val(meta), path(bam|cram), path(bai|crai) ]
+    reads_index = ch_reads_index // [ val(meta), path(bam|cram), path(bai|crai) ]
+    bam_index = ch_reads_index.filter { _meta, reads, _index -> reads.extension == "bam" } // [ val(meta), path(bam), path(bai) ]
+    cram_index = ch_reads_index.filter { _meta, reads, _index -> reads.extension == "cram" } // [ val(meta), path(cram), path(crai) ]
 }
