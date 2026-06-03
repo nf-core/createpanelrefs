@@ -8,6 +8,7 @@ include { BAM_CREATE_SOM_PON_GATK  } from '../subworkflows/nf-core/bam_create_so
 include { CNVKIT_BATCH             } from '../modules/nf-core/cnvkit/batch'
 include { GENS_PON                 } from '../subworkflows/local/gens_pon'
 include { GERMLINECNVCALLER_COHORT } from '../subworkflows/local/germlinecnvcaller_cohort'
+include { PREPARE_ALIGNMENT        } from '../subworkflows/local/prepare_alignment'
 include { SAMTOOLS_VIEW            } from '../modules/nf-core/samtools/view'
 
 workflow CREATEPANELREFS {
@@ -33,13 +34,25 @@ workflow CREATEPANELREFS {
     mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
+    // Build alignment channels from samplesheet, allowing missing indexes
+    ch_bam = samplesheet
+        .filter { meta, bam, bai, cram, crai -> bam }
+        .map { meta, bam, bai, cram, crai -> [meta, bam, bai] }
+
+    ch_cram = samplesheet
+        .filter { meta, bam, bai, cram, crai -> cram }
+        .map { meta, bam, bai, cram, crai -> [meta, cram, crai] }
+
+    // Auto-index alignment files if indexes are missing from the samplesheet
+    PREPARE_ALIGNMENT(ch_bam, ch_cram, tools)
+
     if (tools.split(',').contains('cnvkit')) {
 
-        input_by_fmt = samplesheet.branch { meta, bam, _bai, cram, crai ->
-            bam: bam
-            return [meta, bam]
-            cram: cram
-            return [meta, cram, crai]
+        input_by_fmt = PREPARE_ALIGNMENT.out.reads_index.branch { meta, alignment, index ->
+            bam: alignment.extension == "bam"
+            return [meta, alignment]
+            cram: alignment.extension == "cram"
+            return [meta, alignment, index]
         }
 
         cnvkit_input = SAMTOOLS_VIEW(
@@ -65,14 +78,13 @@ workflow CREATEPANELREFS {
 
     if (tools.split(',').contains('germlinecnvcaller')) {
 
-        germlinecnvcaller_input = samplesheet.map { meta, bam, bai, cram, crai ->
-            if (bam) {
-                return [meta + [data_type: 'bam'], bam, bai]
+        germlinecnvcaller_input = PREPARE_ALIGNMENT.out.reads_index
+            .map { meta, alignment, index ->
+                if (alignment.extension == "bam") {
+                    return [meta + [data_type: 'bam'], alignment, index]
+                }
+                return [meta + [data_type: 'cram'], alignment, index]
             }
-            if (cram) {
-                return [meta + [data_type: 'cram'], cram, crai]
-            }
-        }
 
         GERMLINECNVCALLER_COHORT(
             germlinecnvcaller_input,
@@ -92,14 +104,13 @@ workflow CREATEPANELREFS {
 
     if (tools.split(',').contains('mutect2')) {
 
-        mutect2_input = samplesheet.map { meta, bam, bai, cram, crai ->
-            if (bam) {
-                return [meta + [data_type: 'bam'], bam, bai, []]
+        mutect2_input = PREPARE_ALIGNMENT.out.reads_index
+            .map { meta, alignment, index ->
+                if (alignment.extension == "bam") {
+                    return [meta + [data_type: 'bam'], alignment, index, []]
+                }
+                return [meta + [data_type: 'cram'], alignment, index, []]
             }
-            if (cram) {
-                return [meta + [data_type: 'cram'], cram, crai, []]
-            }
-        }
 
         BAM_CREATE_SOM_PON_GATK(
             mutect2_input,
@@ -113,14 +124,13 @@ workflow CREATEPANELREFS {
 
     if (tools.split(',').contains('gens')) {
 
-        gens_input = samplesheet.map { meta, bam, bai, cram, crai ->
-            if (bam) {
-                return [meta + [data_type: 'bam'], bam, bai]
+        gens_input = PREPARE_ALIGNMENT.out.reads_index
+            .map { meta, alignment, index ->
+                if (alignment.extension == "bam") {
+                    return [meta + [data_type: 'bam'], alignment, index]
+                }
+                return [meta + [data_type: 'cram'], alignment, index]
             }
-            if (cram) {
-                return [meta + [data_type: 'cram'], cram, crai]
-            }
-        }
 
         GENS_PON(
             gens_input,

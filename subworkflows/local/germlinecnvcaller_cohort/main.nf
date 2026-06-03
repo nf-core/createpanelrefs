@@ -9,7 +9,6 @@ include { GATK4_INDEXFEATUREFILE as GATK4_INDEXFEATUREFILE_MAPPABILITY } from '.
 include { GATK4_INDEXFEATUREFILE as GATK4_INDEXFEATUREFILE_SEGDUP      } from '../../../modules/nf-core/gatk4/indexfeaturefile'
 include { GATK4_INTERVALLISTTOOLS                                      } from '../../../modules/nf-core/gatk4/intervallisttools'
 include { GATK4_PREPROCESSINTERVALS                                    } from '../../../modules/nf-core/gatk4/preprocessintervals'
-include { SAMTOOLS_INDEX                                               } from '../../../modules/nf-core/samtools/index'
 
 workflow GERMLINECNVCALLER_COHORT {
     take:
@@ -86,24 +85,7 @@ workflow GERMLINECNVCALLER_COHORT {
         GATK4_INDEXFEATUREFILE_SEGDUP.out.index.ifEmpty([[:], []]),
     )
 
-    // Filter out files that lack indices, and generate them
     ch_input
-        .branch { meta, alignment, index ->
-            alignment_with_index: index.size() > 0
-            return [meta, alignment, index]
-            alignment_without_index: index.size() == 0
-            return [meta, alignment]
-        }
-        .set { ch_for_mix }
-
-    SAMTOOLS_INDEX(ch_for_mix.alignment_without_index)
-
-    ch_index = SAMTOOLS_INDEX.out.index
-
-    // Collect alignment files and their indices
-    ch_for_mix.alignment_without_index
-        .join(ch_index)
-        .mix(ch_for_mix.alignment_with_index)
         .combine(GATK4_PREPROCESSINTERVALS.out.interval_list.map { it -> it[1] })
         .set { ch_readcounts_in }
 
