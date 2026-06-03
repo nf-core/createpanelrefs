@@ -1,4 +1,4 @@
-process GATK4_CREATESOMATICPANELOFNORMALS {
+process GATK4_SPLITINTERVALS {
     tag "${meta.id}"
     label 'process_low'
 
@@ -8,14 +8,13 @@ process GATK4_CREATESOMATICPANELOFNORMALS {
         : 'community.wave.seqera.io/library/gatk4_gcnvkernel:edb12e4f0bf02cd3'}"
 
     input:
-    tuple val(meta), path(genomicsdb)
+    tuple val(meta), path(intervals)
     tuple val(meta2), path(fasta)
     tuple val(meta3), path(fai)
     tuple val(meta4), path(dict)
 
     output:
-    tuple val(meta), path("${prefix}.vcf.gz"), emit: vcf
-    tuple val(meta), path("${prefix}.vcf.gz.tbi"), emit: tbi
+    tuple val(meta), path("**.interval_list"), emit: split_intervals
     tuple val("${task.process}"), val('gatk4'), eval("gatk --version | sed -n '/GATK.*v/s/.*v//p'"), topic: versions, emit: versions_gatk4
 
     when:
@@ -23,29 +22,31 @@ process GATK4_CREATESOMATICPANELOFNORMALS {
 
     script:
     def args = task.ext.args ?: ''
-    prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    def reference = fasta ? "--reference ${fasta}" : ""
 
     def avail_mem = 3072
     if (!task.memory) {
-        log.info('[GATK CreateSomaticPanelOfNormals] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.')
+        log.info('[GATK SplitIntervals] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.')
     }
     else {
         avail_mem = (task.memory.mega * 0.8).intValue()
     }
     """
     gatk --java-options "-Xmx${avail_mem}M -XX:-UsePerfData" \\
-        CreateSomaticPanelOfNormals \\
-        --variant gendb://${genomicsdb} \\
-        --output ${prefix}.vcf.gz \\
-        --reference ${fasta} \\
+        SplitIntervals \\
+        --output ${prefix} \\
+        --intervals ${intervals} \\
+        ${reference} \\
         --tmp-dir . \\
         ${args}
     """
 
     stub:
-    prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    echo "" | gzip > ${prefix}.vcf.gz
-    touch ${prefix}.vcf.gz.tbi
+    mkdir ${prefix}
+    touch ${prefix}/0000-scattered.interval_list
+    touch ${prefix}/0001-scattered.interval_list
     """
 }

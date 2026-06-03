@@ -31,6 +31,7 @@ workflow CREATEPANELREFS {
     gcnv_target_bed // channel: [meta, gcnv_target_bed]
     gcnv_target_interval_list // channel: [meta, gcnv_target_interval_list]
     gens_interval_list // channel: [meta, gens_interval_list]
+    intervals_num // channel: [ path(intervals), val(num_intervals) ]
     mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
@@ -119,6 +120,7 @@ workflow CREATEPANELREFS {
             dict,
             mutect2_pon_name,
             mutect2_target_bed.map { _meta, target -> [target] },
+            intervals_num,
         )
     }
 

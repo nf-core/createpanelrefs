@@ -24,6 +24,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#17](https://github.com/nf-core/createpanelrefs/pull/17) - `GENS` can be used to create a PON
 - [#50](https://github.com/nf-core/createpanelrefs/pull/50) - Add auto creation of interval_list file from gens, and bed file for mutect2
 - [#62](https://github.com/nf-core/createpanelrefs/pull/62) - Add megatests
+- [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Add `mutect2_intervals_num` params
 
 ### `Changed`
 
@@ -49,6 +50,8 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#69](https://github.com/nf-core/createpanelrefs/pull/69) - Replace `CAT_CAT` by `FIND_CONCATENATE`
 - [#74](https://github.com/nf-core/createpanelrefs/pull/74) - Update all modules to work with singularity and apptainer
 - [#76](https://github.com/nf-core/createpanelrefs/pull/76) - Template update for nf-core/tools v4.0.1
+- [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Add intervals for Mutect2 in PON creation
+- [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Update MultiQC
 
 ### `Fixed`
 
@@ -72,7 +75,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 | gawk       |             | 5.3.1       |
 | htslib     |             | 1.23.1      |
 | mosdepth   |             | 0.3.14      |
-| multiqc    |             | 1.34        |
+| multiqc    |             | 1.35        |
 | samtools   |             | 1.23.1      |
 
 ### `Dependencies` - Nextflow plugins
