@@ -177,6 +177,7 @@ workflow PIPELINE_COMPLETION {
 //
 def validateInputParameters() {
     genomeExistsError()
+    mutect2PonNameError()
 }
 
 //
@@ -186,6 +187,18 @@ def genomeExistsError() {
     if (params.genomes && params.genome && !params.genomes.containsKey(params.genome)) {
         def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" + "  Currently, the available genome keys are:\n" + "  ${params.genomes.keySet().join(", ")}\n" + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         error(error_string)
+    }
+}
+
+//
+// Exit pipeline if --tools contains mutect2 and --mutect2_pon_name is missing
+//
+def mutect2PonNameError() {
+    def tools_list = params.tools ? params.tools.tokenize(',').collect { it.trim() } : []
+
+    if ('mutect2' in tools_list && !params.mutect2_pon_name) {
+        log.warn("Please provide a panel of normals name with '--mutect2_pon_name <NAME>' when running '--tools mutect2'.")
+        error("Missing required parameter for mutect2: --mutect2_pon_name")
     }
 }
 //
