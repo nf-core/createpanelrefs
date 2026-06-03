@@ -7,11 +7,11 @@ include { SAMTOOLS_INDEX } from '../../../modules/nf-core/samtools/index'
 workflow PREPARE_ALIGNMENT {
     take:
     samplesheet // [ val(meta), path(bam), path(bai), path(cram), path(crai) ]
-    tools // string: comma-separated list of tools
+    tools // list: tools to run
 
     main:
-    def index_bams = tools.split(',').find { tool -> tool in ['germlinecnvcaller', 'gens', 'mutect2'] } != null
-    def index_crams = tools.split(',').find { tool -> tool in ['germlinecnvcaller', 'gens', 'mutect2'] } != null
+    def index_bams = tools.any { tool -> tool in ['germlinecnvcaller', 'gens', 'mutect2'] }
+    def index_crams = tools.any { tool -> tool in ['germlinecnvcaller', 'gens', 'mutect2'] }
 
     ch_bam = samplesheet
         .filter { _meta, bam, _bai, _cram, _crai -> bam }

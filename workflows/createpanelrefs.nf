@@ -14,7 +14,7 @@ include { SAMTOOLS_VIEW            } from '../modules/nf-core/samtools/view'
 workflow CREATEPANELREFS {
     take:
     samplesheet // channel: samplesheet read in from --input
-    tools // array: tools to run, or no_tools if none (it's actually comma separated values string, but close enough)
+    tools // list: tools to run
     gcnv_model_name // string: name of gcnv model
     gens_analysis_type // string: type of analysis for gens pon ('lrs' or 'srs')
     gens_pon_name // string: name of gens pon
@@ -38,7 +38,7 @@ workflow CREATEPANELREFS {
     // Auto-index alignment files if indexes are missing from the samplesheet
     PREPARE_ALIGNMENT(samplesheet, tools)
 
-    if (tools.split(',').contains('cnvkit')) {
+    if ('cnvkit' in tools) {
 
         SAMTOOLS_VIEW(
             PREPARE_ALIGNMENT.out.cram_index,
@@ -57,7 +57,7 @@ workflow CREATEPANELREFS {
         )
     }
 
-    if (tools.split(',').contains('gens')) {
+    if ('gens' in tools) {
 
         gens_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
 
@@ -72,7 +72,7 @@ workflow CREATEPANELREFS {
         )
     }
 
-    if (tools.split(',').contains('germlinecnvcaller')) {
+    if ('germlinecnvcaller' in tools) {
 
         germlinecnvcaller_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
 
@@ -92,7 +92,7 @@ workflow CREATEPANELREFS {
         )
     }
 
-    if (tools.split(',').contains('mutect2')) {
+    if ('mutect2' in tools) {
 
         mutect2_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
 

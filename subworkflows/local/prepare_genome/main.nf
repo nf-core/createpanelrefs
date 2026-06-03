@@ -13,7 +13,7 @@ workflow PREPARE_GENOME {
     user_gens_interval_list // channel: [optional]  [ val(meta), path(gens_interval_list) ]
     user_mutect2_target_bed // channel: [optional]  [ val(meta), path(mutect2_target_bed) ]
     mutect2_intervals_num //   value: [optional] number of intervals for mutect2 scatter
-    tools //   array: [mandatory] [ tools ]
+    tools //   list: [mandatory] tools to run
 
     main:
     dict = channel.empty()
@@ -50,7 +50,7 @@ workflow PREPARE_GENOME {
     fasta_for_interval_list = fasta
         .mix(user_gens_interval_list)
         .groupTuple()
-        .filter { _meta, files -> (tools.split(',').contains('gens') && !files[1]) }
+        .filter { _meta, files -> ('gens' in tools && !files[1]) }
 
     GATK4_PREPROCESSINTERVALS_GENS(fasta_for_interval_list, fai.collect(), dict.collect(), [[:], []], [[:], []])
 
@@ -61,7 +61,7 @@ workflow PREPARE_GENOME {
     fai_for_intervals = fai
         .mix(user_mutect2_target_bed)
         .groupTuple()
-        .filter { _meta, files -> (tools.split(',').contains('mutect2') && !files[1]) }
+        .filter { _meta, files -> ('mutect2' in tools && !files[1]) }
 
     BUILD_INTERVALS(fai_for_intervals, [], false)
 
@@ -70,7 +70,7 @@ workflow PREPARE_GENOME {
     // If mutect2 is in tools and mutect2_intervals_num > 1, split intervals for scatter/gather strategy
     // ch_intervals_num: [ path(intervals), val(num_intervals) ]
     // num_intervals > 1 triggers per-interval scatter and merge of outputs
-    if (tools.split(',').contains('mutect2') && mutect2_intervals_num > 1) {
+    if ('mutect2' in tools && mutect2_intervals_num > 1) {
         GATK4_SPLITINTERVALS(
             mutect2_target_bed,
             fasta,
