@@ -3,25 +3,6 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
-
-### `Added`
-
-- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Created a local `cnvkit_pon` subworkflow encapsulating CRAM-to-BAM conversion + PON generation
-
-### `Changed`
-
-- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Replaced `if` guards with `.filter` on input channels so subworkflows are always called unconditionally
-- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Normalized `take:` parameter names to `ch_` prefix and emit names to snake_case across all local subworkflows
-- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Removed all `.set` operators from local subworkflow code
-- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Moved `data_type` injection into `prepare_alignment` subworkflow instead of at each call site
-
-### `Fixed`
-
-- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Fixed `_closure15` error when mutect2 is not in tools by filtering `dict` and `mutect2_target_bed` channels
-- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Fixed `gens_pon` bug where `ch_readcounts_out` was initialized but never assigned
-- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Fixed `mutect2.config` `saveAs` closure parameter name shadowing the outer `meta` variable
-
 ## [1.0.0](https://github.com/nf-core/createpanelrefs/releases/tag/1.0.0) - Hell's Gate
 
 Hell's Gate National Park is a national park situated near Lake Naivasha in Kenya.
@@ -38,6 +19,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#50](https://github.com/nf-core/createpanelrefs/pull/50) - Add auto creation of interval_list file from gens, and bed file for mutect2
 - [#62](https://github.com/nf-core/createpanelrefs/pull/62) - Add megatests
 - [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Add `mutect2_intervals_num` params
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Created a local `cnvkit_pon` subworkflow encapsulating CRAM-to-BAM conversion + PON generation
 
 ### `Changed`
 
@@ -68,6 +50,12 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#79](https://github.com/nf-core/createpanelrefs/pull/79) - Extract alignment indexing into a dedicated `prepare_alignment` subworkflow used across all tools
 - [#80](https://github.com/nf-core/createpanelrefs/pull/80) - Update all modules/subworkflows to latest
 - [#81](https://github.com/nf-core/createpanelrefs/pull/81) - Refactored tools handling to use a centralized `defineToolsList()` function, aligned with the pattern used in nf-core/rnavar and nf-core/seqinspector
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Replaced `if` statements with `.filter` on input channels so subworkflows are always called unconditionally
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Normalized `take:` parameter names to `ch_` prefix and emit names to snake_case across all local subworkflows
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Removed all `.set` operators
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Simplified `prepare_alignment` subworkflow usage
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Fixed `gens_pon` bug where `ch_readcounts_out` was initialized but never assigned
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Removed time requirements for Mutect2 as intervals usage is now possible via [#78](https://github.com/nf-core/createpanelrefs/pull/78)
 
 ### `Fixed`
 
@@ -82,6 +70,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#72](https://github.com/nf-core/createpanelrefs/pull/72) - Adjust time resource requirement for MUTECT2
 - [#73](https://github.com/nf-core/createpanelrefs/pull/73) - More time for Mutect2
 - [#82](https://github.com/nf-core/createpanelrefs/pull/82) - Fix schema requiring `mutect2_pon_name` even when not running mutect2; replaced with runtime validation
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Fixed `gens_pon` bug where `ch_readcounts_out` was initialized but never assigned
 
 ### `Dependencies` - modules
 
