@@ -24,7 +24,7 @@ workflow CNVKIT_PON {
     )
 
     CNVKIT_BATCH(
-        ch_reads.bam.mix(SAMTOOLS_VIEW.out.bam).map { meta, bam -> [[id: 'panel'], bam] }.groupTuple().map { meta, bam -> [meta, [], [], bam, []] },
+        ch_reads.bam.mix(SAMTOOLS_VIEW.out.bam).map { _meta, bam -> [[id: 'panel'], bam] }.groupTuple().map { meta, bam -> [meta, [], [], bam, []] },
         ch_fasta.map { meta, fasta_ -> [meta, fasta_, []] },
         ch_cnvkit_targets,
         [[:], []],

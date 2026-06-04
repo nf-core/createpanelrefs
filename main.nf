@@ -54,6 +54,8 @@ params.mutect2_target_bed          = getGenomeAttribute('mutect2_target_bed')
 */
 
 workflow {
+
+    main:
     // Define list of tools to run
     def tools = defineToolsList(params.tools)
 
@@ -215,7 +217,53 @@ workflow {
         params.monochrome_logs,
         MULTIQC.out.report.toList(),
     )
+
+    publish:
+    multiqc                       = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
+    cnvkit                        = NFCORE_CREATEPANELREFS.out.cnvkit_cnn.mix(NFCORE_CREATEPANELREFS.out.cnvkit_bed).mix(NFCORE_CREATEPANELREFS.out.cnvkit_cnr)
+    gens_pon                      = NFCORE_CREATEPANELREFS.out.gens_pon
+    gens_read_counts              = NFCORE_CREATEPANELREFS.out.gens_read_counts
+    germlinecnvcaller_model       = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_cnv_model.mix(NFCORE_CREATEPANELREFS.out.germlinecnvcaller_ploidy_model)
+    germlinecnvcaller_read_counts = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_read_counts.flatMap { _meta, files -> files.flatten().collect { f -> [_meta, f] } }
+    som_pon                       = NFCORE_CREATEPANELREFS.out.som_pon_gatk_vcf.mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_index).mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_mutect2_stats).mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_genomicsdb)
 }
+
+output {
+    multiqc {
+        path "reports/multiqc"
+    }
+    cnvkit {
+        path { _meta, file ->
+            file >> "reference/cnvkit/"
+        }
+    }
+    gens_pon {
+        path { _meta, file ->
+            file >> "gens_pon/"
+        }
+    }
+    gens_read_counts {
+        path { _meta, file ->
+            file >> "gens_pon/readcounts/"
+        }
+    }
+    germlinecnvcaller_model {
+        path { _meta, file ->
+            file >> "germlinecnvcaller/"
+        }
+    }
+    germlinecnvcaller_read_counts {
+        path { _meta, file ->
+            file >> "germlinecnvcaller/readcounts/"
+        }
+    }
+    som_pon {
+        path { _meta, file ->
+            file >> "gatk4/mutect2/"
+        }
+    }
+}
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
