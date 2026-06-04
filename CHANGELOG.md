@@ -19,6 +19,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#50](https://github.com/nf-core/createpanelrefs/pull/50) - Add auto creation of interval_list file from gens, and bed file for mutect2
 - [#62](https://github.com/nf-core/createpanelrefs/pull/62) - Add megatests
 - [#78](https://github.com/nf-core/createpanelrefs/pull/78) - Add `mutect2_intervals_num` params
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Created a local `cnvkit_pon` subworkflow encapsulating CRAM-to-BAM conversion + PON generation
 
 ### `Changed`
 
@@ -49,6 +50,11 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#79](https://github.com/nf-core/createpanelrefs/pull/79) - Extract alignment indexing into a dedicated `prepare_alignment` subworkflow used across all tools
 - [#80](https://github.com/nf-core/createpanelrefs/pull/80) - Update all modules/subworkflows to latest
 - [#81](https://github.com/nf-core/createpanelrefs/pull/81) - Refactored tools handling to use a centralized `defineToolsList()` function, aligned with the pattern used in nf-core/rnavar and nf-core/seqinspector
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Normalized `take:` parameter names to `ch_` prefix and emit names to snake_case across all local subworkflows
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Removed all `.set` operators
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Simplified `prepare_alignment` subworkflow usage
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Fixed `gens_pon` bug where `ch_readcounts_out` was initialized but never assigned
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Removed time requirements for Mutect2 as intervals usage is now possible via [#78](https://github.com/nf-core/createpanelrefs/pull/78)
 - [#84](https://github.com/nf-core/createpanelrefs/pull/84) - Removed `ext.when` from `germlinecnvcaller_cohort` config and moved conditional logic into the subworkflow via channel filtering
 
 ### `Fixed`
@@ -64,6 +70,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#72](https://github.com/nf-core/createpanelrefs/pull/72) - Adjust time resource requirement for MUTECT2
 - [#73](https://github.com/nf-core/createpanelrefs/pull/73) - More time for Mutect2
 - [#82](https://github.com/nf-core/createpanelrefs/pull/82) - Fix schema requiring `mutect2_pon_name` even when not running mutect2; replaced with runtime validation
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Fixed `gens_pon` bug where `ch_readcounts_out` was initialized but never assigned
 
 ### `Dependencies` - modules
 

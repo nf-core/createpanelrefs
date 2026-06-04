@@ -12,7 +12,7 @@ include { GATK4_PREPROCESSINTERVALS                                    } from '.
 
 workflow GERMLINECNVCALLER_COHORT {
     take:
-    ch_input // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
+    ch_reads_index // channel: [mandatory] [ val(meta), path(bam/cram), path(bai/crai) ]
     val_pon_name //  string: [optional] name for panel of normals
     val_analysis_type // string: [mandatory] type of analysis ('wes' or 'wgs')
     ch_dict // channel: [optional] [ val(meta), path(dict) ]
@@ -50,7 +50,7 @@ workflow GERMLINECNVCALLER_COHORT {
         ch_exclude_bed_interval_list = GATK4_BEDTOINTERVALLIST_EXCLUDE.out.interval_list
     }
 
-    ch_user_target_interval_list
+    ch_targets_for_mix = ch_user_target_interval_list
         .combine(ch_target_bed_interval_list.ifEmpty(null))
         .branch { it ->
             intervallistfrompath: it[2].equals(null)
@@ -58,14 +58,12 @@ workflow GERMLINECNVCALLER_COHORT {
             intervallistfrombed: !it[2].equals(null)
             return [it[2], it[3]]
         }
-        .set { ch_targets_for_mix }
 
-    ch_targets_for_mix.intervallistfrompath
+    ch_target_interval_list = ch_targets_for_mix.intervallistfrompath
         .mix(ch_targets_for_mix.intervallistfrombed)
         .collect()
-        .set { ch_target_interval_list }
 
-    ch_user_exclude_interval_list
+    ch_exclude_for_mix = ch_user_exclude_interval_list
         .combine(ch_exclude_bed_interval_list.ifEmpty(null))
         .branch { it ->
             intervallistfrompath: it[2].equals(null)
@@ -73,12 +71,10 @@ workflow GERMLINECNVCALLER_COHORT {
             intervallistfrombed: !it[2].equals(null)
             return [it[2], it[3]]
         }
-        .set { ch_exclude_for_mix }
 
-    ch_exclude_for_mix.intervallistfrompath
+    ch_exclude_interval_list = ch_exclude_for_mix.intervallistfrompath
         .mix(ch_exclude_for_mix.intervallistfrombed)
         .collect()
-        .set { ch_exclude_interval_list }
 
     GATK4_PREPROCESSINTERVALS(
         ch_fasta,
@@ -99,9 +95,7 @@ workflow GERMLINECNVCALLER_COHORT {
         GATK4_INDEXFEATUREFILE_SEGDUP.out.index.ifEmpty([[:], []]),
     )
 
-    ch_input
-        .combine(GATK4_PREPROCESSINTERVALS.out.interval_list.map { it -> it[1] })
-        .set { ch_readcounts_in }
+    ch_readcounts_in = ch_reads_index.combine(GATK4_PREPROCESSINTERVALS.out.interval_list.map { it -> it[1] })
 
     // Collect read counts, and generate models
     GATK4_COLLECTREADCOUNTS(
@@ -111,11 +105,10 @@ workflow GERMLINECNVCALLER_COHORT {
         ch_dict,
     )
 
-    GATK4_COLLECTREADCOUNTS.out.tsv
+    ch_readcounts_out = GATK4_COLLECTREADCOUNTS.out.tsv
         .mix(GATK4_COLLECTREADCOUNTS.out.hdf5)
         .collect { _meta, file -> [file] }
         .map { tsv -> [[id: val_pon_name], tsv] }
-        .set { ch_readcounts_out }
 
 
     GATK4_FILTERINTERVALS(
@@ -124,12 +117,11 @@ workflow GERMLINECNVCALLER_COHORT {
         GATK4_ANNOTATEINTERVALS.out.annotated_intervals,
     )
 
-    GATK4_INTERVALLISTTOOLS(GATK4_FILTERINTERVALS.out.interval_list).interval_list.map { _meta, it -> it }.flatten().set { ch_intervallist_out }
+    ch_intervallist_out = GATK4_INTERVALLISTTOOLS(GATK4_FILTERINTERVALS.out.interval_list).interval_list.map { _meta, it -> it }.flatten()
 
-    ch_readcounts_out
+    ch_contigploidy_in = ch_readcounts_out
         .combine(GATK4_FILTERINTERVALS.out.interval_list)
         .map { meta, counts, _meta2, il -> [meta, counts, il, []] }
-        .set { ch_contigploidy_in }
 
     GATK4_DETERMINEGERMLINECONTIGPLOIDY(
         ch_contigploidy_in,
@@ -137,16 +129,15 @@ workflow GERMLINECNVCALLER_COHORT {
         ch_ploidy_priors,
     )
 
-    ch_readcounts_out
+    ch_cnvcaller_in = ch_readcounts_out
         .combine(ch_intervallist_out)
         .combine(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
         .map { meta, counts, il, _meta2, calls -> [meta + [id: il.baseName], counts, il, calls, []] }
-        .set { ch_cnvcaller_in }
 
     GATK4_GERMLINECNVCALLER(ch_cnvcaller_in)
 
     emit:
-    cnvmodel    = GATK4_GERMLINECNVCALLER.out.cohortmodel
-    ploidymodel = GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.model
-    readcounts  = ch_readcounts_out
+    cnv_model    = GATK4_GERMLINECNVCALLER.out.cohortmodel
+    ploidy_model = GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.model
+    read_counts  = ch_readcounts_out
 }

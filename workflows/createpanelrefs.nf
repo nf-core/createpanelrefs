@@ -5,11 +5,10 @@
 */
 
 include { BAM_CREATE_SOM_PON_GATK  } from '../subworkflows/nf-core/bam_create_som_pon_gatk'
-include { CNVKIT_BATCH             } from '../modules/nf-core/cnvkit/batch'
+include { CNVKIT_PON               } from '../subworkflows/local/cnvkit_pon'
 include { GENS_PON                 } from '../subworkflows/local/gens_pon'
 include { GERMLINECNVCALLER_COHORT } from '../subworkflows/local/germlinecnvcaller_cohort'
 include { PREPARE_ALIGNMENT        } from '../subworkflows/local/prepare_alignment'
-include { SAMTOOLS_VIEW            } from '../modules/nf-core/samtools/view'
 
 workflow CREATEPANELREFS {
     take:
@@ -36,34 +35,30 @@ workflow CREATEPANELREFS {
     mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
+    ch_gens_pon = channel.empty()
+    ch_gens_read_counts = channel.empty()
+    ch_germlinecnvcaller_cnv_model = channel.empty()
+    ch_germlinecnvcaller_ploidy_model = channel.empty()
+    ch_germlinecnvcaller_read_counts = channel.empty()
+    ch_som_pon_gatk_genomicsdb = channel.empty()
+    ch_som_pon_gatk_index = channel.empty()
+    ch_som_pon_gatk_mutect2_stats = channel.empty()
+    ch_som_pon_gatk_vcf = channel.empty()
+
     // Auto-index alignment files if indexes are missing from the samplesheet
     PREPARE_ALIGNMENT(samplesheet, tools)
 
-    if ('cnvkit' in tools) {
+    //CNVKIT
+    CNVKIT_PON(
+        PREPARE_ALIGNMENT.out.reads_index.filter { 'cnvkit' in tools },
+        fasta,
+        cnvkit_targets,
+    )
 
-        SAMTOOLS_VIEW(
-            PREPARE_ALIGNMENT.out.cram_index,
-            fasta.map { meta, fasta_ -> [meta, fasta_, []] },
-            [[:], []],
-            [[:], []],
-            false,
-        )
-
-        CNVKIT_BATCH(
-            PREPARE_ALIGNMENT.out.bam_index.map { meta, bam, _bai -> [meta, bam] }.mix(SAMTOOLS_VIEW.out.bam).map { meta, bam -> [meta + [id: 'panel'], bam] }.groupTuple().map { meta, bam -> [meta, [], [], bam, []] },
-            fasta.map { meta, fasta_ -> [meta, fasta_, []] },
-            cnvkit_targets,
-            [[:], []],
-            true,
-        )
-    }
-
+    // GENS
     if ('gens' in tools) {
-
-        gens_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
-
         GENS_PON(
-            gens_input,
+            PREPARE_ALIGNMENT.out.reads_index,
             gens_analysis_type,
             gens_pon_name,
             dict,
@@ -71,14 +66,15 @@ workflow CREATEPANELREFS {
             fasta,
             gens_interval_list,
         )
+
+        ch_gens_pon = GENS_PON.out.gens_pon
+        ch_gens_read_counts = GENS_PON.out.read_counts
     }
 
+    // GERMLINECNVCALLER
     if ('germlinecnvcaller' in tools) {
-
-        germlinecnvcaller_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
-
         GERMLINECNVCALLER_COHORT(
-            germlinecnvcaller_input,
+            PREPARE_ALIGNMENT.out.reads_index,
             gcnv_model_name,
             gcnv_analysis_type,
             dict,
@@ -92,14 +88,16 @@ workflow CREATEPANELREFS {
             gcnv_target_bed,
             gcnv_target_interval_list,
         )
+
+        ch_germlinecnvcaller_cnv_model = GERMLINECNVCALLER_COHORT.out.cnv_model
+        ch_germlinecnvcaller_ploidy_model = GERMLINECNVCALLER_COHORT.out.ploidy_model
+        ch_germlinecnvcaller_read_counts = GERMLINECNVCALLER_COHORT.out.read_counts
     }
 
+    // MUTECT2
     if ('mutect2' in tools) {
-
-        mutect2_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
-
         BAM_CREATE_SOM_PON_GATK(
-            mutect2_input,
+            PREPARE_ALIGNMENT.out.reads_index,
             fasta,
             fai.map { meta, fai_ -> [meta, fai_, []] },
             dict,
@@ -107,5 +105,23 @@ workflow CREATEPANELREFS {
             mutect2_target_bed.map { _meta, target -> [target] },
             intervals_num,
         )
+        ch_som_pon_gatk_genomicsdb = BAM_CREATE_SOM_PON_GATK.out.genomicsdb
+        ch_som_pon_gatk_index = BAM_CREATE_SOM_PON_GATK.out.pon_index
+        ch_som_pon_gatk_mutect2_stats = BAM_CREATE_SOM_PON_GATK.out.mutect2_stats
+        ch_som_pon_gatk_vcf = BAM_CREATE_SOM_PON_GATK.out.pon_vcf
     }
+
+    emit:
+    cnvkit_bed                     = CNVKIT_PON.out.bed
+    cnvkit_cnn                     = CNVKIT_PON.out.cnn
+    cnvkit_cnr                     = CNVKIT_PON.out.cnr
+    gens_pon                       = ch_gens_pon
+    gens_read_counts               = ch_gens_read_counts
+    germlinecnvcaller_cnv_model    = ch_germlinecnvcaller_cnv_model
+    germlinecnvcaller_ploidy_model = ch_germlinecnvcaller_ploidy_model
+    germlinecnvcaller_read_counts  = ch_germlinecnvcaller_read_counts
+    som_pon_gatk_genomicsdb        = ch_som_pon_gatk_genomicsdb
+    som_pon_gatk_index             = ch_som_pon_gatk_index
+    som_pon_gatk_mutect2_stats     = ch_som_pon_gatk_mutect2_stats
+    som_pon_gatk_vcf               = ch_som_pon_gatk_vcf
 }
