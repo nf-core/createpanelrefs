@@ -32,8 +32,8 @@ workflow GERMLINECNVCALLER_COHORT {
     GATK4_INDEXFEATUREFILE_SEGDUP(ch_segmental_duplications.filter { _meta, segdup -> !(segdup instanceof List) })
 
     // Bed to interval list conversion — only for WES when bed is provided and no interval list given
-    ch_target_bed_interval_list = channel.value(null)
-    ch_exclude_bed_interval_list = channel.value(null)
+    ch_target_bed_interval_list = channel.empty()
+    ch_exclude_bed_interval_list = channel.empty()
 
     if (val_analysis_type == "wes") {
         GATK4_BEDTOINTERVALLIST_TARGETS(
@@ -51,7 +51,7 @@ workflow GERMLINECNVCALLER_COHORT {
     }
 
     ch_user_target_interval_list
-        .combine(ch_target_bed_interval_list)
+        .combine(ch_target_bed_interval_list.ifEmpty(null))
         .branch { it ->
             intervallistfrompath: it[2].equals(null)
             return [it[0], it[1]]
@@ -66,7 +66,7 @@ workflow GERMLINECNVCALLER_COHORT {
         .set { ch_target_interval_list }
 
     ch_user_exclude_interval_list
-        .combine(ch_exclude_bed_interval_list)
+        .combine(ch_exclude_bed_interval_list.ifEmpty(null))
         .branch { it ->
             intervallistfrompath: it[2].equals(null)
             return [it[0], it[1]]
