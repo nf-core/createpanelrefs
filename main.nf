@@ -6,7 +6,7 @@
     Github : https://github.com/nf-core/createpanelrefs
     Website: https://nf-co.re/createpanelrefs
     Slack  : https://nfcore.slack.com/channels/createpanelrefs
-----------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
 */
 
 /*
