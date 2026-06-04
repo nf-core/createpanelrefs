@@ -50,7 +50,6 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#79](https://github.com/nf-core/createpanelrefs/pull/79) - Extract alignment indexing into a dedicated `prepare_alignment` subworkflow used across all tools
 - [#80](https://github.com/nf-core/createpanelrefs/pull/80) - Update all modules/subworkflows to latest
 - [#81](https://github.com/nf-core/createpanelrefs/pull/81) - Refactored tools handling to use a centralized `defineToolsList()` function, aligned with the pattern used in nf-core/rnavar and nf-core/seqinspector
-- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Replaced `if` statements with `.filter` on input channels so subworkflows are always called unconditionally
 - [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Normalized `take:` parameter names to `ch_` prefix and emit names to snake_case across all local subworkflows
 - [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Removed all `.set` operators
 - [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Simplified `prepare_alignment` subworkflow usage
