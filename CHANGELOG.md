@@ -3,12 +3,6 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
-
-### `Changed`
-
-- [#84](https://github.com/nf-core/createpanelrefs/pull/84) - Removed `ext.when` from `germlinecnvcaller_cohort` config and moved conditional logic into the subworkflow via channel filtering
-
 ## [1.0.0](https://github.com/nf-core/createpanelrefs/releases/tag/1.0.0) - Hell's Gate
 
 Hell's Gate National Park is a national park situated near Lake Naivasha in Kenya.
@@ -55,6 +49,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#79](https://github.com/nf-core/createpanelrefs/pull/79) - Extract alignment indexing into a dedicated `prepare_alignment` subworkflow used across all tools
 - [#80](https://github.com/nf-core/createpanelrefs/pull/80) - Update all modules/subworkflows to latest
 - [#81](https://github.com/nf-core/createpanelrefs/pull/81) - Refactored tools handling to use a centralized `defineToolsList()` function, aligned with the pattern used in nf-core/rnavar and nf-core/seqinspector
+- [#84](https://github.com/nf-core/createpanelrefs/pull/84) - Removed `ext.when` from `germlinecnvcaller_cohort` config and moved conditional logic into the subworkflow via channel filtering
 
 ### `Fixed`
 
