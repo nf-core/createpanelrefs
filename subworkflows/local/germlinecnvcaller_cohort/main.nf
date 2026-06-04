@@ -32,24 +32,26 @@ workflow GERMLINECNVCALLER_COHORT {
     GATK4_INDEXFEATUREFILE_SEGDUP(ch_segmental_duplications.filter { _meta, segdup -> !(segdup instanceof List) })
 
     // Bed to interval list conversion — only for WES when bed is provided and no interval list given
-    ch_target_bed_for_conversion = channel.of(val_analysis_type)
-        .combine(ch_user_target_interval_list.filter { _meta, interval -> interval instanceof List })
-        .combine(ch_target_bed.filter { _meta, bed -> !(bed instanceof List) })
-        .filter { analysis_type, _meta_interval, _interval, _meta_bed, _bed -> analysis_type == "wes" }
-        .map { _analysis_type, _meta_interval, _interval, meta_bed, bed -> [meta_bed, bed] }
+    ch_target_bed_interval_list = channel.empty()
+    ch_exclude_bed_interval_list = channel.empty()
 
-    GATK4_BEDTOINTERVALLIST_TARGETS(ch_target_bed_for_conversion, ch_dict)
+    if (val_analysis_type == "wes") {
+        GATK4_BEDTOINTERVALLIST_TARGETS(
+            ch_target_bed.filter { _meta, bed -> !(bed instanceof List) },
+            ch_dict,
+        )
 
-    ch_exclude_bed_for_conversion = channel.of(val_analysis_type)
-        .combine(ch_user_exclude_interval_list.filter { _meta, interval -> interval instanceof List })
-        .combine(ch_exclude_bed.filter { _meta, bed -> !(bed instanceof List) })
-        .filter { analysis_type, _meta_interval, _interval, _meta_bed, _bed -> analysis_type == "wes" }
-        .map { _analysis_type, _meta_interval, _interval, meta_bed, bed -> [meta_bed, bed] }
+        GATK4_BEDTOINTERVALLIST_EXCLUDE(
+            ch_exclude_bed.filter { _meta, bed -> !(bed instanceof List) },
+            ch_dict,
+        )
 
-    GATK4_BEDTOINTERVALLIST_EXCLUDE(ch_exclude_bed_for_conversion, ch_dict)
+        ch_target_bed_interval_list = GATK4_BEDTOINTERVALLIST_TARGETS.out.interval_list
+        ch_exclude_bed_interval_list = GATK4_BEDTOINTERVALLIST_EXCLUDE.out.interval_list
+    }
 
     ch_user_target_interval_list
-        .combine(GATK4_BEDTOINTERVALLIST_TARGETS.out.interval_list.ifEmpty(null))
+        .combine(ch_target_bed_interval_list.ifEmpty(null))
         .branch { it ->
             intervallistfrompath: it[2].equals(null)
             return [it[0], it[1]]
@@ -64,7 +66,7 @@ workflow GERMLINECNVCALLER_COHORT {
         .set { ch_target_interval_list }
 
     ch_user_exclude_interval_list
-        .combine(GATK4_BEDTOINTERVALLIST_EXCLUDE.out.interval_list.ifEmpty(null))
+        .combine(ch_exclude_bed_interval_list.ifEmpty(null))
         .branch { it ->
             intervallistfrompath: it[2].equals(null)
             return [it[0], it[1]]
