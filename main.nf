@@ -121,6 +121,8 @@ workflow {
         params.show_hidden,
         tools,
         params.mutect2_pon_name,
+        params.genome,
+        params.genomes,
     )
 
     PREPARE_GENOME(

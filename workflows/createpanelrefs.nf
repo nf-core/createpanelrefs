@@ -5,11 +5,10 @@
 */
 
 include { BAM_CREATE_SOM_PON_GATK  } from '../subworkflows/nf-core/bam_create_som_pon_gatk'
-include { CNVKIT_BATCH             } from '../modules/nf-core/cnvkit/batch'
+include { CNVKIT_PON               } from '../subworkflows/local/cnvkit_pon'
 include { GENS_PON                 } from '../subworkflows/local/gens_pon'
 include { GERMLINECNVCALLER_COHORT } from '../subworkflows/local/germlinecnvcaller_cohort'
 include { PREPARE_ALIGNMENT        } from '../subworkflows/local/prepare_alignment'
-include { SAMTOOLS_VIEW            } from '../modules/nf-core/samtools/view'
 
 workflow CREATEPANELREFS {
     take:
@@ -38,72 +37,48 @@ workflow CREATEPANELREFS {
     // Auto-index alignment files if indexes are missing from the samplesheet
     PREPARE_ALIGNMENT(samplesheet, tools)
 
-    if ('cnvkit' in tools) {
+    //CNVKIT
+    CNVKIT_PON(
+        PREPARE_ALIGNMENT.out.reads_index.filter { 'cnvkit' in tools },
+        fasta,
+        cnvkit_targets,
+    )
 
-        SAMTOOLS_VIEW(
-            PREPARE_ALIGNMENT.out.cram_index,
-            fasta.map { meta, fasta_ -> [meta, fasta_, []] },
-            [[:], []],
-            [[:], []],
-            false,
-        )
+    // GENS
+    GENS_PON(
+        PREPARE_ALIGNMENT.out.reads_index.filter { 'gens' in tools },
+        gens_analysis_type,
+        gens_pon_name,
+        dict,
+        fai,
+        fasta,
+        gens_interval_list.filter { 'gens' in tools },
+    )
 
-        CNVKIT_BATCH(
-            PREPARE_ALIGNMENT.out.bam_index.map { meta, bam, _bai -> [meta, bam] }.mix(SAMTOOLS_VIEW.out.bam).map { meta, bam -> [meta + [id: 'panel'], bam] }.groupTuple().map { meta, bam -> [meta, [], [], bam, []] },
-            fasta.map { meta, fasta_ -> [meta, fasta_, []] },
-            cnvkit_targets,
-            [[:], []],
-            true,
-        )
-    }
+    // GERMLINECNVCALLER
+    GERMLINECNVCALLER_COHORT(
+        PREPARE_ALIGNMENT.out.reads_index.filter { 'germlinecnvcaller' in tools },
+        gcnv_model_name,
+        dict,
+        fai,
+        fasta,
+        gcnv_exclude_bed.filter { 'germlinecnvcaller' in tools },
+        gcnv_exclude_interval_list.filter { 'germlinecnvcaller' in tools },
+        gcnv_mappable_regions.filter { 'germlinecnvcaller' in tools },
+        gcnv_ploidy_priors,
+        gcnv_segmental_duplications.filter { 'germlinecnvcaller' in tools },
+        gcnv_target_bed.filter { 'germlinecnvcaller' in tools },
+        gcnv_target_interval_list.filter { 'germlinecnvcaller' in tools },
+    )
 
-    if ('gens' in tools) {
-
-        gens_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
-
-        GENS_PON(
-            gens_input,
-            gens_analysis_type,
-            gens_pon_name,
-            dict,
-            fai,
-            fasta,
-            gens_interval_list,
-        )
-    }
-
-    if ('germlinecnvcaller' in tools) {
-
-        germlinecnvcaller_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
-
-        GERMLINECNVCALLER_COHORT(
-            germlinecnvcaller_input,
-            gcnv_model_name,
-            dict,
-            fai,
-            fasta,
-            gcnv_exclude_bed,
-            gcnv_exclude_interval_list,
-            gcnv_mappable_regions,
-            gcnv_ploidy_priors,
-            gcnv_segmental_duplications,
-            gcnv_target_bed,
-            gcnv_target_interval_list,
-        )
-    }
-
-    if ('mutect2' in tools) {
-
-        mutect2_input = PREPARE_ALIGNMENT.out.reads_index.map { meta, reads, index -> [meta + [data_type: reads.extension], reads, index] }
-
-        BAM_CREATE_SOM_PON_GATK(
-            mutect2_input,
-            fasta,
-            fai.map { meta, fai_ -> [meta, fai_, []] },
-            dict,
-            mutect2_pon_name,
-            mutect2_target_bed.map { _meta, target -> [target] },
-            intervals_num,
-        )
-    }
+    // MUTECT2
+    BAM_CREATE_SOM_PON_GATK(
+        PREPARE_ALIGNMENT.out.reads_index.filter { 'mutect2' in tools },
+        fasta,
+        fai.map { meta, fai_ -> [meta, fai_, []] },
+        dict.filter { 'mutect2' in tools },
+        mutect2_pon_name,
+        mutect2_target_bed.filter { 'mutect2' in tools }.map { _meta, target -> [target] },
+        intervals_num,
+    )
 }
