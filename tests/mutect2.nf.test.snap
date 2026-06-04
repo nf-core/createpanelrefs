@@ -1,4 +1,25 @@
 {
+    "-profile test --tools mutect2": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            [
+                "WARN: Please provide a panel of normals name with '--mutect2_pon_name <NAME>' when running '--tools mutect2'."
+            ],
+            [
+                "Missing required parameter for mutect2: --mutect2_pon_name",
+                "WARN: Please provide a panel of normals name with '--mutect2_pon_name <NAME>' when running '--tools mutect2'."
+            ]
+        ],
+        "timestamp": "2026-06-04T09:57:45.518105867",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
     "-profile test --tools mutect2 --mutect2_target_bed null --mutect2_pon_name test --input tests/csv/1.0.0/cram.csv": {
         "content": [
             6,

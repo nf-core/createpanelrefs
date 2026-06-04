@@ -62,6 +62,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#71](https://github.com/nf-core/createpanelrefs/pull/71) - Fix time resource requirement
 - [#72](https://github.com/nf-core/createpanelrefs/pull/72) - Adjust time resource requirement for MUTECT2
 - [#73](https://github.com/nf-core/createpanelrefs/pull/73) - More time for Mutect2
+- [#82](https://github.com/nf-core/createpanelrefs/pull/82) - Fix schema requiring `mutect2_pon_name` even when not running mutect2; replaced with runtime validation
 
 ### `Dependencies` - modules
 

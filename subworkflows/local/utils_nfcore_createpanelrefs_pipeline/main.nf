@@ -35,6 +35,7 @@ workflow PIPELINE_INITIALISATION {
     help_full // boolean: Show the full help message
     show_hidden // boolean: Show hidden parameters in the help message
     tools
+    mutect2_pon_name
 
     main:
 
@@ -112,7 +113,10 @@ workflow PIPELINE_INITIALISATION {
     //
     // Custom validation for pipeline parameters
     //
-    validateInputParameters()
+    validateInputParameters(
+        mutect2_pon_name,
+        tools,
+    )
 
     //
     // Create channel from input file provided through input
@@ -172,11 +176,13 @@ workflow PIPELINE_COMPLETION {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
 //
 // Check and validate pipeline parameters
 //
-def validateInputParameters() {
+def validateInputParameters(mutect2_pon_name, tools) {
     genomeExistsError()
+    mutect2PonNameError(mutect2_pon_name, 'mutect2' in tools)
 }
 
 //
@@ -188,6 +194,17 @@ def genomeExistsError() {
         error(error_string)
     }
 }
+
+//
+// Exit pipeline if --tools contains mutect2 and --mutect2_pon_name is missing
+//
+def mutect2PonNameError(mutect2_pon_name, mutect2) {
+    if (mutect2 && !mutect2_pon_name) {
+        log.warn("Please provide a panel of normals name with '--mutect2_pon_name <NAME>' when running '--tools mutect2'.")
+        error("Missing required parameter for mutect2: --mutect2_pon_name")
+    }
+}
+
 //
 // Define list of tools to run
 //
