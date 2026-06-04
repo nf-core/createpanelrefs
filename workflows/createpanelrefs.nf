@@ -16,6 +16,7 @@ workflow CREATEPANELREFS {
     samplesheet // channel: samplesheet read in from --input
     tools // list: tools to run
     gcnv_model_name // string: name of gcnv model
+    gcnv_analysis_type // string: type of analysis for germlinecnvcaller ('wes' or 'wgs')
     gens_analysis_type // string: type of analysis for gens pon ('lrs' or 'srs')
     gens_pon_name // string: name of gens pon
     mutect2_pon_name // string: name of mutect2 pon
@@ -79,6 +80,7 @@ workflow CREATEPANELREFS {
         GERMLINECNVCALLER_COHORT(
             germlinecnvcaller_input,
             gcnv_model_name,
+            gcnv_analysis_type,
             dict,
             fai,
             fasta,
