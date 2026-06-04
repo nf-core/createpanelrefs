@@ -33,6 +33,15 @@ nextflow_pipeline {
                 tools: 'mutect2',
             ],
         ],
+        [
+            name: "-profile test --tools mutect2",
+            params: [
+                tools: 'mutect2',
+            ],
+            failure: true,
+            snapshot: 'stdout',
+            snapshot_include: 'mutect2_pon',
+        ],
     ]
 
     // Generate tests for each scenario
