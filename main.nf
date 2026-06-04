@@ -271,4 +271,18 @@ workflow NFCORE_CREATEPANELREFS {
         mutect2_intervals_num,
         mutect2_target_bed,
     )
+
+    emit:
+    cnvkit_bed                     = CREATEPANELREFS.out.cnvkit_bed
+    cnvkit_cnn                     = CREATEPANELREFS.out.cnvkit_cnn
+    cnvkit_cnr                     = CREATEPANELREFS.out.cnvkit_cnr
+    gens_pon                       = CREATEPANELREFS.out.gens_pon
+    gens_read_counts               = CREATEPANELREFS.out.gens_read_counts
+    germlinecnvcaller_cnv_model    = CREATEPANELREFS.out.germlinecnvcaller_cnv_model
+    germlinecnvcaller_ploidy_model = CREATEPANELREFS.out.germlinecnvcaller_ploidy_model
+    germlinecnvcaller_read_counts  = CREATEPANELREFS.out.germlinecnvcaller_read_counts
+    som_pon_gatk_genomicsdb        = CREATEPANELREFS.out.som_pon_gatk_genomicsdb
+    som_pon_gatk_index             = CREATEPANELREFS.out.som_pon_gatk_index
+    som_pon_gatk_mutect2_stats     = CREATEPANELREFS.out.som_pon_gatk_mutect2_stats
+    som_pon_gatk_vcf               = CREATEPANELREFS.out.som_pon_gatk_vcf
 }

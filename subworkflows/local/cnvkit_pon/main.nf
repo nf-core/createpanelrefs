@@ -8,7 +8,7 @@ workflow CNVKIT_PON {
     ch_cnvkit_targets // channel: [mandatory] [ val(meta), path(targets) ]
 
     main:
-    ch_split = ch_reads_index.branch { meta, reads, index ->
+    ch_reads = ch_reads_index.branch { meta, reads, index ->
         bam: meta.data_type == "bam"
         return [meta, reads]
         cram: meta.data_type == "cram"
@@ -16,7 +16,7 @@ workflow CNVKIT_PON {
     }
 
     SAMTOOLS_VIEW(
-        ch_split.cram,
+        ch_reads.cram,
         ch_fasta.map { meta, fasta_ -> [meta, fasta_, []] },
         [[:], []],
         [[:], []],
@@ -24,7 +24,7 @@ workflow CNVKIT_PON {
     )
 
     CNVKIT_BATCH(
-        ch_split.bam.mix(SAMTOOLS_VIEW.out.bam).map { meta, bam -> [[id: 'panel'], bam] }.groupTuple().map { meta, bam -> [meta, [], [], bam, []] },
+        ch_reads.bam.mix(SAMTOOLS_VIEW.out.bam).map { meta, bam -> [[id: 'panel'], bam] }.groupTuple().map { meta, bam -> [meta, [], [], bam, []] },
         ch_fasta.map { meta, fasta_ -> [meta, fasta_, []] },
         ch_cnvkit_targets,
         [[:], []],
