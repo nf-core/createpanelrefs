@@ -12,20 +12,13 @@
                 }
             },
             [
-                "multiqc",
-                "multiqc/multiqc_data",
-                "multiqc/multiqc_data/llms-full.txt",
-                "multiqc/multiqc_data/multiqc.log",
-                "multiqc/multiqc_data/multiqc.parquet",
-                "multiqc/multiqc_data/multiqc_citations.txt",
-                "multiqc/multiqc_data/multiqc_data.json",
-                "multiqc/multiqc_data/multiqc_software_versions.txt",
-                "multiqc/multiqc_data/multiqc_sources.txt",
-                "multiqc/multiqc_report.html",
                 "pipeline_info",
                 "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
                 "reference",
                 "reference/cnvkit",
+                "reference/cnvkit/genome.antitarget.bed",
+                "reference/cnvkit/genome.bed",
+                "reference/cnvkit/genome.target.bed",
                 "reference/cnvkit/panel.cnn",
                 "reference/cnvkit/sample3.antitargetcoverage.cnn",
                 "reference/cnvkit/sample3.targetcoverage.cnn",
@@ -35,13 +28,23 @@
                 "reference/cnvkit/test.paired_end.recalibrated.sorted.targetcoverage.cnn",
                 "reference/cnvkit/test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
                 "reference/cnvkit/test2.paired_end.recalibrated.sorted.targetcoverage.cnn",
-                "samtools",
-                "samtools/sample3.bam",
-                "samtools/sample4.bam"
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
             ],
             "No VCF files",
             [
-                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "genome.antitarget.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "genome.bed:md5,9c6cc178da8c2c27364be9f25c9df96d",
+                "genome.target.bed:md5,2d46270ea16c81f05c309ff8a078ec47",
                 "panel.cnn:md5,bb11c7ec8b2a5679fcabc4dbfa83294a",
                 "sample3.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
                 "sample3.targetcoverage.cnn:md5,814200aceed64f3e0c4a69dab64553c4",
@@ -51,12 +54,11 @@
                 "test.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,814200aceed64f3e0c4a69dab64553c4",
                 "test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
                 "test2.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,ae3bfc49096f86e48c37bc9b997982fb",
-                "sample3.bam:md5,26a0e5d86049a6fccb858588afaca248",
-                "sample4.bam:md5,6361ea1fad1a462f8e47081182c132c5"
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
             "No warnings"
         ],
-        "timestamp": "2026-06-03T11:32:59.962869193",
+        "timestamp": "2026-06-04T18:23:16.238397177",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
