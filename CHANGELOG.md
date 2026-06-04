@@ -3,6 +3,25 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### `Added`
+
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Created a local `cnvkit_pon` subworkflow encapsulating CRAM-to-BAM conversion + PON generation
+
+### `Changed`
+
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Replaced `if` guards with `.filter` on input channels so subworkflows are always called unconditionally
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Normalized `take:` parameter names to `ch_` prefix and emit names to snake_case across all local subworkflows
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Removed all `.set` operators from local subworkflow code
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Moved `data_type` injection into `prepare_alignment` subworkflow instead of at each call site
+
+### `Fixed`
+
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Fixed `_closure15` error when mutect2 is not in tools by filtering `dict` and `mutect2_target_bed` channels
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Fixed `gens_pon` bug where `ch_readcounts_out` was initialized but never assigned
+- [#83](https://github.com/nf-core/createpanelrefs/pull/83) - Fixed `mutect2.config` `saveAs` closure parameter name shadowing the outer `meta` variable
+
 ## [1.0.0](https://github.com/nf-core/createpanelrefs/releases/tag/1.0.0) - Hell's Gate
 
 Hell's Gate National Park is a national park situated near Lake Naivasha in Kenya.
