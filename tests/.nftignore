@@ -1,4 +1,5 @@
 .DS_Store
+cnvkit/*.bed
 gatk4/**/*.{vcf.gz,vcf.gz.tbi}
 gens_pon/createreadcountpanelofnormals/gens_pon.hdf5
 germlinecnvcaller/determinegermlinecontigploidy/cohort-model/*_psi_j_log__.tsv
@@ -7,7 +8,6 @@ germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-call
 germlinecnvcaller/germlinecnvcaller/{1,2}scattered-cnv-model/{1,2}scattered-model/*.tsv
 germlinecnvcaller/readcounts/*.hdf5
 pipeline_info/*.{html,json,txt,yml}
-references/cnvkit/*.bed
 references/genome.dict
 references/intervals/gens_pon/genome.interval_list
 reports/multiqc/multiqc_data/fastqc_top_overrepresented_sequences_table.txt

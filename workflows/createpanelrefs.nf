@@ -120,6 +120,7 @@ workflow CREATEPANELREFS {
     germlinecnvcaller_cnv_model    = ch_germlinecnvcaller_cnv_model
     germlinecnvcaller_ploidy_model = ch_germlinecnvcaller_ploidy_model
     germlinecnvcaller_read_counts  = ch_germlinecnvcaller_read_counts
+    reads_index                    = PREPARE_ALIGNMENT.out.reads_index
     som_pon_gatk_genomicsdb        = ch_som_pon_gatk_genomicsdb
     som_pon_gatk_index             = ch_som_pon_gatk_index
     som_pon_gatk_mutect2_stats     = ch_som_pon_gatk_mutect2_stats

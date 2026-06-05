@@ -225,7 +225,7 @@ workflow {
     gens_pon                      = NFCORE_CREATEPANELREFS.out.gens_pon
     gens_read_counts              = NFCORE_CREATEPANELREFS.out.gens_read_counts
     germlinecnvcaller_model       = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_cnv_model.mix(NFCORE_CREATEPANELREFS.out.germlinecnvcaller_ploidy_model)
-    germlinecnvcaller_read_counts = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_read_counts.flatMap { _meta, files -> files.flatten().collect { f -> [_meta, f] } }
+    germlinecnvcaller_read_counts = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_read_counts.flatMap { _meta, files -> files.flatten().collect { file -> [_meta, file] } }
     som_pon                       = NFCORE_CREATEPANELREFS.out.som_pon_gatk_vcf.mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_index).mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_mutect2_stats).mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_genomicsdb)
 }
 
@@ -235,7 +235,7 @@ output {
     }
     cnvkit {
         path { _meta, file ->
-            file >> "reference/cnvkit/"
+            file >> "cnvkit/"
         }
     }
     gens_pon {
@@ -260,7 +260,7 @@ output {
     }
     som_pon {
         path { _meta, file ->
-            file >> "gatk4/mutect2/"
+            file >> "mutect2/"
         }
     }
 }

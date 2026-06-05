@@ -22,7 +22,10 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/reference/cnvkit/`
+- `results/cnvkit/`
+  - "<REFERENCE>.antitarget.bed": Antitarget regions for the genome.
+  - "<REFERENCE>.bed": Genome regions.
+  - "<REFERENCE>.target.bed": Target regions for the genome.
   - "panel.cnn": Panel reference file containing coverage information for copy number.
   - "<SAMPLE>.antitargetcoverage.cnn": Antitarget coverage file for each sample.
   - "<SAMPLE>.targetcoverage.cnn": Target coverage file for each sample.
