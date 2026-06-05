@@ -22,7 +22,7 @@ nextflow_pipeline {
                 tools: 'cnvkit',
             ],
             failure: true,
-            snapshot: 'stderr',
+            snapshot: 'stdout',
             snapshot_include: 'cnvkit_pon_name',
         ],
     ]

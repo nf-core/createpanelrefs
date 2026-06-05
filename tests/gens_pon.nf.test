@@ -39,7 +39,7 @@ nextflow_pipeline {
                 tools: 'gens',
             ],
             failure: true,
-            snapshot: 'stderr',
+            snapshot: 'stdout',
             snapshot_include: 'gens_pon_name',
         ],
     ]

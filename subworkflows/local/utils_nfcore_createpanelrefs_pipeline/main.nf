@@ -225,18 +225,15 @@ workflow PIPELINE_COMPLETION {
 //
 def validateInputParameters(genome, genomes, cnvkit_pon_name, gcnv_model_name, gens_pon_name, mutect2_pon_name, tools) {
     genomeExistsError(genome, genomes)
-    checkPonNamesNonNull(
-        cnvkit_pon_name: cnvkit_pon_name,
-        gcnv_model_name: gcnv_model_name,
-        gens_pon_name: gens_pon_name,
-        mutect2_pon_name: mutect2_pon_name,
+    checkPonName(
+        tools,
+        [
+            cnvkit_pon_name: cnvkit_pon_name,
+            gcnv_model_name: gcnv_model_name,
+            gens_pon_name: gens_pon_name,
+            mutect2_pon_name: mutect2_pon_name,
+        ],
     )
-    checkPonNameDefaults(tools, [
-        cnvkit_pon_name: cnvkit_pon_name,
-        gcnv_model_name: gcnv_model_name,
-        gens_pon_name: gens_pon_name,
-        mutect2_pon_name: mutect2_pon_name,
-    ])
 }
 
 //
@@ -250,22 +247,15 @@ def genomeExistsError(genome, genomes) {
 }
 
 //
-// Error if any PON name is null or empty
+// Check PON names: error on null/empty, warn if default for a selected tool
 //
-def checkPonNamesNonNull(Map pon_names) {
-    pon_names.each { name, value ->
-        if (value == null || value == '') error("--${name} is not set. Please specify a name for the panel of normals.")
-    }
-}
-
-//
-// Warn if --tools contains a tool but its PON name is still the default
-//
-def checkPonNameDefaults(tools, Map pon_names) {
+def checkPonName(tools, pon_names) {
     def defaults = [cnvkit_pon_name: 'cnvkit', mutect2_pon_name: 'mutect2', gens_pon_name: 'gens', gcnv_model_name: 'germlinecnvcaller']
-    def tool_keys = [cnvkit_pon_name: 'cnvkit', mutect2_pon_name: 'mutect2', gens_pon_name: 'gens', gcnv_model_name: 'germlinecnvcaller']
     pon_names.each { param, value ->
-        if (tool_keys[param] in tools && value == defaults[param]) {
+        if (!value) {
+            error("--${param} is not set. Please specify a name for the panel of normals.")
+        }
+        if (defaults[param] in tools && value == defaults[param]) {
             log.warn("--${param} is set to the default value '${defaults[param]}'.")
         }
     }

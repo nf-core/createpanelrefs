@@ -72,9 +72,12 @@
             "No VCF files",
             "No stable content",
             "No warnings",
-            "No content"
+            [
+                "  cnvkit_pon_name                    : null",
+                "--cnvkit_pon_name is not set. Please specify a name for the panel of normals."
+            ]
         ],
-        "timestamp": "2026-06-05T18:00:04.313038694",
+        "timestamp": "2026-06-05T18:22:34.274091356",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

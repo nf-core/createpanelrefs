@@ -37,7 +37,7 @@ nextflow_pipeline {
                 tools: 'mutect2',
             ],
             failure: true,
-            snapshot: 'stderr',
+            snapshot: 'stdout',
             snapshot_include: 'mutect2_pon_name',
         ],
     ]

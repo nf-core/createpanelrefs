@@ -259,9 +259,12 @@
             "No VCF files",
             "No stable content",
             "No warnings",
-            "No content"
+            [
+                "  mutect2_pon_name                   : null",
+                "--mutect2_pon_name is not set. Please specify a name for the panel of normals."
+            ]
         ],
-        "timestamp": "2026-06-05T18:02:36.940569019",
+        "timestamp": "2026-06-05T18:23:03.525377095",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
