@@ -245,7 +245,7 @@ def ponNameWarning(tool, pon_name, is_selected) {
     def defaults = [mutect2: 'mutect2', gens: 'gens', germlinecnvcaller: 'germlinecnvcaller']
     def param_names = [mutect2: 'mutect2_pon_name', gens: 'gens_pon_name', germlinecnvcaller: 'gcnv_model_name']
     if (is_selected && pon_name == defaults[tool]) {
-        log.warn("--${param_names[tool]} is set to the default value '${defaults[tool]}'. Please provide a custom name to avoid overwriting previous runs.")
+        log.warn("--${param_names[tool]} is set to the default value '${defaults[tool]}'.")
     }
 }
 
