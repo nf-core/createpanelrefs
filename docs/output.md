@@ -11,7 +11,7 @@ The directories listed below will be created in the results directory after the 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
 - [CNVKit](#cnvkit) - Create reference files for copy number variant detection from sequencing data.
-- [GATK's germlinecnvcaller](#germlinecnvcaller) - Publish read counts, ploidy and cnvcalling models that can be used to call cnv's in the case mode.
+- [GATK's GermlineCNVCaller](#gatk-germlinecnvcaller) - Publish read counts, ploidy and CNV calling models that can be used to call CNVs in the case mode.
 - [GATK's Mutect2](#gatk-mutect2) - Create panel of normals for somatic variant calling.
 - [GENS](#gens) - Create panel of normals for read-count denoising.
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
@@ -22,10 +22,11 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/cnvkit/`
+- `results/references/cnvkit/`
   - "<REFERENCE>.antitarget.bed": Antitarget regions for the genome.
   - "<REFERENCE>.bed": Genome regions.
   - "<REFERENCE>.target.bed": Target regions for the genome.
+- `results/cnvkit/`
   - "panel.cnn": Panel reference file containing coverage information for copy number.
   - "<SAMPLE>.antitargetcoverage.cnn": Antitarget coverage file for each sample.
   - "<SAMPLE>.targetcoverage.cnn": Target coverage file for each sample.
@@ -37,7 +38,7 @@ In this pipeline, CNVKit creates reference files that can be used for copy numbe
 The workflow processes normal samples to generate a reference CNN file that captures the baseline coverage patterns, which can then be used for tumor-only or tumor-normal CNV analysis in downstream applications.
 The reference file contains coverage information normalized across the cohort and is essential for accurate copy number calling.
 
-### GATK germlinecnvcaller
+### GATK GermlineCNVCaller
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -55,7 +56,9 @@ The reference file contains coverage information normalized across the cohort an
 
 </details>
 
-[GATK](https://github.com/broadinstitute/gatk) is a toolkit which offers a wide variety of tools with a primary focus on variant discovery and genotyping. In this pipeline we have implemented GATK's germlinecnvcalling workflow for analysing a cohort of samples. The output files generated from this analysis can be used for analysing samples in case mode. For more information about the workflow and output files, see GATK's documentation [here.](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants)
+[GATK](https://github.com/broadinstitute/gatk) is a toolkit which offers a wide variety of tools with a primary focus on variant discovery and genotyping following GATK's germlinecnvcalling workflow for analysing a cohort of samples.
+The output files generated from this analysis can be used for analysing samples in case mode.
+For more information about the workflow and output files, see [GATK's documentation](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).
 
 ### GATK Mutect2
 
@@ -76,44 +79,49 @@ The reference file contains coverage information normalized across the cohort an
 
 </details>
 
-[GATK Mutect2](https://gatk.broadinstitute.org/hc/en-us/articles/360035894731-Mutect2) creates a panel of normals from normal samples for somatic variant calling. The workflow: (1) calls variants in each normal sample using Mutect2 in panel of normals mode, (2) imports all VCFs into a GenomicsDB workspace, and (3) creates a final panel of normals VCF file. This panel can be used with Mutect2 in case mode via the `--panel-of-normals` parameter to filter out common germline variants and sequencing artifacts.
+[GATK Mutect2](https://gatk.broadinstitute.org/hc/en-us/articles/360035894731-Mutect2) creates a panel of normals from normal samples for somatic variant calling following this workflow:
+Calls variants in each normal sample using Mutect2 in panel of normals mode, imports all VCFs into a GenomicsDB workspace, and creates a final panel of normals VCF file.
+This panel can be used with Mutect2 in case mode via the `--panel-of-normals` parameter to filter out common germline variants and sequencing artifacts.
 
 ### GENS
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/gatk4/`
-  - `collectreadcounts/`
-    - `*.hdf5`: Read count data in HDF5 format for each sample.
-    - `*.tsv`: Read count data in TSV format for each sample.
+- `references/gens/`
+  - `*.interval_list`: Interval list file used for read count collection.
+  - `*.bed`: BED versions of interval list file used for read count collection for long-reads.
+- `results/gens/`
+  - `readcounts/`
+    - `<SAMPLE>.hdf5`: Read count data in HDF5 format for each sample from GATK4's CollectReadCounts.
+    - `<SAMPLE>.tsv`: Read count data in TSV format for each sample from GATK4's CollectReadCounts.
+    - `<SAMPLE>_concat`: Coverage data for each sample from MOSDEPTH.
   - `createreadcountpanelofnormals/`
     - `{pon_name}.hdf5`: Final panel of normals file in HDF5 format.
-  - `references/intervals/gens_pon/`
-    - `*.interval_list`: Interval list file used for read count collection.
-    - `*.bed`: BED versions of interval list file used for read count collection for long-reads.
 
 </details>
 
-[GENS](https://github.com/Clinical-Genomics-Lund/gens) creates a panel of normals for read-count denoising to improve somatic variant detection. The workflow: (1) indexes BAM/CRAM files if needed, (2) collects read counts at specified intervals using GATK's CollectReadCounts, and (3) creates a panel of normals using GATK's CreateReadCountPanelOfNormals. This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection sensitivity.
+[GENS](https://github.com/Clinical-Genomics-Lund/gens) creates a panel of normals for read-count denoising to improve somatic variant detection following this workflow:
+Collects read counts at specified intervals using GATK4's CollectReadCounts, and creates a panel of normals using GATK4's CreateReadCountPanelOfNormals.
+This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection sensitivity.
 
-When `gens_analysis_type` is set to 'lrs', a modified version of the workflow above is run where coverage calculated by mosdepth is used instead of read counts.
+When `gens_analysis_type` is set to 'lrs', a modified version of the workflow above is run where coverage calculated by MOSDEPTH is used instead of GATK4's CollectReadCounts.
 
 ### MultiQC
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `multiqc/`
+- `reports/multiqc/`
   - `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
   - `multiqc_data/`: directory containing parsed statistics from the different tools used in the pipeline.
   - `multiqc_plots/`: directory containing static images from the report in various formats.
 
 </details>
 
-[MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
+[MultiQC](https://seqera.io/multiqc/) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
 
-Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQC. The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability. For more information about how to use MultiQC reports, see <http://multiqc.info>.
+Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQC. The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability. For more information about how to use MultiQC reports, see [https://seqera.io/multiqc/](https://seqera.io/multiqc/).
 
 ### Pipeline information
 

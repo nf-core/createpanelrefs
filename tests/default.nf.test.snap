@@ -13,9 +13,6 @@
             },
             [
                 "cnvkit",
-                "cnvkit/genome.antitarget.bed",
-                "cnvkit/genome.bed",
-                "cnvkit/genome.target.bed",
                 "cnvkit/panel.cnn",
                 "cnvkit/sample3.antitargetcoverage.cnn",
                 "cnvkit/sample3.targetcoverage.cnn",
@@ -27,6 +24,11 @@
                 "cnvkit/test2.paired_end.recalibrated.sorted.targetcoverage.cnn",
                 "pipeline_info",
                 "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/cnvkit",
+                "references/cnvkit/genome.antitarget.bed",
+                "references/cnvkit/genome.bed",
+                "references/cnvkit/genome.target.bed",
                 "reports",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
@@ -54,7 +56,7 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-06-05T08:32:39.888808613",
+        "timestamp": "2026-06-05T08:42:59.944572835",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

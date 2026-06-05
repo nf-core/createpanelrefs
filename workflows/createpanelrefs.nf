@@ -35,6 +35,7 @@ workflow CREATEPANELREFS {
     mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
+    ch_gens_bed = channel.empty()
     ch_gens_pon = channel.empty()
     ch_gens_read_counts = channel.empty()
     ch_germlinecnvcaller_cnv_model = channel.empty()
@@ -67,7 +68,8 @@ workflow CREATEPANELREFS {
             gens_interval_list,
         )
 
-        ch_gens_pon = GENS_PON.out.gens_pon
+        ch_gens_bed = GENS_PON.out.bed
+        ch_gens_pon = GENS_PON.out.pon
         ch_gens_read_counts = GENS_PON.out.read_counts
     }
 
@@ -113,8 +115,8 @@ workflow CREATEPANELREFS {
 
     emit:
     cnvkit_bed                     = CNVKIT_PON.out.bed
-    cnvkit_cnn                     = CNVKIT_PON.out.cnn
-    cnvkit_cnr                     = CNVKIT_PON.out.cnr
+    cnvkit_out                     = CNVKIT_PON.out.cnn.mix(CNVKIT_PON.out.cnr)
+    gens_bed                       = ch_gens_bed
     gens_pon                       = ch_gens_pon
     gens_read_counts               = ch_gens_read_counts
     germlinecnvcaller_cnv_model    = ch_germlinecnvcaller_cnv_model

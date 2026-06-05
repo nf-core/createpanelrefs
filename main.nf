@@ -221,7 +221,9 @@ workflow {
 
     publish:
     multiqc                       = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
-    cnvkit                        = NFCORE_CREATEPANELREFS.out.cnvkit_cnn.mix(NFCORE_CREATEPANELREFS.out.cnvkit_bed).mix(NFCORE_CREATEPANELREFS.out.cnvkit_cnr)
+    cnvkit_bed                    = NFCORE_CREATEPANELREFS.out.cnvkit_bed
+    cnvkit_out                    = NFCORE_CREATEPANELREFS.out.cnvkit_out
+    gens_intervals                = NFCORE_CREATEPANELREFS.out.gens_bed.mix(PREPARE_GENOME.out.gens_interval_list)
     gens_pon                      = NFCORE_CREATEPANELREFS.out.gens_pon
     gens_read_counts              = NFCORE_CREATEPANELREFS.out.gens_read_counts
     germlinecnvcaller_model       = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_cnv_model.mix(NFCORE_CREATEPANELREFS.out.germlinecnvcaller_ploidy_model)
@@ -233,19 +235,29 @@ output {
     multiqc {
         path "reports/multiqc"
     }
-    cnvkit {
+    cnvkit_bed {
+        path { _meta, file ->
+            file >> "references/cnvkit/"
+        }
+    }
+    cnvkit_out {
         path { _meta, file ->
             file >> "cnvkit/"
         }
     }
+    gens_intervals {
+        path { _meta, file ->
+            file >> "references/gens/"
+        }
+    }
     gens_pon {
         path { _meta, file ->
-            file >> "gens_pon/"
+            file >> "gens/createreadcountpanelofnormals/"
         }
     }
     gens_read_counts {
         path { _meta, file ->
-            file >> "gens_pon/readcounts/"
+            file >> "gens/readcounts/"
         }
     }
     germlinecnvcaller_model {
@@ -264,7 +276,6 @@ output {
         }
     }
 }
-
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -325,8 +336,8 @@ workflow NFCORE_CREATEPANELREFS {
 
     emit:
     cnvkit_bed                     = CREATEPANELREFS.out.cnvkit_bed
-    cnvkit_cnn                     = CREATEPANELREFS.out.cnvkit_cnn
-    cnvkit_cnr                     = CREATEPANELREFS.out.cnvkit_cnr
+    cnvkit_out                     = CREATEPANELREFS.out.cnvkit_out
+    gens_bed                       = CREATEPANELREFS.out.gens_bed
     gens_pon                       = CREATEPANELREFS.out.gens_pon
     gens_read_counts               = CREATEPANELREFS.out.gens_read_counts
     germlinecnvcaller_cnv_model    = CREATEPANELREFS.out.germlinecnvcaller_cnv_model
