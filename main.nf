@@ -70,6 +70,7 @@ workflow {
         params.help_full,
         params.show_hidden,
         tools,
+        params.cnvkit_pon_name,
         params.gcnv_model_name,
         params.gens_pon_name,
         params.mutect2_pon_name,
@@ -99,6 +100,7 @@ workflow {
     NFCORE_CREATEPANELREFS(
         PIPELINE_INITIALISATION.out.samplesheet,
         tools,
+        params.cnvkit_pon_name,
         params.gcnv_model_name,
         params.gcnv_analysis_type,
         params.gens_analysis_type,
@@ -270,6 +272,7 @@ workflow NFCORE_CREATEPANELREFS {
     take:
     samplesheet // channel: samplesheet read in from --input
     tools // list: tools to run
+    cnvkit_pon_name // string: name of cnvkit pon
     gcnv_model_name // string: name of gcnv model
     gcnv_analysis_type // string: type of analysis for germlinecnvcaller ('wes' or 'wgs')
     gens_analysis_type // string: type of analysis for gens pon ('lrs' or 'srs')
@@ -295,6 +298,7 @@ workflow NFCORE_CREATEPANELREFS {
     CREATEPANELREFS(
         samplesheet,
         tools,
+        cnvkit_pon_name,
         gcnv_model_name,
         gcnv_analysis_type,
         gens_analysis_type,

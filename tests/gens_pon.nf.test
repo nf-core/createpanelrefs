@@ -32,6 +32,16 @@ nextflow_pipeline {
                 tools: 'gens',
             ],
         ],
+        [
+            name: "-profile test --tools gens --gens_pon_name null",
+            params: [
+                gens_pon_name: null,
+                tools: 'gens',
+            ],
+            failure: true,
+            snapshot: 'stderr',
+            snapshot_include: 'gens_pon_name',
+        ],
     ]
 
     // Generate tests for each scenario

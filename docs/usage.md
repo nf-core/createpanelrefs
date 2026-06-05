@@ -123,6 +123,8 @@ process {
 
 2. provide the `--cnvkit_target` parameter (optional) as a .bed file for the targets
 
+The CNVKit PON name defaults to `cnvkit` when `--cnvkit_pon_name` is not specified.
+
 ### gens
 
 If you are running the pipeline to generate references for the GENS workflow, you should ensure that you have provided all the mandatory options specified in the table below.

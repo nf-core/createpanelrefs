@@ -29,11 +29,13 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - `<REFERENCE>.bed`: Genome regions.
   - `<REFERENCE>.target.bed`: Target regions for the genome.
 - `cnvkit/`
-  - `panel.cnn`: Panel reference file containing coverage information for copy number.
+  - `<CNVKIT_PON_NAME>.cnn`: Panel reference file containing coverage information for copy number.
   - `<SAMPLE>.antitargetcoverage.cnn`: Antitarget coverage file for each sample.
   - `<SAMPLE>.targetcoverage.cnn`: Target coverage file for each sample.
 
 </details>
+
+The PON name defaults to `cnvkit` when `--cnvkit_pon_name` is not specified.
 
 [CNVKit](https://cnvkit.readthedocs.io/en/stable/index.html) is a Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data.
 CNVKit creates reference files that can be used for copy number variant detection.
@@ -56,7 +58,7 @@ The reference file contains coverage information normalized across the cohort an
 
 </details>
 
-The PON name defaults to `germlinecnvcaller` when `--gcnv_model_name` is not specified.
+The model name defaults to `germlinecnvcaller` when `--gcnv_model_name` is not specified.
 
 [GATK](https://github.com/broadinstitute/gatk) is a toolkit which offers a wide variety of tools with a primary focus on variant discovery and genotyping.
 GATK's GermlineCNVCaller is used to analyze a cohort of samples.

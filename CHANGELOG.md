@@ -60,7 +60,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Update documentation
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Update minimum Nextflow version from 25.10.4 to 26.04.0
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Workflow outputs for all files
-- [#88](https://github.com/nf-core/createpanelrefs/pull/88) - Added default values for `mutect2_pon_name`, `gens_pon_name` and `gcnv_model_name`, and warn when they are unchanged
+- [#88](https://github.com/nf-core/createpanelrefs/pull/88) - Added default values for `cnvkit_pon_name`, `gens_pon_name`, `gcnv_model_name` and `mutect2_pon_name`, warn when they are unchanged, err when null.
 - [#88](https://github.com/nf-core/createpanelrefs/pull/88) - Remove all nf-core utils subworkflows in favor of the nf-core-utils plugin
 - [#88](https://github.com/nf-core/createpanelrefs/pull/88) - Update nf-core-utils to 0.5.0 and nf-schema to 2.7.2
 
@@ -84,12 +84,15 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
 | cnvkit     |             | 0.9.12      |
+| - htslib   |             | 1.21        |
+| - samtools |             | 1.21        |
 | gatk4      |             | 4.6.2.0     |
 | gawk       |             | 5.3.1       |
-| htslib     |             | 1.23.1      |
 | mosdepth   |             | 0.3.14      |
+| - htslib   |             | 1.23.1      |
 | multiqc    |             | 1.35        |
 | samtools   |             | 1.23.1      |
+| - htslib   |             | 1.23.1      |
 
 ### `Dependencies` - Nextflow plugins
 

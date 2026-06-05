@@ -14,6 +14,7 @@ workflow CREATEPANELREFS {
     take:
     samplesheet // channel: samplesheet read in from --input
     tools // list: tools to run
+    cnvkit_pon_name // string: name of cnvkit pon
     gcnv_model_name // string: name of gcnv model
     gcnv_analysis_type // string: type of analysis for germlinecnvcaller ('wes' or 'wgs')
     gens_analysis_type // string: type of analysis for gens pon ('lrs' or 'srs')
@@ -53,6 +54,7 @@ workflow CREATEPANELREFS {
         PREPARE_ALIGNMENT.out.reads_index.filter { 'cnvkit' in tools },
         fasta,
         cnvkit_targets,
+        cnvkit_pon_name,
     )
 
     // GENS

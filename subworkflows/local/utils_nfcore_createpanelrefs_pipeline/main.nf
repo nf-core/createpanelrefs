@@ -39,6 +39,7 @@ workflow PIPELINE_INITIALISATION {
     help_full // boolean: Show the full help message
     show_hidden // boolean: Show hidden parameters in the help message
     tools
+    cnvkit_pon_name
     gcnv_model_name
     gens_pon_name
     mutect2_pon_name
@@ -154,6 +155,7 @@ workflow PIPELINE_INITIALISATION {
     validateInputParameters(
         genome,
         genomes,
+        cnvkit_pon_name,
         gcnv_model_name,
         gens_pon_name,
         mutect2_pon_name,
@@ -221,11 +223,20 @@ workflow PIPELINE_COMPLETION {
 //
 // Check and validate pipeline parameters
 //
-def validateInputParameters(genome, genomes, gcnv_model_name, gens_pon_name, mutect2_pon_name, tools) {
+def validateInputParameters(genome, genomes, cnvkit_pon_name, gcnv_model_name, gens_pon_name, mutect2_pon_name, tools) {
     genomeExistsError(genome, genomes)
-    ponNameWarning('germlinecnvcaller', gcnv_model_name, 'germlinecnvcaller' in tools)
-    ponNameWarning('gens', gens_pon_name, 'gens' in tools)
-    ponNameWarning('mutect2', mutect2_pon_name, 'mutect2' in tools)
+    checkPonNamesNonNull(
+        cnvkit_pon_name: cnvkit_pon_name,
+        gcnv_model_name: gcnv_model_name,
+        gens_pon_name: gens_pon_name,
+        mutect2_pon_name: mutect2_pon_name,
+    )
+    checkPonNameDefaults(tools, [
+        cnvkit_pon_name: cnvkit_pon_name,
+        gcnv_model_name: gcnv_model_name,
+        gens_pon_name: gens_pon_name,
+        mutect2_pon_name: mutect2_pon_name,
+    ])
 }
 
 //
@@ -239,13 +250,24 @@ def genomeExistsError(genome, genomes) {
 }
 
 //
+// Error if any PON name is null or empty
+//
+def checkPonNamesNonNull(Map pon_names) {
+    pon_names.each { name, value ->
+        if (value == null || value == '') error("--${name} is not set. Please specify a name for the panel of normals.")
+    }
+}
+
+//
 // Warn if --tools contains a tool but its PON name is still the default
 //
-def ponNameWarning(tool, pon_name, is_selected) {
-    def defaults = [mutect2: 'mutect2', gens: 'gens', germlinecnvcaller: 'germlinecnvcaller']
-    def param_names = [mutect2: 'mutect2_pon_name', gens: 'gens_pon_name', germlinecnvcaller: 'gcnv_model_name']
-    if (is_selected && pon_name == defaults[tool]) {
-        log.warn("--${param_names[tool]} is set to the default value '${defaults[tool]}'.")
+def checkPonNameDefaults(tools, Map pon_names) {
+    def defaults = [cnvkit_pon_name: 'cnvkit', mutect2_pon_name: 'mutect2', gens_pon_name: 'gens', gcnv_model_name: 'germlinecnvcaller']
+    def tool_keys = [cnvkit_pon_name: 'cnvkit', mutect2_pon_name: 'mutect2', gens_pon_name: 'gens', gcnv_model_name: 'germlinecnvcaller']
+    pon_names.each { param, value ->
+        if (tool_keys[param] in tools && value == defaults[param]) {
+            log.warn("--${param} is set to the default value '${defaults[param]}'.")
+        }
     }
 }
 

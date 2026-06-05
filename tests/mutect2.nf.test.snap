@@ -152,7 +152,7 @@
                 "reports/multiqc/multiqc_report.html"
             ],
             [
-                "test.vcf.gz:md5,dd63499034d2d81f07eca224b0cd309",
+                "mutect2.vcf.gz:md5,dd63499034d2d81f07eca224b0cd309",
                 "vcfheader.vcf:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "normal.mutect2.vcf.gz:md5,bd2895070c41e27dee3210e5646bfb11",
                 "tumour.mutect2.vcf.gz:md5,f701dbd4591d009e56477928f971b804"
@@ -162,9 +162,11 @@
                 "tumour.mutect2.vcf.gz.stats:md5,38e93a2641469e6401a1e5727d9ab0d2",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
-            "No warnings"
+            [
+                "WARN: --mutect2_pon_name is set to the default value 'mutect2'."
+            ]
         ],
-        "timestamp": "2026-06-05T15:49:55.660258734",
+        "timestamp": "2026-06-05T17:49:09.117313753",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
@@ -244,6 +246,22 @@
             ]
         ],
         "timestamp": "2026-06-05T17:45:28.11377466",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
+    "-profile test --tools mutect2 --mutect2_pon_name null": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            "No warnings",
+            "No content"
+        ],
+        "timestamp": "2026-06-05T18:02:36.940569019",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

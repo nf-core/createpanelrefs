@@ -1,4 +1,20 @@
 {
+    "-profile test --tools gens --gens_pon_name null": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            "No warnings",
+            "No content"
+        ],
+        "timestamp": "2026-06-05T18:02:19.403762386",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
     "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_readcount_format TSV": {
         "content": [
             5,

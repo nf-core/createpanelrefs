@@ -13,7 +13,7 @@
             },
             [
                 "cnvkit",
-                "cnvkit/panel.cnn",
+                "cnvkit/cnvkit.cnn",
                 "cnvkit/sample3.antitargetcoverage.cnn",
                 "cnvkit/sample3.targetcoverage.cnn",
                 "cnvkit/sample4.antitargetcoverage.cnn",
@@ -43,7 +43,7 @@
             ],
             "No VCF files",
             [
-                "panel.cnn:md5,bb11c7ec8b2a5679fcabc4dbfa83294a",
+                "cnvkit.cnn:md5,bb11c7ec8b2a5679fcabc4dbfa83294a",
                 "sample3.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
                 "sample3.targetcoverage.cnn:md5,814200aceed64f3e0c4a69dab64553c4",
                 "sample4.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
@@ -54,9 +54,27 @@
                 "test2.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,ae3bfc49096f86e48c37bc9b997982fb",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
-            "No warnings"
+            [
+                "WARN: --cnvkit_pon_name is set to the default value 'cnvkit'."
+            ]
         ],
-        "timestamp": "2026-06-05T08:42:59.944572835",
+        "timestamp": "2026-06-05T18:03:38.158554356",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
+    "-profile test --tools cnvkit --cnvkit_pon_name null": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            "No warnings",
+            "No content"
+        ],
+        "timestamp": "2026-06-05T18:00:04.313038694",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

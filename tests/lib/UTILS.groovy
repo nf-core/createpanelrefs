@@ -115,6 +115,10 @@ class UTILS {
                 tag scenario.tag
             }
 
+            if (scenario.failure) {
+                tag "failure"
+            }
+
             when {
                 params {
                     // Mandatory, as we always need an outdir

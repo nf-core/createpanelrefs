@@ -1,4 +1,20 @@
 {
+    "-profile test --tools germlinecnvcaller --gcnv_model_name null": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            "No warnings",
+            "No content"
+        ],
+        "timestamp": "2026-06-05T18:02:28.028193451",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
     "-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --gcnv_ploidy_priors --gcnv_scatter_content 2": {
         "content": [
             10,

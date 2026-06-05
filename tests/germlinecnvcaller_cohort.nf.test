@@ -18,6 +18,16 @@ nextflow_pipeline {
             ],
             no_conda: true,
         ],
+        [
+            name: "-profile test --tools germlinecnvcaller --gcnv_model_name null",
+            params: [
+                gcnv_model_name: null,
+                tools: 'germlinecnvcaller',
+            ],
+            failure: true,
+            snapshot: 'stderr',
+            snapshot_include: 'gcnv_model_name',
+        ],
     ]
 
     // Generate tests for each scenario
