@@ -49,12 +49,14 @@ The reference file contains coverage information normalized across the cohort an
   - `determinecontigploidy/`
     - `cohort-model/`: Contig ploidy model.
   - `germlinecnvcaller/`
-    - `*-model/`: CNV caller model for each scattered shard.
-    - `*-calls/`: Per-sample CNV calls for each scattered shard.
+    - `<GCNV_MODEL_NAME>-model/`: CNV caller model for each scattered shard.
+    - `<GCNV_MODEL_NAME>-calls/`: Per-sample CNV calls for each scattered shard.
   - `readcounts/`
     - `*.hdf5|.tsv`: Read count statistics for each sample.
 
 </details>
+
+> The PON directory name defaults to `germlinecnvcaller` when `--gcnv_model_name` is not specified.
 
 [GATK](https://github.com/broadinstitute/gatk) is a toolkit which offers a wide variety of tools with a primary focus on variant discovery and genotyping.
 GATK's GermlineCNVCaller is used to analyze a cohort of samples.
@@ -83,6 +85,8 @@ For more information about the workflow and output files, see [GATK's documentat
 Calls variants in each normal sample using Mutect2 in panel of normals mode, imports all VCFs into a GenomicsDB workspace, and creates a final panel of normals VCF file.
 This panel can be used with Mutect2 in case mode via the `--panel-of-normals` parameter to filter out common germline variants and sequencing artifacts.
 
+> The PON directory name defaults to `mutect2` when `--mutect2_pon_name` is not specified.
+
 ### GENS
 
 <details markdown="1">
@@ -104,6 +108,8 @@ This panel can be used with Mutect2 in case mode via the `--panel-of-normals` pa
 [GENS](https://github.com/Clinical-Genomics-Lund/gens) uses a panel of normals for read-count denoising to improve somatic variant detection following this workflow:
 Collects read counts at specified intervals using GATK4's CollectReadCounts, and creates a panel of normals using GATK4's CreateReadCountPanelOfNormals.
 This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection sensitivity.
+
+> The PON directory name defaults to `gens` when `--gens_pon_name` is not specified.
 
 When `gens_analysis_type` is set to 'lrs', a modified version of the workflow above is run where coverage calculated by MOSDEPTH is used instead of GATK4's CollectReadCounts.
 
