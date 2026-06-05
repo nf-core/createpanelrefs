@@ -60,7 +60,8 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Update documentation
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Update minimum Nextflow version from 25.10.4 to 26.04.0
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Workflow outputs for all files
-- [#XX](https://github.com/nf-core/createpanelrefs/pull/XX) - Remove all nf-core utils subworkflows in favor of the nf-core-utils plugin (aligned with the pattern used in nf-core/rnavar)
+- [#88](https://github.com/nf-core/createpanelrefs/pull/88) - Remove all nf-core utils subworkflows in favor of the nf-core-utils plugin
+- [#88](https://github.com/nf-core/createpanelrefs/pull/88) - Update nf-core-utils to 0.5.0 and nf-schema to 2.7.2
 
 ### `Fixed`
 
@@ -93,7 +94,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 
 | Dependency    | Old version | New version |
 | ------------- | ----------- | ----------- |
-| nf-core-utils |             | 0.4.0       |
-| nf-schema     |             | 2.7.1       |
+| nf-core-utils |             | 0.5.0       |
+| nf-schema     |             | 2.7.2       |
 
 ### `Deprecated`

@@ -106,9 +106,6 @@ workflow PIPELINE_INITIALISATION {
             showHidden: show_hidden,
             fullHelp: help_full,
         ]
-        if (null) {
-            help_options << [parametersSchema: null]
-        }
         log.info(
             paramsHelp(
                 help_options,
@@ -125,12 +122,8 @@ workflow PIPELINE_INITIALISATION {
     // that differ from the default given in the JSON schema
     //
 
-    def summary_options = [:]
-    if (null) {
-        summary_options << [parametersSchema: null]
-    }
     log.info(before_text)
-    log.info(paramsSummaryLog(summary_options, workflow))
+    log.info(paramsSummaryLog([:], workflow))
     log.info(after_text)
 
     extra_text = """
@@ -150,11 +143,7 @@ workflow PIPELINE_INITIALISATION {
     // given via the validation.parametersSchema configuration option
     //
     if (validate_params) {
-        def validateOptions = [:]
-        if (null) {
-            validateOptions << [parametersSchema: null]
-        }
-        validateParameters(validateOptions)
+        validateParameters([:])
     }
 
     //
