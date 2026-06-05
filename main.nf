@@ -226,7 +226,9 @@ workflow {
     gens_intervals                = NFCORE_CREATEPANELREFS.out.gens_bed.mix(PREPARE_GENOME.out.gens_interval_list)
     gens_pon                      = NFCORE_CREATEPANELREFS.out.gens_pon
     gens_read_counts              = NFCORE_CREATEPANELREFS.out.gens_read_counts
-    germlinecnvcaller_model       = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_cnv_model.mix(NFCORE_CREATEPANELREFS.out.germlinecnvcaller_ploidy_model)
+    germlinecnvcaller_cnv_calls   = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_cnv_calls
+    germlinecnvcaller_cnv_model   = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_cnv_model
+    germlinecnvcaller_ploidy      = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_ploidy_model
     germlinecnvcaller_read_counts = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_read_counts.flatMap { _meta, files -> files.flatten().collect { file -> [_meta, file] } }
     som_pon                       = NFCORE_CREATEPANELREFS.out.som_pon_gatk_vcf.mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_index).mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_mutect2_stats).mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_genomicsdb)
 }
@@ -260,9 +262,19 @@ output {
             file >> "gens/readcounts/"
         }
     }
-    germlinecnvcaller_model {
+    germlinecnvcaller_cnv_model {
         path { _meta, file ->
-            file >> "germlinecnvcaller/"
+            file >> "germlinecnvcaller/germlinecnvcaller/"
+        }
+    }
+    germlinecnvcaller_cnv_calls {
+        path { _meta, file ->
+            file >> "germlinecnvcaller/germlinecnvcaller/"
+        }
+    }
+    germlinecnvcaller_ploidy {
+        path { _meta, file ->
+            file >> "germlinecnvcaller/determinecontigploidy/"
         }
     }
     germlinecnvcaller_read_counts {
@@ -341,6 +353,7 @@ workflow NFCORE_CREATEPANELREFS {
     gens_pon                       = CREATEPANELREFS.out.gens_pon
     gens_read_counts               = CREATEPANELREFS.out.gens_read_counts
     germlinecnvcaller_cnv_model    = CREATEPANELREFS.out.germlinecnvcaller_cnv_model
+    germlinecnvcaller_cnv_calls    = CREATEPANELREFS.out.germlinecnvcaller_cnv_calls
     germlinecnvcaller_ploidy_model = CREATEPANELREFS.out.germlinecnvcaller_ploidy_model
     germlinecnvcaller_read_counts  = CREATEPANELREFS.out.germlinecnvcaller_read_counts
     som_pon_gatk_genomicsdb        = CREATEPANELREFS.out.som_pon_gatk_genomicsdb

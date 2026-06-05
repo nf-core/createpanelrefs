@@ -39,6 +39,7 @@ workflow CREATEPANELREFS {
     ch_gens_pon = channel.empty()
     ch_gens_read_counts = channel.empty()
     ch_germlinecnvcaller_cnv_model = channel.empty()
+    ch_germlinecnvcaller_cnv_calls = channel.empty()
     ch_germlinecnvcaller_ploidy_model = channel.empty()
     ch_germlinecnvcaller_read_counts = channel.empty()
     ch_som_pon_gatk_genomicsdb = channel.empty()
@@ -92,6 +93,7 @@ workflow CREATEPANELREFS {
         )
 
         ch_germlinecnvcaller_cnv_model = GERMLINECNVCALLER_COHORT.out.cnv_model
+        ch_germlinecnvcaller_cnv_calls = GERMLINECNVCALLER_COHORT.out.cnv_calls
         ch_germlinecnvcaller_ploidy_model = GERMLINECNVCALLER_COHORT.out.ploidy_model
         ch_germlinecnvcaller_read_counts = GERMLINECNVCALLER_COHORT.out.read_counts
     }
@@ -120,6 +122,7 @@ workflow CREATEPANELREFS {
     gens_pon                       = ch_gens_pon
     gens_read_counts               = ch_gens_read_counts
     germlinecnvcaller_cnv_model    = ch_germlinecnvcaller_cnv_model
+    germlinecnvcaller_cnv_calls    = ch_germlinecnvcaller_cnv_calls
     germlinecnvcaller_ploidy_model = ch_germlinecnvcaller_ploidy_model
     germlinecnvcaller_read_counts  = ch_germlinecnvcaller_read_counts
     reads_index                    = PREPARE_ALIGNMENT.out.reads_index

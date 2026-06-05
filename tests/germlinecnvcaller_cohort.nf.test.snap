@@ -27,16 +27,16 @@
             },
             [
                 "germlinecnvcaller",
-                "germlinecnvcaller/determinegermlinecontigploidy",
-                "germlinecnvcaller/determinegermlinecontigploidy/cohort-model",
-                "germlinecnvcaller/determinegermlinecontigploidy/cohort-model/contig_ploidy_prior.tsv",
-                "germlinecnvcaller/determinegermlinecontigploidy/cohort-model/gcnvkernel_version.json",
-                "germlinecnvcaller/determinegermlinecontigploidy/cohort-model/interval_list.tsv",
-                "germlinecnvcaller/determinegermlinecontigploidy/cohort-model/mu_mean_bias_j_interval__.tsv",
-                "germlinecnvcaller/determinegermlinecontigploidy/cohort-model/mu_psi_j_log__.tsv",
-                "germlinecnvcaller/determinegermlinecontigploidy/cohort-model/ploidy_config.json",
-                "germlinecnvcaller/determinegermlinecontigploidy/cohort-model/std_mean_bias_j_interval__.tsv",
-                "germlinecnvcaller/determinegermlinecontigploidy/cohort-model/std_psi_j_log__.tsv",
+                "germlinecnvcaller/determinecontigploidy",
+                "germlinecnvcaller/determinecontigploidy/cohort-model",
+                "germlinecnvcaller/determinecontigploidy/cohort-model/contig_ploidy_prior.tsv",
+                "germlinecnvcaller/determinecontigploidy/cohort-model/gcnvkernel_version.json",
+                "germlinecnvcaller/determinecontigploidy/cohort-model/interval_list.tsv",
+                "germlinecnvcaller/determinecontigploidy/cohort-model/mu_mean_bias_j_interval__.tsv",
+                "germlinecnvcaller/determinecontigploidy/cohort-model/mu_psi_j_log__.tsv",
+                "germlinecnvcaller/determinecontigploidy/cohort-model/ploidy_config.json",
+                "germlinecnvcaller/determinecontigploidy/cohort-model/std_mean_bias_j_interval__.tsv",
+                "germlinecnvcaller/determinecontigploidy/cohort-model/std_psi_j_log__.tsv",
                 "germlinecnvcaller/germlinecnvcaller",
                 "germlinecnvcaller/germlinecnvcaller/1scattered-cnv-model",
                 "germlinecnvcaller/germlinecnvcaller/1scattered-cnv-model/1scattered-calls",
@@ -133,18 +133,19 @@
                 "germlinecnvcaller/readcounts",
                 "germlinecnvcaller/readcounts/testN.hdf5",
                 "germlinecnvcaller/readcounts/testT.hdf5",
-                "multiqc",
-                "multiqc/multiqc_data",
-                "multiqc/multiqc_data/llms-full.txt",
-                "multiqc/multiqc_data/multiqc.log",
-                "multiqc/multiqc_data/multiqc.parquet",
-                "multiqc/multiqc_data/multiqc_citations.txt",
-                "multiqc/multiqc_data/multiqc_data.json",
-                "multiqc/multiqc_data/multiqc_software_versions.txt",
-                "multiqc/multiqc_data/multiqc_sources.txt",
-                "multiqc/multiqc_report.html",
                 "pipeline_info",
-                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml"
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
             ],
             "No VCF files",
             [
@@ -172,10 +173,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-04-10T16:48:59.354336293",
+        "timestamp": "2026-06-05T11:42:39.624966821",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.2"
+            "nextflow": "26.04.3"
         }
     }
 }

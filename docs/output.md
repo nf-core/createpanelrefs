@@ -2,9 +2,11 @@
 
 ## Introduction
 
-This document describes the output produced by the pipeline. Most of the plots are taken from the MultiQC report, which summarises results at the end of the pipeline.
+This document describes the output produced by the pipeline.
+Most of the plots are taken from the MultiQC report, which summarises results at the end of the pipeline.
 
-The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
+The directories listed below will be created in the `results/` directory after the pipeline has finished.
+All paths are relative to the top-level `results/` directory.
 
 ## Pipeline overview
 
@@ -22,11 +24,11 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/references/cnvkit/`
+- `references/cnvkit/`
   - "<REFERENCE>.antitarget.bed": Antitarget regions for the genome.
   - "<REFERENCE>.bed": Genome regions.
   - "<REFERENCE>.target.bed": Target regions for the genome.
-- `results/cnvkit/`
+- `cnvkit/`
   - "panel.cnn": Panel reference file containing coverage information for copy number.
   - "<SAMPLE>.antitargetcoverage.cnn": Antitarget coverage file for each sample.
   - "<SAMPLE>.targetcoverage.cnn": Target coverage file for each sample.
@@ -34,8 +36,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 </details>
 
 [CNVKit](https://cnvkit.readthedocs.io/en/stable/index.html) is a Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data.
-In this pipeline, CNVKit creates reference files that can be used for copy number variant detection.
-The workflow processes normal samples to generate a reference CNN file that captures the baseline coverage patterns, which can then be used for tumor-only or tumor-normal CNV analysis in downstream applications.
+CNVKit creates reference files that can be used for copy number variant detection.
+CNVKit processes normal samples to generate a reference CNN file that captures the baseline coverage patterns, which can then be used for tumor-only or tumor-normal CNV analysis in downstream applications.
 The reference file contains coverage information normalized across the cohort and is essential for accurate copy number calling.
 
 ### GATK GermlineCNVCaller
@@ -43,20 +45,19 @@ The reference file contains coverage information normalized across the cohort an
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/germlinecnvcaller/`
-  - `determinecontigploidy`
-    - `cohort-model`: Contig ploidy model.
-  - `germlinecnvcaller`
-    - `*_model`: CNV caller model for each scattered shard.
-  - `readcounts`
+- `germlinecnvcaller/`
+  - `determinecontigploidy/`
+    - `cohort-model/`: Contig ploidy model.
+  - `germlinecnvcaller/`
+    - `*-model/`: CNV caller model for each scattered shard.
+    - `*-calls/`: Per-sample CNV calls for each scattered shard.
+  - `readcounts/`
     - `*.hdf5|.tsv`: Read count statistics for each sample.
-  - `references`
-    - `*.dict`: Sequence dictionary file. This file is not published if user supplies this file to the pipeline using the `--dict` parameter.
-    - `*.fai`: Fasta index file. This file is not published if user supplies this file to the pipeline using the `--fai` parameter.
 
 </details>
 
-[GATK](https://github.com/broadinstitute/gatk) is a toolkit which offers a wide variety of tools with a primary focus on variant discovery and genotyping following GATK's germlinecnvcalling workflow for analysing a cohort of samples.
+[GATK](https://github.com/broadinstitute/gatk) is a toolkit which offers a wide variety of tools with a primary focus on variant discovery and genotyping.
+GATK's GermlineCNVCaller is used to analyze a cohort of samples.
 The output files generated from this analysis can be used for analysing samples in case mode.
 For more information about the workflow and output files, see [GATK's documentation](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).
 
@@ -65,7 +66,7 @@ For more information about the workflow and output files, see [GATK's documentat
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/gatk4/`
+- `gatk4/`
   - `mutect2/`
     - `*.vcf.gz`: Compressed VCF files containing somatic variant calls for each sample.
     - `*.vcf.gz.tbi`: Tabix index files for the VCF files.
@@ -91,7 +92,7 @@ This panel can be used with Mutect2 in case mode via the `--panel-of-normals` pa
 - `references/gens/`
   - `*.interval_list`: Interval list file used for read count collection.
   - `*.bed`: BED versions of interval list file used for read count collection for long-reads.
-- `results/gens/`
+- `gens/`
   - `readcounts/`
     - `<SAMPLE>.hdf5`: Read count data in HDF5 format for each sample from GATK4's CollectReadCounts.
     - `<SAMPLE>.tsv`: Read count data in TSV format for each sample from GATK4's CollectReadCounts.
@@ -101,7 +102,7 @@ This panel can be used with Mutect2 in case mode via the `--panel-of-normals` pa
 
 </details>
 
-[GENS](https://github.com/Clinical-Genomics-Lund/gens) creates a panel of normals for read-count denoising to improve somatic variant detection following this workflow:
+[GENS](https://github.com/Clinical-Genomics-Lund/gens) uses a panel of normals for read-count denoising to improve somatic variant detection following this workflow:
 Collects read counts at specified intervals using GATK4's CollectReadCounts, and creates a panel of normals using GATK4's CreateReadCountPanelOfNormals.
 This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection sensitivity.
 
@@ -119,9 +120,12 @@ When `gens_analysis_type` is set to 'lrs', a modified version of the workflow ab
 
 </details>
 
-[MultiQC](https://seqera.io/multiqc/) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
+[MultiQC](https://seqera.io/multiqc/) is a visualization tool that generates a single HTML report summarising all samples in your project.
+Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
 
-Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQC. The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability. For more information about how to use MultiQC reports, see [https://seqera.io/multiqc/](https://seqera.io/multiqc/).
+Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQC.
+The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability.
+For more information about how to use MultiQC reports, see [https://seqera.io/multiqc/](https://seqera.io/multiqc/).
 
 ### Pipeline information
 
@@ -136,4 +140,5 @@ Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQ
 
 </details>
 
-[Nextflow](https://www.nextflow.io/docs/latest/tracing.html) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
+[Nextflow](https://docs.seqera.io/platform-cloud/reports/overview) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline.
+This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
