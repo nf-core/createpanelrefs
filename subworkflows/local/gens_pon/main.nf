@@ -19,6 +19,7 @@ workflow GENS_PON {
 
     main:
     ch_readcounts = channel.empty()
+    ch_bed = channel.empty()
 
     if (val_analysis_type == 'srs') {
         // Collect read counts, and generate models
@@ -39,9 +40,11 @@ workflow GENS_PON {
             [],
         )
 
+        ch_bed = INTERVAL_LIST_TO_BED.out.output
+
         // Prepare the body
         MOSDEPTH(
-            ch_reads_index.combine(INTERVAL_LIST_TO_BED.out.output).map { meta, bam, bai, _bins_meta, bins -> [meta, bam, bai, bins] },
+            ch_reads_index.combine(ch_bed).map { meta, bam, bai, _bins_meta, bins -> [meta, bam, bai, bins] },
             [[], []],
             false,
         )
@@ -77,6 +80,7 @@ workflow GENS_PON {
     GATK4_CREATEREADCOUNTPANELOFNORMALS(ch_readcounts.collect { _meta, readcounts -> readcounts }.map { readcounts -> [[id: val_pon_name], readcounts] })
 
     emit:
-    gens_pon    = GATK4_CREATEREADCOUNTPANELOFNORMALS.out.pon
+    bed         = ch_bed
+    pon         = GATK4_CREATEREADCOUNTPANELOFNORMALS.out.pon
     read_counts = ch_readcounts
 }

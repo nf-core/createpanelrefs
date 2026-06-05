@@ -32,38 +32,43 @@
                 }
             },
             [
-                "gens_pon",
-                "gens_pon/createreadcountpanelofnormals",
-                "gens_pon/createreadcountpanelofnormals/gens_pon.hdf5",
-                "multiqc",
-                "multiqc/multiqc_data",
-                "multiqc/multiqc_data/llms-full.txt",
-                "multiqc/multiqc_data/multiqc.log",
-                "multiqc/multiqc_data/multiqc.parquet",
-                "multiqc/multiqc_data/multiqc_citations.txt",
-                "multiqc/multiqc_data/multiqc_data.json",
-                "multiqc/multiqc_data/multiqc_software_versions.txt",
-                "multiqc/multiqc_data/multiqc_sources.txt",
-                "multiqc/multiqc_report.html",
+                "gens",
+                "gens/createreadcountpanelofnormals",
+                "gens/createreadcountpanelofnormals/gens_pon.hdf5",
+                "gens/readcounts",
+                "gens/readcounts/testN_concat",
+                "gens/readcounts/testT_concat",
                 "pipeline_info",
                 "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
                 "references",
-                "references/intervals",
-                "references/intervals/gens_pon",
-                "references/intervals/gens_pon/genome.interval_list",
-                "references/intervals/gens_pon/gens_coverage_bins.bed"
+                "references/gens",
+                "references/gens/genome.interval_list",
+                "references/gens/gens_coverage_bins.bed",
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
             ],
             "No VCF files",
             [
-                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649"
+                "testN_concat:md5,70dfd965fb28e73ba76b2c4ddff5f818",
+                "testT_concat:md5,acb6c8d8144ccecb3e11b06552989092",
+                "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
             "No warnings"
         ],
-        "timestamp": "2026-04-29T14:37:41.182596269",
+        "timestamp": "2026-06-05T09:33:02.329231509",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.3"
+            "nextflow": "26.04.3"
         }
     },
     "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV": {
@@ -81,28 +86,28 @@
                 }
             },
             [
-                "gens_pon",
-                "gens_pon/createreadcountpanelofnormals",
-                "gens_pon/createreadcountpanelofnormals/gens_pon.hdf5",
-                "gens_pon/readcounts",
-                "gens_pon/readcounts/testN.tsv",
-                "gens_pon/readcounts/testT.tsv",
-                "multiqc",
-                "multiqc/multiqc_data",
-                "multiqc/multiqc_data/llms-full.txt",
-                "multiqc/multiqc_data/multiqc.log",
-                "multiqc/multiqc_data/multiqc.parquet",
-                "multiqc/multiqc_data/multiqc_citations.txt",
-                "multiqc/multiqc_data/multiqc_data.json",
-                "multiqc/multiqc_data/multiqc_software_versions.txt",
-                "multiqc/multiqc_data/multiqc_sources.txt",
-                "multiqc/multiqc_report.html",
+                "gens",
+                "gens/createreadcountpanelofnormals",
+                "gens/createreadcountpanelofnormals/gens_pon.hdf5",
+                "gens/readcounts",
+                "gens/readcounts/testN.tsv",
+                "gens/readcounts/testT.tsv",
                 "pipeline_info",
                 "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
                 "references",
-                "references/intervals",
-                "references/intervals/gens_pon",
-                "references/intervals/gens_pon/genome.interval_list"
+                "references/gens",
+                "references/gens/genome.interval_list",
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
             ],
             "No VCF files",
             [
@@ -112,10 +117,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-04-10T14:42:52.904323557",
+        "timestamp": "2026-06-05T09:32:19.543782274",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.2"
+            "nextflow": "26.04.3"
         }
     }
 }

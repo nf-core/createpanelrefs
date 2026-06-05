@@ -138,6 +138,7 @@ workflow GERMLINECNVCALLER_COHORT {
 
     emit:
     cnv_model    = GATK4_GERMLINECNVCALLER.out.cohortmodel
+    cnv_calls    = GATK4_GERMLINECNVCALLER.out.cohortcalls
     ploidy_model = GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.model
     read_counts  = ch_readcounts_out
 }
