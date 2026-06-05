@@ -58,6 +58,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#84](https://github.com/nf-core/createpanelrefs/pull/84) - Removed `ext.when` from `germlinecnvcaller_cohort` config and moved conditional logic into the subworkflow via channel filtering
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Refactored `prepare_genome` subworkflow to consolidate reference file channel creation
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Update documentation
+- [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Update minimum Nextflow version from 25.10.4 to 26.04.0
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Workflow outputs for all files
 
 ### `Fixed`
