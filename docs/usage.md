@@ -140,7 +140,7 @@ If you are running the pipeline to generate references for the GENS workflow, yo
 The GENS workflow creates a panel of normals for read-count denoising from normal samples. This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection. For more information, see the [GENS documentation](https://github.com/Clinical-Genomics-Lund/gens).
 
 > [!NOTE]
-> If `--gens_analysis_type` is set to 'lrs', this requires the sample ID set in the sample sheet to be equal to the `SM` tag in the BAM-file.
+> If `--gens_analysis_type` is set to 'lrs', this requires the sample ID set in the samplesheet to be equal to the `SM` tag in the BAM-file.
 
 ### germlinecnvcaller
 
