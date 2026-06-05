@@ -1,11 +1,8 @@
 {
-    "-profile test --tools mutect2 --mutect2_target_bed null --input tests/csv/1.0.0/cram.csv": {
+    "-profile test --tools mutect2": {
         "content": [
-            6,
+            5,
             {
-                "BUILD_INTERVALS": {
-                    "gawk": "5.3.1"
-                },
                 "GATK4_CREATESOMATICPANELOFNORMALS": {
                     "gatk4": "4.6.2.0"
                 },
@@ -25,25 +22,32 @@
                 "gatk4/genomicsdb/mutect2",
                 "gatk4/genomicsdb/mutect2/__tiledb_workspace.tdb",
                 "gatk4/genomicsdb/mutect2/callset.json",
-                "gatk4/genomicsdb/mutect2/chr21$1$46709983",
-                "gatk4/genomicsdb/mutect2/chr21$1$46709983/.__consolidation_lock",
-                "gatk4/genomicsdb/mutect2/chr21$1$46709983/__array_schema.tdb",
-                "gatk4/genomicsdb/mutect2/chr21$1$46709983/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/mutect2/chr21$1$46709983/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
                 "gatk4/genomicsdb/mutect2/vcfheader.vcf",
                 "gatk4/genomicsdb/mutect2/vidmap.json",
                 "gatk4/mutect2",
-                "gatk4/mutect2/sample3.vcf.gz",
-                "gatk4/mutect2/sample3.vcf.gz.stats",
-                "gatk4/mutect2/sample3.vcf.gz.tbi",
-                "gatk4/mutect2/sample4.vcf.gz",
-                "gatk4/mutect2/sample4.vcf.gz.stats",
-                "gatk4/mutect2/sample4.vcf.gz.tbi",
+                "gatk4/mutect2/normal.vcf.gz",
+                "gatk4/mutect2/normal.vcf.gz.stats",
+                "gatk4/mutect2/normal.vcf.gz.tbi",
+                "gatk4/mutect2/tumour.vcf.gz",
+                "gatk4/mutect2/tumour.vcf.gz.stats",
+                "gatk4/mutect2/tumour.vcf.gz.tbi",
                 "pipeline_info",
                 "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
-                "references",
-                "references/mutect2",
-                "references/mutect2/genome.bed",
                 "reports",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
@@ -57,20 +61,21 @@
                 "reports/multiqc/multiqc_report.html"
             ],
             [
-                "test.vcf.gz:md5,b0585f3524e3d2f1a3344f8fcb5b9bc0",
+                "mutect2.vcf.gz:md5,dd63499034d2d81f07eca224b0cd309",
                 "vcfheader.vcf:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "sample3.vcf.gz:md5,923a2e246f16496cecb89ae83179d341",
-                "sample4.vcf.gz:md5,d20955acaba1af4952675feef9c6c8ec"
+                "normal.vcf.gz:md5,9e92d8a4eb3590bd5f4324de14109788",
+                "tumour.vcf.gz:md5,c62050303d7aa8aca51a39e621c3c04b"
             ],
             [
-                "sample3.vcf.gz.stats:md5,a05ace4138fc5cb993ed912d654ec22d",
-                "sample4.vcf.gz.stats:md5,080e6d0e254e582dfb9d5916c9637391",
-                "genome.bed:md5,472d213cfcde96565699779d5bfc0e32",
+                "normal.vcf.gz.stats:md5,b569ce66bbffe9588b3d221e821023ee",
+                "tumour.vcf.gz.stats:md5,76f749c53212d72e98801f6030fbf8a6",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
-            "No warnings"
+            [
+                "WARN: --mutect2_pon_name is set to the default value 'mutect2'."
+            ]
         ],
-        "timestamp": "2026-06-05T15:46:37.220074805",
+        "timestamp": "2026-06-05T17:43:14.142933179",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
@@ -165,10 +170,13 @@
             "nextflow": "26.04.3"
         }
     },
-    "-profile test --tools mutect2": {
+    "-profile test --tools mutect2 --mutect2_target_bed null --input tests/csv/1.0.0/cram.csv": {
         "content": [
-            5,
+            6,
             {
+                "BUILD_INTERVALS": {
+                    "gawk": "5.3.1"
+                },
                 "GATK4_CREATESOMATICPANELOFNORMALS": {
                     "gatk4": "4.6.2.0"
                 },
@@ -188,32 +196,25 @@
                 "gatk4/genomicsdb/mutect2",
                 "gatk4/genomicsdb/mutect2/__tiledb_workspace.tdb",
                 "gatk4/genomicsdb/mutect2/callset.json",
-                "gatk4/genomicsdb/mutect2/chr21$2$23354000",
-                "gatk4/genomicsdb/mutect2/chr21$2$23354000/.__consolidation_lock",
-                "gatk4/genomicsdb/mutect2/chr21$2$23354000/__array_schema.tdb",
-                "gatk4/genomicsdb/mutect2/chr21$2$23354000/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/mutect2/chr21$2$23354000/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
-                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998",
-                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/.__consolidation_lock",
-                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/__array_schema.tdb",
-                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
-                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983",
-                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/.__consolidation_lock",
-                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/__array_schema.tdb",
-                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/chr21$1$46709983",
+                "gatk4/genomicsdb/mutect2/chr21$1$46709983/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$1$46709983/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$1$46709983/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$1$46709983/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
                 "gatk4/genomicsdb/mutect2/vcfheader.vcf",
                 "gatk4/genomicsdb/mutect2/vidmap.json",
                 "gatk4/mutect2",
-                "gatk4/mutect2/normal.vcf.gz",
-                "gatk4/mutect2/normal.vcf.gz.stats",
-                "gatk4/mutect2/normal.vcf.gz.tbi",
-                "gatk4/mutect2/tumour.vcf.gz",
-                "gatk4/mutect2/tumour.vcf.gz.stats",
-                "gatk4/mutect2/tumour.vcf.gz.tbi",
+                "gatk4/mutect2/sample3.vcf.gz",
+                "gatk4/mutect2/sample3.vcf.gz.stats",
+                "gatk4/mutect2/sample3.vcf.gz.tbi",
+                "gatk4/mutect2/sample4.vcf.gz",
+                "gatk4/mutect2/sample4.vcf.gz.stats",
+                "gatk4/mutect2/sample4.vcf.gz.tbi",
                 "pipeline_info",
                 "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/mutect2",
+                "references/mutect2/genome.bed",
                 "reports",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
@@ -227,19 +228,22 @@
                 "reports/multiqc/multiqc_report.html"
             ],
             [
-                "test.vcf.gz:md5,dd63499034d2d81f07eca224b0cd309",
+                "mutect2.vcf.gz:md5,b0585f3524e3d2f1a3344f8fcb5b9bc0",
                 "vcfheader.vcf:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "normal.vcf.gz:md5,9e92d8a4eb3590bd5f4324de14109788",
-                "tumour.vcf.gz:md5,c62050303d7aa8aca51a39e621c3c04b"
+                "sample3.vcf.gz:md5,923a2e246f16496cecb89ae83179d341",
+                "sample4.vcf.gz:md5,d20955acaba1af4952675feef9c6c8ec"
             ],
             [
-                "normal.vcf.gz.stats:md5,b569ce66bbffe9588b3d221e821023ee",
-                "tumour.vcf.gz.stats:md5,76f749c53212d72e98801f6030fbf8a6",
+                "sample3.vcf.gz.stats:md5,a05ace4138fc5cb993ed912d654ec22d",
+                "sample4.vcf.gz.stats:md5,080e6d0e254e582dfb9d5916c9637391",
+                "genome.bed:md5,472d213cfcde96565699779d5bfc0e32",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
-            "No warnings"
+            [
+                "WARN: --mutect2_pon_name is set to the default value 'mutect2'."
+            ]
         ],
-        "timestamp": "2026-06-05T15:43:51.041829723",
+        "timestamp": "2026-06-05T17:45:28.11377466",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
