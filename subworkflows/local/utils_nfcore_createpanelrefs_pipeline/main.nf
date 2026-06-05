@@ -39,6 +39,8 @@ workflow PIPELINE_INITIALISATION {
     help_full // boolean: Show the full help message
     show_hidden // boolean: Show hidden parameters in the help message
     tools
+    gcnv_model_name
+    gens_pon_name
     mutect2_pon_name
     genome
     genomes
@@ -152,6 +154,8 @@ workflow PIPELINE_INITIALISATION {
     validateInputParameters(
         genome,
         genomes,
+        gcnv_model_name,
+        gens_pon_name,
         mutect2_pon_name,
         tools,
     )
@@ -217,9 +221,11 @@ workflow PIPELINE_COMPLETION {
 //
 // Check and validate pipeline parameters
 //
-def validateInputParameters(genome, genomes, mutect2_pon_name, tools) {
+def validateInputParameters(genome, genomes, gcnv_model_name, gens_pon_name, mutect2_pon_name, tools) {
     genomeExistsError(genome, genomes)
-    mutect2PonNameError(mutect2_pon_name, 'mutect2' in tools)
+    ponNameWarning('germlinecnvcaller', gcnv_model_name, 'germlinecnvcaller' in tools)
+    ponNameWarning('gens', gens_pon_name, 'gens' in tools)
+    ponNameWarning('mutect2', mutect2_pon_name, 'mutect2' in tools)
 }
 
 //
@@ -233,12 +239,13 @@ def genomeExistsError(genome, genomes) {
 }
 
 //
-// Exit pipeline if --tools contains mutect2 and --mutect2_pon_name is missing
+// Warn if --tools contains a tool but its PON name is still the default
 //
-def mutect2PonNameError(mutect2_pon_name, mutect2) {
-    if (mutect2 && !mutect2_pon_name) {
-        log.warn("Please provide a panel of normals name with '--mutect2_pon_name <NAME>' when running '--tools mutect2'.")
-        error("Missing required parameter for mutect2: --mutect2_pon_name")
+def ponNameWarning(tool, pon_name, is_selected) {
+    def defaults = [mutect2: 'mutect2', gens: 'gens', germlinecnvcaller: 'germlinecnvcaller']
+    def param_names = [mutect2: 'mutect2_pon_name', gens: 'gens_pon_name', germlinecnvcaller: 'gcnv_model_name']
+    if (is_selected && pon_name == defaults[tool]) {
+        log.warn("--${param_names[tool]} is set to the default value '${defaults[tool]}'. Please provide a custom name to avoid overwriting previous runs.")
     }
 }
 

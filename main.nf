@@ -70,6 +70,8 @@ workflow {
         params.help_full,
         params.show_hidden,
         tools,
+        params.gcnv_model_name,
+        params.gens_pon_name,
         params.mutect2_pon_name,
         params.genome,
         params.genomes,

@@ -318,6 +318,7 @@
                 },
                 "mutect2_pon_name": {
                     "type": "string",
+                    "default": "mutect2",
                     "description": "Name for panel of normals."
                 }
             }

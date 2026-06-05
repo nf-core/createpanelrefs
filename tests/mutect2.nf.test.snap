@@ -1,26 +1,5 @@
 {
-    "-profile test --tools mutect2": {
-        "content": [
-            [
-                "pipeline_info"
-            ],
-            "No VCF files",
-            "No stable content",
-            [
-                "WARN: Please provide a panel of normals name with '--mutect2_pon_name <NAME>' when running '--tools mutect2'."
-            ],
-            [
-                "Missing required parameter for mutect2: --mutect2_pon_name",
-                "WARN: Please provide a panel of normals name with '--mutect2_pon_name <NAME>' when running '--tools mutect2'."
-            ]
-        ],
-        "timestamp": "2026-06-04T09:57:45.518105867",
-        "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
-        }
-    },
-    "-profile test --tools mutect2 --mutect2_target_bed null --mutect2_pon_name test --input tests/csv/1.0.0/cram.csv": {
+    "-profile test --tools mutect2 --mutect2_target_bed null --input tests/csv/1.0.0/cram.csv": {
         "content": [
             6,
             {
@@ -40,19 +19,19 @@
             [
                 "gatk4",
                 "gatk4/createsomaticpanelofnormals",
-                "gatk4/createsomaticpanelofnormals/test.vcf.gz",
-                "gatk4/createsomaticpanelofnormals/test.vcf.gz.tbi",
+                "gatk4/createsomaticpanelofnormals/mutect2.vcf.gz",
+                "gatk4/createsomaticpanelofnormals/mutect2.vcf.gz.tbi",
                 "gatk4/genomicsdb",
-                "gatk4/genomicsdb/test",
-                "gatk4/genomicsdb/test/__tiledb_workspace.tdb",
-                "gatk4/genomicsdb/test/callset.json",
-                "gatk4/genomicsdb/test/chr21$1$46709983",
-                "gatk4/genomicsdb/test/chr21$1$46709983/.__consolidation_lock",
-                "gatk4/genomicsdb/test/chr21$1$46709983/__array_schema.tdb",
-                "gatk4/genomicsdb/test/chr21$1$46709983/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/test/chr21$1$46709983/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
-                "gatk4/genomicsdb/test/vcfheader.vcf",
-                "gatk4/genomicsdb/test/vidmap.json",
+                "gatk4/genomicsdb/mutect2",
+                "gatk4/genomicsdb/mutect2/__tiledb_workspace.tdb",
+                "gatk4/genomicsdb/mutect2/callset.json",
+                "gatk4/genomicsdb/mutect2/chr21$1$46709983",
+                "gatk4/genomicsdb/mutect2/chr21$1$46709983/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$1$46709983/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$1$46709983/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$1$46709983/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/vcfheader.vcf",
+                "gatk4/genomicsdb/mutect2/vidmap.json",
                 "gatk4/mutect2",
                 "gatk4/mutect2/sample3.vcf.gz",
                 "gatk4/mutect2/sample3.vcf.gz.stats",
@@ -97,7 +76,7 @@
             "nextflow": "26.04.3"
         }
     },
-    "-profile test --tools mutect2 --mutect2_pon_name test --mutect2_intervals_num 2": {
+    "-profile test --tools mutect2 --mutect2_intervals_num 2": {
         "content": [
             12,
             {
@@ -123,29 +102,29 @@
             [
                 "gatk4",
                 "gatk4/createsomaticpanelofnormals",
-                "gatk4/createsomaticpanelofnormals/test.vcf.gz",
-                "gatk4/createsomaticpanelofnormals/test.vcf.gz.tbi",
+                "gatk4/createsomaticpanelofnormals/mutect2.vcf.gz",
+                "gatk4/createsomaticpanelofnormals/mutect2.vcf.gz.tbi",
                 "gatk4/genomicsdb",
-                "gatk4/genomicsdb/test",
-                "gatk4/genomicsdb/test/__tiledb_workspace.tdb",
-                "gatk4/genomicsdb/test/callset.json",
-                "gatk4/genomicsdb/test/chr21$2$23354000",
-                "gatk4/genomicsdb/test/chr21$2$23354000/.__consolidation_lock",
-                "gatk4/genomicsdb/test/chr21$2$23354000/__array_schema.tdb",
-                "gatk4/genomicsdb/test/chr21$2$23354000/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/test/chr21$2$23354000/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
-                "gatk4/genomicsdb/test/chr21$24132500$24910998",
-                "gatk4/genomicsdb/test/chr21$24132500$24910998/.__consolidation_lock",
-                "gatk4/genomicsdb/test/chr21$24132500$24910998/__array_schema.tdb",
-                "gatk4/genomicsdb/test/chr21$24132500$24910998/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/test/chr21$24132500$24910998/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
-                "gatk4/genomicsdb/test/chr21$25689498$46709983",
-                "gatk4/genomicsdb/test/chr21$25689498$46709983/.__consolidation_lock",
-                "gatk4/genomicsdb/test/chr21$25689498$46709983/__array_schema.tdb",
-                "gatk4/genomicsdb/test/chr21$25689498$46709983/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/test/chr21$25689498$46709983/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
-                "gatk4/genomicsdb/test/vcfheader.vcf",
-                "gatk4/genomicsdb/test/vidmap.json",
+                "gatk4/genomicsdb/mutect2",
+                "gatk4/genomicsdb/mutect2/__tiledb_workspace.tdb",
+                "gatk4/genomicsdb/mutect2/callset.json",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/vcfheader.vcf",
+                "gatk4/genomicsdb/mutect2/vidmap.json",
                 "gatk4/mutect2",
                 "gatk4/mutect2/normal.mutect2.vcf.gz",
                 "gatk4/mutect2/normal.mutect2.vcf.gz.stats",
@@ -186,7 +165,7 @@
             "nextflow": "26.04.3"
         }
     },
-    "-profile test --tools mutect2 --mutect2_pon_name test": {
+    "-profile test --tools mutect2": {
         "content": [
             5,
             {
@@ -203,29 +182,29 @@
             [
                 "gatk4",
                 "gatk4/createsomaticpanelofnormals",
-                "gatk4/createsomaticpanelofnormals/test.vcf.gz",
-                "gatk4/createsomaticpanelofnormals/test.vcf.gz.tbi",
+                "gatk4/createsomaticpanelofnormals/mutect2.vcf.gz",
+                "gatk4/createsomaticpanelofnormals/mutect2.vcf.gz.tbi",
                 "gatk4/genomicsdb",
-                "gatk4/genomicsdb/test",
-                "gatk4/genomicsdb/test/__tiledb_workspace.tdb",
-                "gatk4/genomicsdb/test/callset.json",
-                "gatk4/genomicsdb/test/chr21$2$23354000",
-                "gatk4/genomicsdb/test/chr21$2$23354000/.__consolidation_lock",
-                "gatk4/genomicsdb/test/chr21$2$23354000/__array_schema.tdb",
-                "gatk4/genomicsdb/test/chr21$2$23354000/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/test/chr21$2$23354000/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
-                "gatk4/genomicsdb/test/chr21$24132500$24910998",
-                "gatk4/genomicsdb/test/chr21$24132500$24910998/.__consolidation_lock",
-                "gatk4/genomicsdb/test/chr21$24132500$24910998/__array_schema.tdb",
-                "gatk4/genomicsdb/test/chr21$24132500$24910998/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/test/chr21$24132500$24910998/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
-                "gatk4/genomicsdb/test/chr21$25689498$46709983",
-                "gatk4/genomicsdb/test/chr21$25689498$46709983/.__consolidation_lock",
-                "gatk4/genomicsdb/test/chr21$25689498$46709983/__array_schema.tdb",
-                "gatk4/genomicsdb/test/chr21$25689498$46709983/genomicsdb_meta_dir",
-                "gatk4/genomicsdb/test/chr21$25689498$46709983/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
-                "gatk4/genomicsdb/test/vcfheader.vcf",
-                "gatk4/genomicsdb/test/vidmap.json",
+                "gatk4/genomicsdb/mutect2",
+                "gatk4/genomicsdb/mutect2/__tiledb_workspace.tdb",
+                "gatk4/genomicsdb/mutect2/callset.json",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$2$23354000/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$24132500$24910998/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/.__consolidation_lock",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/__array_schema.tdb",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/genomicsdb_meta_dir",
+                "gatk4/genomicsdb/mutect2/chr21$25689498$46709983/genomicsdb_meta_dir/genomicsdb_column_bounds.json",
+                "gatk4/genomicsdb/mutect2/vcfheader.vcf",
+                "gatk4/genomicsdb/mutect2/vidmap.json",
                 "gatk4/mutect2",
                 "gatk4/mutect2/normal.vcf.gz",
                 "gatk4/mutect2/normal.vcf.gz.stats",
