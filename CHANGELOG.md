@@ -60,6 +60,7 @@ Initial release of nf-core/createpanelrefs, created with the [nf-core](https://n
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Update documentation
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Update minimum Nextflow version from 25.10.4 to 26.04.0
 - [#85](https://github.com/nf-core/createpanelrefs/pull/85) - Workflow outputs for all files
+- [#XX](https://github.com/nf-core/createpanelrefs/pull/XX) - Remove all nf-core utils subworkflows in favor of the nf-core-utils plugin (aligned with the pattern used in nf-core/rnavar)
 
 ### `Fixed`
 
