@@ -67,16 +67,15 @@ For more information about the workflow and output files, see [GATK's documentat
 <summary>Output files</summary>
 
 - `gatk4/`
-  - `mutect2/`
-    - `*.vcf.gz`: Compressed VCF files containing somatic variant calls for each sample.
-    - `*.vcf.gz.tbi`: Tabix index files for the VCF files.
-    - `*.vcf.gz.stats`: Statistics files containing detailed metrics for each sample.
-    - `*.f1r2.tar.gz`: Files containing information for LearnReadOrientationModel (only output when tumor-normal pair mode is run).
-  - `genomicsdb/`
-    - `{pon_name}/`: GenomicsDB workspace containing all sample VCFs combined.
   - `createsomaticpanelofnormals/`
-    - `{pon_name}.vcf.gz`: Final panel of normals VCF file.
-    - `{pon_name}.vcf.gz.tbi`: Tabix index for the panel of normals VCF.
+    - `<PON_NAME>.vcf.gz`: Panel of normals VCF file.
+    - `<PON_NAME>.vcf.gz.tbi`: Tabix index for the panel of normals VCF.
+  - `mutect2/`
+    - `<SAMPLE>.vcf.gz`: Compressed VCF files containing somatic variant calls for each sample.
+    - `<SAMPLE>.vcf.gz.tbi`: Tabix index files for the VCF files.
+    - `<SAMPLE>.vcf.gz.stats`: Statistics files containing detailed metrics for each sample.
+  - `genomicsdb/`
+    - `<PON_NAME>/`: GenomicsDB workspace containing all sample VCFs combined.
 
 </details>
 

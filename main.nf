@@ -59,57 +59,6 @@ workflow {
     // Define list of tools to run
     def tools = defineToolsList(params.tools)
 
-    // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-    user_dict = params.dict
-        ? channel.fromPath(params.dict).map { dict -> [[id: 'genome'], dict] }.collect()
-        : channel.empty()
-
-    user_fai = params.fai
-        ? channel.fromPath(params.fai).map { fai -> [[id: 'genome'], fai] }.collect()
-        : channel.empty()
-
-    fasta = params.fasta
-        ? channel.fromPath(params.fasta).map { fasta -> [[id: 'genome'], fasta] }.collect()
-        : channel.empty()
-
-    // Initialize cnvkit specific parameters
-    cnvkit_targets = params.cnvkit_targets
-        ? channel.fromPath(params.cnvkit_targets).map { targets -> [[id: 'genome'], targets] }.collect()
-        : channel.value([[id: 'genome'], []])
-
-    // Initialize gens interval list specific parameters
-    user_gens_interval_list = params.gens_interval_list
-        ? channel.fromPath(params.gens_interval_list).map { gens_interval_list -> [[id: 'genome'], gens_interval_list] }.collect()
-        : channel.empty()
-
-    // Initialize germlinecnvcaller specific parameters
-    gcnv_exclude_bed = params.gcnv_exclude_bed
-        ? channel.fromPath(params.gcnv_exclude_bed).map { exclude -> [[id: 'genome'], exclude] }.collect()
-        : channel.value([[id: 'genome'], []])
-    gcnv_exclude_interval_list = params.gcnv_exclude_interval_list
-        ? channel.fromPath(params.gcnv_exclude_interval_list).map { exclude -> [[id: 'genome'], exclude] }.collect()
-        : channel.value([[id: 'genome'], []])
-    gcnv_mappable_regions = params.gcnv_mappable_regions
-        ? channel.fromPath(params.gcnv_mappable_regions).collect()
-        : channel.value([[id: 'genome'], []])
-    gcnv_ploidy_priors = params.gcnv_ploidy_priors
-        ? channel.fromPath(params.gcnv_ploidy_priors).collect()
-        : channel.empty()
-    gcnv_target_bed = params.gcnv_target_bed
-        ? channel.fromPath(params.gcnv_target_bed).map { targets -> [[id: 'genome'], targets] }.collect()
-        : channel.value([[id: 'genome'], []])
-    gcnv_target_interval_list = params.gcnv_target_interval_list
-        ? channel.fromPath(params.gcnv_target_interval_list).map { targets -> [[id: 'genome'], targets] }.collect()
-        : channel.value([[id: 'genome'], []])
-    gcnv_segmental_duplications = params.gcnv_segmental_duplications
-        ? channel.fromPath(params.gcnv_segmental_duplications).collect()
-        : channel.value([[id: 'genome'], []])
-
-    // Initialize mutect2 specific parameters
-    user_mutect2_target_bed = params.mutect2_target_bed
-        ? channel.fromPath(params.mutect2_target_bed).map { targets -> [[id: 'genome'], targets] }.collect()
-        : channel.empty()
-
     // SUBWORKFLOW: Run initialisation tasks
     PIPELINE_INITIALISATION(
         params.version,
@@ -128,13 +77,21 @@ workflow {
     )
 
     PREPARE_GENOME(
-        fasta,
-        user_dict,
-        user_fai,
-        user_gens_interval_list,
-        user_mutect2_target_bed,
-        params.mutect2_intervals_num,
         tools,
+        params.cnvkit_targets,
+        params.dict,
+        params.fai,
+        params.fasta,
+        params.gcnv_exclude_bed,
+        params.gcnv_exclude_interval_list,
+        params.gcnv_mappable_regions,
+        params.gcnv_ploidy_priors,
+        params.gcnv_segmental_duplications,
+        params.gcnv_target_bed,
+        params.gcnv_target_interval_list,
+        params.gens_interval_list,
+        params.mutect2_intervals_num,
+        params.mutect2_target_bed,
     )
 
     // WORKFLOW: Run main workflow
@@ -146,17 +103,17 @@ workflow {
         params.gens_analysis_type,
         params.gens_pon_name,
         params.mutect2_pon_name,
-        fasta,
+        PREPARE_GENOME.out.cnvkit_targets,
         PREPARE_GENOME.out.dict,
         PREPARE_GENOME.out.fai,
-        cnvkit_targets,
-        gcnv_exclude_bed,
-        gcnv_exclude_interval_list,
-        gcnv_mappable_regions,
-        gcnv_ploidy_priors,
-        gcnv_segmental_duplications,
-        gcnv_target_bed,
-        gcnv_target_interval_list,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.gcnv_exclude_bed,
+        PREPARE_GENOME.out.gcnv_exclude_interval_list,
+        PREPARE_GENOME.out.gcnv_mappable_regions,
+        PREPARE_GENOME.out.gcnv_ploidy_priors,
+        PREPARE_GENOME.out.gcnv_segmental_duplications,
+        PREPARE_GENOME.out.gcnv_target_bed,
+        PREPARE_GENOME.out.gcnv_target_interval_list,
         PREPARE_GENOME.out.gens_interval_list,
         PREPARE_GENOME.out.intervals_num,
         PREPARE_GENOME.out.mutect2_target_bed,
@@ -223,14 +180,17 @@ workflow {
     multiqc                       = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
     cnvkit_bed                    = NFCORE_CREATEPANELREFS.out.cnvkit_bed
     cnvkit_out                    = NFCORE_CREATEPANELREFS.out.cnvkit_out
+    fasta_refs                    = PREPARE_GENOME.out.dict.mix(PREPARE_GENOME.out.fai)
+    gatk4_genomicsdb              = NFCORE_CREATEPANELREFS.out.gatk4_genomicsdb
+    gatk4_mutect2                 = NFCORE_CREATEPANELREFS.out.gatk4_mutect2
+    gatk4_mutect2_bed             = PREPARE_GENOME.out.mutect2_target_bed
+    gatk4_pon                     = NFCORE_CREATEPANELREFS.out.gatk4_pon
     gens_intervals                = NFCORE_CREATEPANELREFS.out.gens_bed.mix(PREPARE_GENOME.out.gens_interval_list)
     gens_pon                      = NFCORE_CREATEPANELREFS.out.gens_pon
     gens_read_counts              = NFCORE_CREATEPANELREFS.out.gens_read_counts
-    germlinecnvcaller_cnv_calls   = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_cnv_calls
-    germlinecnvcaller_cnv_model   = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_cnv_model
+    germlinecnvcaller_cnv         = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_cnv
     germlinecnvcaller_ploidy      = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_ploidy_model
-    germlinecnvcaller_read_counts = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_read_counts.flatMap { _meta, files -> files.flatten().collect { file -> [_meta, file] } }
-    som_pon                       = NFCORE_CREATEPANELREFS.out.som_pon_gatk_vcf.mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_index).mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_mutect2_stats).mix(NFCORE_CREATEPANELREFS.out.som_pon_gatk_genomicsdb)
+    germlinecnvcaller_read_counts = NFCORE_CREATEPANELREFS.out.germlinecnvcaller_read_counts
 }
 
 output {
@@ -247,10 +207,29 @@ output {
             file >> "cnvkit/"
         }
     }
-    gens_intervals {
+    fasta_refs {
+        path "references/"
+    }
+    gatk4_genomicsdb {
         path { _meta, file ->
-            file >> "references/gens/"
+            file >> "gatk4/genomicsdb/"
         }
+    }
+    gatk4_mutect2 {
+        path { _meta, file ->
+            file >> "gatk4/mutect2/"
+        }
+    }
+    gatk4_mutect2_bed {
+        path "references/mutect2/"
+    }
+    gatk4_pon {
+        path { _meta, file ->
+            file >> "gatk4/createsomaticpanelofnormals/"
+        }
+    }
+    gens_intervals {
+        path "references/gens/"
     }
     gens_pon {
         path { _meta, file ->
@@ -262,12 +241,7 @@ output {
             file >> "gens/readcounts/"
         }
     }
-    germlinecnvcaller_cnv_model {
-        path { _meta, file ->
-            file >> "germlinecnvcaller/germlinecnvcaller/"
-        }
-    }
-    germlinecnvcaller_cnv_calls {
+    germlinecnvcaller_cnv {
         path { _meta, file ->
             file >> "germlinecnvcaller/germlinecnvcaller/"
         }
@@ -280,11 +254,6 @@ output {
     germlinecnvcaller_read_counts {
         path { _meta, file ->
             file >> "germlinecnvcaller/readcounts/"
-        }
-    }
-    som_pon {
-        path { _meta, file ->
-            file >> "mutect2/"
         }
     }
 }
@@ -305,10 +274,10 @@ workflow NFCORE_CREATEPANELREFS {
     gens_analysis_type // string: type of analysis for gens pon ('lrs' or 'srs')
     gens_pon_name // string: name of gens pon
     mutect2_pon_name // string: name of mutect2 pon
-    fasta // channel: [meta, fasta]
+    cnvkit_targets // channel: [meta, cnvkit_targets]
     dict // channel: [meta, dict]
     fai // channel: [meta, fai]
-    cnvkit_targets // channel: [meta, cnvkit_targets]
+    fasta // channel: [meta, fasta]
     gcnv_exclude_bed // channel: [meta, gcnv_exclude_bed]
     gcnv_exclude_interval_list // channel: [meta, gcnv_exclude_interval_list]
     gcnv_mappable_regions // channel: [meta, gcnv_mappable_regions]
@@ -317,7 +286,7 @@ workflow NFCORE_CREATEPANELREFS {
     gcnv_target_bed // channel: [meta, gcnv_target_bed]
     gcnv_target_interval_list // channel: [meta, gcnv_target_interval_list]
     gens_interval_list // channel: [meta, gens_interval_list]
-    mutect2_intervals_num
+    intervals_num
     mutect2_target_bed // channel: [meta, mutect2_target_bed]
 
     main:
@@ -330,10 +299,10 @@ workflow NFCORE_CREATEPANELREFS {
         gens_analysis_type,
         gens_pon_name,
         mutect2_pon_name,
-        fasta,
+        cnvkit_targets,
         dict,
         fai,
-        cnvkit_targets,
+        fasta,
         gcnv_exclude_bed,
         gcnv_exclude_interval_list,
         gcnv_mappable_regions,
@@ -342,22 +311,20 @@ workflow NFCORE_CREATEPANELREFS {
         gcnv_target_bed,
         gcnv_target_interval_list,
         gens_interval_list,
-        mutect2_intervals_num,
+        intervals_num,
         mutect2_target_bed,
     )
 
     emit:
     cnvkit_bed                     = CREATEPANELREFS.out.cnvkit_bed
     cnvkit_out                     = CREATEPANELREFS.out.cnvkit_out
+    gatk4_genomicsdb               = CREATEPANELREFS.out.gatk4_genomicsdb
+    gatk4_mutect2                  = CREATEPANELREFS.out.gatk4_mutect2
+    gatk4_pon                      = CREATEPANELREFS.out.gatk4_pon
     gens_bed                       = CREATEPANELREFS.out.gens_bed
     gens_pon                       = CREATEPANELREFS.out.gens_pon
     gens_read_counts               = CREATEPANELREFS.out.gens_read_counts
-    germlinecnvcaller_cnv_model    = CREATEPANELREFS.out.germlinecnvcaller_cnv_model
-    germlinecnvcaller_cnv_calls    = CREATEPANELREFS.out.germlinecnvcaller_cnv_calls
+    germlinecnvcaller_cnv          = CREATEPANELREFS.out.germlinecnvcaller_cnv
     germlinecnvcaller_ploidy_model = CREATEPANELREFS.out.germlinecnvcaller_ploidy_model
     germlinecnvcaller_read_counts  = CREATEPANELREFS.out.germlinecnvcaller_read_counts
-    som_pon_gatk_genomicsdb        = CREATEPANELREFS.out.som_pon_gatk_genomicsdb
-    som_pon_gatk_index             = CREATEPANELREFS.out.som_pon_gatk_index
-    som_pon_gatk_mutect2_stats     = CREATEPANELREFS.out.som_pon_gatk_mutect2_stats
-    som_pon_gatk_vcf               = CREATEPANELREFS.out.som_pon_gatk_vcf
 }
