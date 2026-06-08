@@ -58,7 +58,6 @@
             ],
             "No VCF files",
             [
-                "gens.hdf5:md5,c7ee60aed88afcae7d30b7ddf1928d49",
                 "testN.tsv:md5,bfceab35109b04317f38f9cc1cde71ca",
                 "testT.tsv:md5,7141d08cdc26f6057557be9e23ef4365",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
@@ -132,7 +131,6 @@
             ],
             "No VCF files",
             [
-                "gens.hdf5:md5,08c6306810f27625934affe933eeb49f",
                 "testN_concat:md5,70dfd965fb28e73ba76b2c4ddff5f818",
                 "testT_concat:md5,acb6c8d8144ccecb3e11b06552989092",
                 "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649",
