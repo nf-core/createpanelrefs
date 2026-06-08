@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/createpanelrefs/master/assets/schema_input.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/createpanelrefs/main/assets/schema_input.json",
     "title": "nf-core/createpanelrefs pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
@@ -13,21 +13,36 @@
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
             },
-            "fastq_1": {
+            "bam": {
+                "errorMessage": "BAM file cannot contain spaces, has to exist and must have extension '.bam'",
                 "type": "string",
+                "pattern": "^\\S+\\.bam$",
                 "format": "file-path",
-                "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "exists": true
             },
-            "fastq_2": {
+            "bai": {
+                "errorMessage": "BAM index file cannot contain spaces and must have extension '.bai'",
                 "type": "string",
+                "pattern": "^\\S+\\.bai$",
                 "format": "file-path",
-                "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "exists": true
+            },
+            "cram": {
+                "errorMessage": "CRAM file cannot contain spaces and must have extension '.cram'",
+                "type": "string",
+                "pattern": "^\\S+\\.cram$",
+                "format": "file-path",
+                "exists": true
+            },
+            "crai": {
+                "errorMessage": "CRAM index file cannot contain spaces and must have extension '.crai'",
+                "type": "string",
+                "pattern": "^\\S+\\.crai$",
+                "format": "file-path",
+                "exists": true
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample"],
+        "oneOf": [{ "required": ["bam"] }, { "required": ["cram"] }]
     }
 }

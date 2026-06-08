@@ -1,12 +1,11 @@
 lint:
   files_exist:
-    - .github/workflows/ci.yml
     - conf/modules.config
   files_unchanged:
-    - .gitattributes
-    - .gitignore
+    - .github/PULL_REQUEST_TEMPLATE.md
   modules_config: false
-nf_core_version: 3.3.1
+  nf_test_content: false
+nf_core_version: 4.0.2
 repository_type: pipeline
 template:
   author: "@maxulysse"
@@ -17,4 +16,4 @@ template:
   name: createpanelrefs
   org: nf-core
   outdir: .
-  version: 1.0dev
+  version: 1.0.0

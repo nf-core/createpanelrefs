@@ -6,49 +6,34 @@
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
-
 ## Samplesheet input
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use the `--input` parameter to specify its location. It has to be a comma-separated file and recognizes the following fields as column headers.
+
+| Fields   | Description                    |
+| -------- | ------------------------------ |
+| `sample` | Custom sample name.            |
+| `bam`    | Alignment file in bam format.  |
+| `bai`    | bam file index.                |
+| `cram`   | Alignment file in cram format. |
+| `crai`   | cram file index.               |
 
 ```bash
 --input '[path to samplesheet file]'
 ```
 
-### Multiple runs of the same sample
-
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
-```
-
 ### Full samplesheet
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
+The pipeline will auto-detect whether a sample is aligned in bam/cram format using the information provided in the samplesheet. The samplesheet can have either bam/cram files with or without their indices.
 
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
+A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 3 samples, where one sample, `SAMPLE_1` is missing its index file.
 
 ```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
+sample,bam,bai
+SAMPLE_1,sample1.bam,
+SAMPLE_2,sample2.bam,sample2.bam.bai
+SAMPLE_3,sample3.bam,sample3.bam.bai
 ```
-
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
@@ -57,10 +42,12 @@ An [example samplesheet](../assets/samplesheet.csv) has been provided with the p
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run nf-core/createpanelrefs --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker
+nextflow run nf-core/createpanelrefs --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker --tools cnvkit,germlinecnvcaller
 ```
 
-This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+This will launch the pipeline with the `docker` configuration profile, and generate reference files necessary for cnvkit and germlinecnvcaller. To learn more about what tool options are recognized by the pipeline, check the pipeline's documentation on the [nf-core website](https://nf-co.re/createpanelrefs/dev/parameters/).
+
+See below for more information about profiles.
 
 Note that the pipeline will create the following files in your working directory:
 
@@ -76,7 +63,7 @@ If you wish to repeatedly use the same parameters for multiple runs, rather than
 Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
 
 > [!WARNING]
-> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/running/run-pipelines#configuring-pipelines), other infrastructural tweaks (such as output directories), or module arguments (args).
 
 The above pipeline run specified with a params file in yaml format:
 
@@ -116,6 +103,78 @@ To further assist in reproducibility, you can use share and reuse [parameter fil
 > [!TIP]
 > If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
 
+## Workflow specific arguments
+
+### cnvkit
+
+If you are running the pipeline to generate references for the CNVkit variant calling workflow, you should consider that currently the default method for this pipeline is whole-genome. In order to use the CNVkit default, i.e. hybrid capture, when the user is creating a background for targeted capture sequencing (most commonly, exomes or panels), the user should
+
+1. provide an additional config file, in order to change or remove the method specified in the default `ext.args`, i.e.
+
+```
+process {
+
+    withName: CNVKIT_BATCH {
+        ext.args   = {"--output-reference ${meta.id}.cnn"}
+    }
+
+}
+```
+
+2. provide the `--cnvkit_target` parameter (optional) as a .bed file for the targets
+
+### gens
+
+If you are running the pipeline to generate references for the GENS workflow, you should ensure that you have provided all the mandatory options specified in the table below.
+
+| Mandatory     | Optional              |
+| ------------- | --------------------- |
+| fasta/genomes | fai                   |
+|               | dict                  |
+|               | gens_analysis_type    |
+|               | gens_bin_length       |
+|               | gens_pon_name         |
+|               | gens_readcount_format |
+|               | gens_interval_list    |
+
+The GENS workflow creates a panel of normals for read-count denoising from normal samples. This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection. For more information, see the [GENS documentation](https://github.com/Clinical-Genomics-Lund/gens).
+
+> [!NOTE]
+> If `--gens_analysis_type` is set to 'lrs', this requires the sample ID set in the samplesheet to be equal to the `SM` tag in the BAM-file.
+
+### germlinecnvcaller
+
+If you are running the pipeline to generate references for the GATK's germlinecnvcalling workflow, you should ensure that you have provided all the mandatory options specified in the table below.
+
+| Mandatory                      | Optional                                    |
+| ------------------------------ | ------------------------------------------- |
+| fasta/genomes                  | fai                                         |
+| gcnv_ploidy_priors<sup>1</sup> | dict                                        |
+|                                | gcnv_target_bed/gcnv_target_interval_list   |
+|                                | gcnv_exclude_bed/gcnv_exclude_interval_list |
+|                                | gcnv_bin_length                             |
+|                                | gcnv_mappable_regions                       |
+|                                | gcnv_padding                                |
+|                                | gcnv_model_name                             |
+|                                | gcnv_readcount_format                       |
+|                                | gcnv_scatter_content                        |
+|                                | gcnv_segmental_duplications                 |
+
+<sup>1</sup> To learn more about this file, see [this comment](https://gatk.broadinstitute.org/hc/en-us/community/posts/360074399831/comments/13441240230299) on GATK forum.<br />
+
+### mutect2
+
+If you are running the pipeline to generate references for the GATK's Mutect2 somatic variant calling workflow, you should ensure that you have provided all the mandatory options specified in the table below.
+
+| Mandatory     | Optional           |
+| ------------- | ------------------ |
+| fasta/genomes | fai                |
+|               | dict               |
+|               | mutect2_target_bed |
+|               | mutect2_pon_name   |
+
+The Mutect2 workflow creates a panel of normals from normal samples for somatic variant calling. This panel can be used with Mutect2 in case mode via the `--panel-of-normals` parameter to filter out common germline variants and sequencing artifacts. For more information, see the [GATK documentation](https://gatk.broadinstitute.org/hc/en-us/articles/360035894731-Mutect2).
+
 ## Core Nextflow arguments
 
 > [!NOTE]
@@ -149,11 +208,11 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `shifter`
   - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
 - `charliecloud`
-  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+  - A generic configuration profile to be used with [Charliecloud](https://charliecloud.io/)
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `wave`
-  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow ` 24.03.0-edge` or later).
+  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow `24.03.0-edge` or later).
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 
@@ -173,19 +232,19 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
-To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
+To change the resource requests, please see the [max resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#set-max-resources) and [customise process resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#customize-process-resources) section of the nf-core website.
 
 ### Custom Containers
 
 In some cases, you may wish to change the container or conda environment used by a pipeline steps for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
-To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
+To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#update-tool-versions) section of the nf-core website.
 
 ### Custom Tool Arguments
 
 A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
 
-To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
+To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#modifying-tool-arguments) section of the nf-core website.
 
 ### nf-core/configs
 

@@ -1,0 +1,51 @@
+def projectDir = new File('.').absolutePath
+
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_createpanelrefs"
+    config "./gens_pon.config"
+
+    def test_scenario = [
+        [
+            name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_readcount_format TSV",
+            params: [
+                genome: 'GRCh38.chr22.testdata',
+                gens_bin_length: 100,
+                gens_interval_list: null,
+                gens_readcount_format: "TSV",
+                input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
+                tools: 'gens',
+            ],
+        ],
+        [
+            name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_readcount_format TSV --gens_analysis_type lrs",
+            params: [
+                genome: 'GRCh38.chr22.testdata',
+                gens_analysis_type: 'lrs',
+                gens_bin_length: 100,
+                gens_interval_list: null,
+                gens_readcount_format: "TSV",
+                input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
+                tools: 'gens',
+            ],
+        ],
+        [
+            name: "-profile test --tools gens --gens_pon_name null",
+            params: [
+                gens_pon_name: null,
+                tools: 'gens',
+            ],
+            failure: true,
+            snapshot: 'stdout',
+            snapshot_include: 'gens_pon_name',
+        ],
+    ]
+
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
+    }
+}
