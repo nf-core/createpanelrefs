@@ -3,6 +3,24 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased](https://github.com/nf-core/createpanelrefs/tree/dev) - dev
+
+### `Added`
+
+### `Changed`
+
+- [#90](https://github.com/nf-core/createpanelrefs/pull/90) - Back to dev
+
+### `Fixed`
+
+### `Parameters`
+
+### `Dependencies` - modules
+
+### `Dependencies` - Nextflow plugins
+
+### `Deprecated`
+
 ## [1.0.0](https://github.com/nf-core/createpanelrefs/releases/tag/1.0.0) - Hell's Gate
 
 Hell's Gate National Park is a national park situated near Lake Naivasha in Kenya.
