@@ -1,5 +1,24 @@
 {
-    "-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --gcnv_model_name cohort --gcnv_ploidy_priors --gcnv_scatter_content 2": {
+    "-profile test --tools germlinecnvcaller --gcnv_model_name null": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            "No warnings",
+            [
+                "  gcnv_model_name                    : null",
+                "--gcnv_model_name is not set. Please specify a name for the panel of normals."
+            ]
+        ],
+        "timestamp": "2026-06-05T18:22:52.632196797",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
+    "-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --gcnv_ploidy_priors --gcnv_scatter_content 2": {
         "content": [
             10,
             {
@@ -28,15 +47,15 @@
             [
                 "germlinecnvcaller",
                 "germlinecnvcaller/determinecontigploidy",
-                "germlinecnvcaller/determinecontigploidy/cohort-model",
-                "germlinecnvcaller/determinecontigploidy/cohort-model/contig_ploidy_prior.tsv",
-                "germlinecnvcaller/determinecontigploidy/cohort-model/gcnvkernel_version.json",
-                "germlinecnvcaller/determinecontigploidy/cohort-model/interval_list.tsv",
-                "germlinecnvcaller/determinecontigploidy/cohort-model/mu_mean_bias_j_interval__.tsv",
-                "germlinecnvcaller/determinecontigploidy/cohort-model/mu_psi_j_log__.tsv",
-                "germlinecnvcaller/determinecontigploidy/cohort-model/ploidy_config.json",
-                "germlinecnvcaller/determinecontigploidy/cohort-model/std_mean_bias_j_interval__.tsv",
-                "germlinecnvcaller/determinecontigploidy/cohort-model/std_psi_j_log__.tsv",
+                "germlinecnvcaller/determinecontigploidy/germlinecnvcaller-model",
+                "germlinecnvcaller/determinecontigploidy/germlinecnvcaller-model/contig_ploidy_prior.tsv",
+                "germlinecnvcaller/determinecontigploidy/germlinecnvcaller-model/gcnvkernel_version.json",
+                "germlinecnvcaller/determinecontigploidy/germlinecnvcaller-model/interval_list.tsv",
+                "germlinecnvcaller/determinecontigploidy/germlinecnvcaller-model/mu_mean_bias_j_interval__.tsv",
+                "germlinecnvcaller/determinecontigploidy/germlinecnvcaller-model/mu_psi_j_log__.tsv",
+                "germlinecnvcaller/determinecontigploidy/germlinecnvcaller-model/ploidy_config.json",
+                "germlinecnvcaller/determinecontigploidy/germlinecnvcaller-model/std_mean_bias_j_interval__.tsv",
+                "germlinecnvcaller/determinecontigploidy/germlinecnvcaller-model/std_psi_j_log__.tsv",
                 "germlinecnvcaller/germlinecnvcaller",
                 "germlinecnvcaller/germlinecnvcaller/1scattered-cnv-model",
                 "germlinecnvcaller/germlinecnvcaller/1scattered-cnv-model/1scattered-calls",
@@ -171,9 +190,11 @@
                 "gcnvkernel_version.json:md5,aa0ad91e0ff23be94e09e909cf2286d8",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
-            "No warnings"
+            [
+                "WARN: --gcnv_model_name is set to the default value 'germlinecnvcaller'."
+            ]
         ],
-        "timestamp": "2026-06-05T11:42:39.624966821",
+        "timestamp": "2026-06-05T17:39:37.320651508",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

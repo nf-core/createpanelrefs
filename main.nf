@@ -22,7 +22,6 @@ include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
 include { MULTIQC                 } from './modules/nf-core/multiqc'
 include { defineToolsList         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { paramsSummaryMap        } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc    } from './subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText  } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { getGenomeAttribute      } from 'plugin/nf-core-utils'
 include { softwareVersionsToYAML  } from 'plugin/nf-core-utils'
@@ -71,6 +70,9 @@ workflow {
         params.help_full,
         params.show_hidden,
         tools,
+        params.cnvkit_pon_name,
+        params.gcnv_model_name,
+        params.gens_pon_name,
         params.mutect2_pon_name,
         params.genome,
         params.genomes,
@@ -98,6 +100,7 @@ workflow {
     NFCORE_CREATEPANELREFS(
         PIPELINE_INITIALISATION.out.samplesheet,
         tools,
+        params.cnvkit_pon_name,
         params.gcnv_model_name,
         params.gcnv_analysis_type,
         params.gens_analysis_type,
@@ -269,6 +272,7 @@ workflow NFCORE_CREATEPANELREFS {
     take:
     samplesheet // channel: samplesheet read in from --input
     tools // list: tools to run
+    cnvkit_pon_name // string: name of cnvkit pon
     gcnv_model_name // string: name of gcnv model
     gcnv_analysis_type // string: type of analysis for germlinecnvcaller ('wes' or 'wgs')
     gens_analysis_type // string: type of analysis for gens pon ('lrs' or 'srs')
@@ -294,6 +298,7 @@ workflow NFCORE_CREATEPANELREFS {
     CREATEPANELREFS(
         samplesheet,
         tools,
+        cnvkit_pon_name,
         gcnv_model_name,
         gcnv_analysis_type,
         gens_analysis_type,
@@ -327,4 +332,35 @@ workflow NFCORE_CREATEPANELREFS {
     germlinecnvcaller_cnv          = CREATEPANELREFS.out.germlinecnvcaller_cnv
     germlinecnvcaller_ploidy_model = CREATEPANELREFS.out.germlinecnvcaller_ploidy_model
     germlinecnvcaller_read_counts  = CREATEPANELREFS.out.germlinecnvcaller_read_counts
+}
+
+// Get workflow summary for MultiQC
+def paramsSummaryMultiqc(summary_params) {
+    def summary_section = ''
+    summary_params
+        .keySet()
+        .each { group ->
+            def group_params = summary_params.get(group)
+            if (group_params) {
+                summary_section += "    <p style=\"font-size:110%\"><b>${group}</b></p>\n"
+                summary_section += "    <dl class=\"dl-horizontal\">\n"
+                group_params
+                    .keySet()
+                    .sort()
+                    .each { param ->
+                        summary_section += "        <dt>${param}</dt><dd><samp>${group_params.get(param) ?: '<span style=\"color:#999999;\">N/A</a>'}</samp></dd>\n"
+                    }
+                summary_section += "    </dl>\n"
+            }
+        }
+
+    def yaml_file_text = "id: '${workflow.manifest.name.replace('/', '-')}-summary'\n" as String
+    yaml_file_text     += "description: ' - this information is collected when the pipeline is started.'\n"
+    yaml_file_text     += "section_name: '${workflow.manifest.name} Workflow Summary'\n"
+    yaml_file_text     += "section_href: 'https://github.com/${workflow.manifest.name}'\n"
+    yaml_file_text     += "plot_type: 'html'\n"
+    yaml_file_text     += "data: |\n"
+    yaml_file_text     += "${summary_section}"
+
+    return yaml_file_text
 }

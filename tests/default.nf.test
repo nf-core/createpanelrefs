@@ -15,6 +15,16 @@ nextflow_pipeline {
                 tools: 'cnvkit',
             ],
         ],
+        [
+            name: "-profile test --tools cnvkit --cnvkit_pon_name null",
+            params: [
+                cnvkit_pon_name: null,
+                tools: 'cnvkit',
+            ],
+            failure: true,
+            snapshot: 'stdout',
+            snapshot_include: 'cnvkit_pon_name',
+        ],
     ]
 
     // Generate tests for each scenario

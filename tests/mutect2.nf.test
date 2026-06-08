@@ -10,37 +10,35 @@ nextflow_pipeline {
 
     def test_scenario = [
         [
-            name: "-profile test --tools mutect2 --mutect2_pon_name test",
+            name: "-profile test --tools mutect2",
             params: [
-                mutect2_pon_name: 'test',
                 tools: 'mutect2',
             ],
         ],
         [
-            name: "-profile test --tools mutect2 --mutect2_target_bed null --mutect2_pon_name test --input tests/csv/1.0.0/cram.csv",
+            name: "-profile test --tools mutect2 --mutect2_target_bed null --input tests/csv/1.0.0/cram.csv",
             params: [
                 input: "${projectDir}/tests/csv/1.0.0/cram.csv",
-                mutect2_pon_name: 'test',
                 mutect2_target_bed: null,
                 tools: 'mutect2',
             ],
         ],
         [
-            name: "-profile test --tools mutect2 --mutect2_pon_name test --mutect2_intervals_num 2",
+            name: "-profile test --tools mutect2 --mutect2_intervals_num 2",
             params: [
-                mutect2_pon_name: 'test',
                 mutect2_intervals_num: 2,
                 tools: 'mutect2',
             ],
         ],
         [
-            name: "-profile test --tools mutect2",
+            name: "-profile test --tools mutect2 --mutect2_pon_name null",
             params: [
+                mutect2_pon_name: null,
                 tools: 'mutect2',
             ],
             failure: true,
             snapshot: 'stdout',
-            snapshot_include: 'mutect2_pon',
+            snapshot_include: 'mutect2_pon_name',
         ],
     ]
 

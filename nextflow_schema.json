@@ -201,6 +201,11 @@
             "description": "Options used by the cnvkit subworkflow",
             "default": "",
             "properties": {
+                "cnvkit_pon_name": {
+                    "type": "string",
+                    "description": "Name for panel of normals.",
+                    "default": "cnvkit"
+                },
                 "cnvkit_targets": {
                     "type": "string",
                     "format": "path",
@@ -318,6 +323,7 @@
                 },
                 "mutect2_pon_name": {
                     "type": "string",
+                    "default": "mutect2",
                     "description": "Name for panel of normals."
                 }
             }

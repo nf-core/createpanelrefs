@@ -25,15 +25,17 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <summary>Output files</summary>
 
 - `references/cnvkit/`
-  - "<REFERENCE>.antitarget.bed": Antitarget regions for the genome.
-  - "<REFERENCE>.bed": Genome regions.
-  - "<REFERENCE>.target.bed": Target regions for the genome.
+  - `<REFERENCE>.antitarget.bed`: Antitarget regions for the genome.
+  - `<REFERENCE>.bed`: Genome regions.
+  - `<REFERENCE>.target.bed`: Target regions for the genome.
 - `cnvkit/`
-  - "panel.cnn": Panel reference file containing coverage information for copy number.
-  - "<SAMPLE>.antitargetcoverage.cnn": Antitarget coverage file for each sample.
-  - "<SAMPLE>.targetcoverage.cnn": Target coverage file for each sample.
+  - `<CNVKIT_PON_NAME>.cnn`: Panel reference file containing coverage information for copy number.
+  - `<SAMPLE>.antitargetcoverage.cnn`: Antitarget coverage file for each sample.
+  - `<SAMPLE>.targetcoverage.cnn`: Target coverage file for each sample.
 
 </details>
+
+The PON name defaults to `cnvkit` when `--cnvkit_pon_name` is not specified.
 
 [CNVKit](https://cnvkit.readthedocs.io/en/stable/index.html) is a Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data.
 CNVKit creates reference files that can be used for copy number variant detection.
@@ -49,12 +51,14 @@ The reference file contains coverage information normalized across the cohort an
   - `determinecontigploidy/`
     - `cohort-model/`: Contig ploidy model.
   - `germlinecnvcaller/`
-    - `*-model/`: CNV caller model for each scattered shard.
-    - `*-calls/`: Per-sample CNV calls for each scattered shard.
+    - `<GCNV_MODEL_NAME>-model/`: CNV caller model for each scattered shard.
+    - `<GCNV_MODEL_NAME>-calls/`: Per-sample CNV calls for each scattered shard.
   - `readcounts/`
     - `*.hdf5|.tsv`: Read count statistics for each sample.
 
 </details>
+
+The model name defaults to `germlinecnvcaller` when `--gcnv_model_name` is not specified.
 
 [GATK](https://github.com/broadinstitute/gatk) is a toolkit which offers a wide variety of tools with a primary focus on variant discovery and genotyping.
 GATK's GermlineCNVCaller is used to analyze a cohort of samples.
@@ -68,20 +72,22 @@ For more information about the workflow and output files, see [GATK's documentat
 
 - `gatk4/`
   - `createsomaticpanelofnormals/`
-    - `<PON_NAME>.vcf.gz`: Panel of normals VCF file.
-    - `<PON_NAME>.vcf.gz.tbi`: Tabix index for the panel of normals VCF.
+    - `<MUTECT2_PON_NAME>.vcf.gz`: Panel of normals VCF file.
+    - `<MUTECT2_PON_NAME>.vcf.gz.tbi`: Tabix index for the panel of normals VCF.
   - `mutect2/`
     - `<SAMPLE>.vcf.gz`: Compressed VCF files containing somatic variant calls for each sample.
     - `<SAMPLE>.vcf.gz.tbi`: Tabix index files for the VCF files.
     - `<SAMPLE>.vcf.gz.stats`: Statistics files containing detailed metrics for each sample.
   - `genomicsdb/`
-    - `<PON_NAME>/`: GenomicsDB workspace containing all sample VCFs combined.
+    - `<MUTECT2_PON_NAME>/`: GenomicsDB workspace containing all sample VCFs combined.
 
 </details>
 
 [GATK Mutect2](https://gatk.broadinstitute.org/hc/en-us/articles/360035894731-Mutect2) creates a panel of normals from normal samples for somatic variant calling following this workflow:
 Calls variants in each normal sample using Mutect2 in panel of normals mode, imports all VCFs into a GenomicsDB workspace, and creates a final panel of normals VCF file.
 This panel can be used with Mutect2 in case mode via the `--panel-of-normals` parameter to filter out common germline variants and sequencing artifacts.
+
+The PON name defaults to `mutect2` when `--mutect2_pon_name` is not specified.
 
 ### GENS
 
@@ -97,13 +103,15 @@ This panel can be used with Mutect2 in case mode via the `--panel-of-normals` pa
     - `<SAMPLE>.tsv`: Read count data in TSV format for each sample from GATK4's CollectReadCounts.
     - `<SAMPLE>_concat`: Coverage data for each sample from MOSDEPTH.
   - `createreadcountpanelofnormals/`
-    - `{pon_name}.hdf5`: Final panel of normals file in HDF5 format.
+    - `<GENS_PON_NAME>.hdf5`: Final panel of normals file in HDF5 format.
 
 </details>
 
 [GENS](https://github.com/Clinical-Genomics-Lund/gens) uses a panel of normals for read-count denoising to improve somatic variant detection following this workflow:
 Collects read counts at specified intervals using GATK4's CollectReadCounts, and creates a panel of normals using GATK4's CreateReadCountPanelOfNormals.
 This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection sensitivity.
+
+The PON name defaults to `gens` when `--gens_pon_name` is not specified.
 
 When `gens_analysis_type` is set to 'lrs', a modified version of the workflow above is run where coverage calculated by MOSDEPTH is used instead of GATK4's CollectReadCounts.
 

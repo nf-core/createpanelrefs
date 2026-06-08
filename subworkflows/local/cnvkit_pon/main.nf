@@ -6,6 +6,7 @@ workflow CNVKIT_PON {
     ch_reads_index // channel: [mandatory] [ val(meta), path(bam|cram), path(bai|crai) ]
     ch_fasta // channel: [mandatory] [ val(meta), path(fasta) ]
     ch_cnvkit_targets // channel: [mandatory] [ val(meta), path(targets) ]
+    pon_name // string: name of the cnvkit pon
 
     main:
     ch_reads = ch_reads_index.branch { meta, reads, index ->
@@ -24,7 +25,7 @@ workflow CNVKIT_PON {
     )
 
     CNVKIT_BATCH(
-        ch_reads.bam.mix(SAMTOOLS_VIEW.out.bam).map { _meta, bam -> [[id: 'panel'], bam] }.groupTuple().map { meta, bam -> [meta, [], [], bam, []] },
+        ch_reads.bam.mix(SAMTOOLS_VIEW.out.bam).map { _meta, bam -> [[id: pon_name], bam] }.groupTuple().map { meta, bam -> [meta, [], [], bam, []] },
         ch_fasta.map { meta, fasta_ -> [meta, fasta_, []] },
         ch_cnvkit_targets,
         [[:], []],

@@ -8,14 +8,18 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { UTILS_NFSCHEMA_PLUGIN   } from '../../nf-core/utils_nfschema_plugin'
-include { paramsSummaryMap        } from 'plugin/nf-schema'
-include { samplesheetToList       } from 'plugin/nf-schema'
-include { paramsHelp              } from 'plugin/nf-schema'
-include { completionEmail         } from '../../nf-core/utils_nfcore_pipeline'
-include { completionSummary       } from '../../nf-core/utils_nfcore_pipeline'
-include { UTILS_NFCORE_PIPELINE   } from '../../nf-core/utils_nfcore_pipeline'
-include { UTILS_NEXTFLOW_PIPELINE } from '../../nf-core/utils_nextflow_pipeline'
+include { checkCondaChannels   } from 'plugin/nf-core-utils'
+include { checkConfigProvided  } from 'plugin/nf-core-utils'
+include { checkProfileProvided } from 'plugin/nf-core-utils'
+include { completionEmail      } from 'plugin/nf-core-utils'
+include { completionSummary    } from 'plugin/nf-core-utils'
+include { dumpParametersToJSON } from 'plugin/nf-core-utils'
+include { getWorkflowVersion   } from 'plugin/nf-core-utils'
+include { paramsHelp           } from 'plugin/nf-schema'
+include { paramsSummaryLog     } from 'plugin/nf-schema'
+include { paramsSummaryMap     } from 'plugin/nf-schema'
+include { samplesheetToList    } from 'plugin/nf-schema'
+include { validateParameters   } from 'plugin/nf-schema'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,6 +39,9 @@ workflow PIPELINE_INITIALISATION {
     help_full // boolean: Show the full help message
     show_hidden // boolean: Show hidden parameters in the help message
     tools
+    cnvkit_pon_name
+    gcnv_model_name
+    gens_pon_name
     mutect2_pon_name
     genome
     genomes
@@ -42,14 +49,28 @@ workflow PIPELINE_INITIALISATION {
     main:
 
     //
-    // Print version and exit if required and dump pipeline parameters to JSON file
+    // Print workflow version and exit on --version
     //
-    UTILS_NEXTFLOW_PIPELINE(
-        version,
-        true,
-        outdir,
-        workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1,
-    )
+    if (version) {
+        log.info("${workflow.manifest.name} ${getWorkflowVersion()}")
+        System.exit(0)
+    }
+
+    //
+    // Dump pipeline parameters to a JSON file
+    //
+    if (outdir) {
+        dumpParametersToJSON(outdir, params)
+    }
+
+    //
+    // When running with Conda, warn if channels have not been set-up appropriately
+    //
+    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
+        checkCondaChannels()
+    }
+
+    checkConfigProvided()
 
     //
     // Validate parameters and generate parameter summary to stdout
@@ -80,18 +101,33 @@ workflow PIPELINE_INITIALISATION {
 
     command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
 
-    UTILS_NFSCHEMA_PLUGIN(
-        workflow,
-        validate_params,
-        null,
-        help,
-        help_full,
-        show_hidden,
-        before_text,
-        after_text,
-        command,
-        null,
-    )
+    if (help || help_full) {
+        def help_options = [
+            beforeText: before_text,
+            afterText: after_text,
+            command: command,
+            showHidden: show_hidden,
+            fullHelp: help_full,
+        ]
+        log.info(
+            paramsHelp(
+                help_options,
+                params.help instanceof String && params.help != "true" ? params.help : "",
+            )
+        )
+        exit(0)
+    }
+
+    checkProfileProvided(nextflow_cli_args)
+
+    //
+    // Print parameter summary to stdout. This will display the parameters
+    // that differ from the default given in the JSON schema
+    //
+
+    log.info(before_text)
+    log.info(paramsSummaryLog([:], workflow))
+    log.info(after_text)
 
     extra_text = """
 \033[1;37mExtra informations\033[0m
@@ -106,11 +142,12 @@ workflow PIPELINE_INITIALISATION {
     log.info(extra_text)
 
     //
-    // Check config provided to the pipeline
+    // Validate the parameters using nextflow_schema.json or the schema
+    // given via the validation.parametersSchema configuration option
     //
-    UTILS_NFCORE_PIPELINE(
-        nextflow_cli_args
-    )
+    if (validate_params) {
+        validateParameters([:])
+    }
 
     //
     // Custom validation for pipeline parameters
@@ -118,6 +155,9 @@ workflow PIPELINE_INITIALISATION {
     validateInputParameters(
         genome,
         genomes,
+        cnvkit_pon_name,
+        gcnv_model_name,
+        gens_pon_name,
         mutect2_pon_name,
         tools,
     )
@@ -183,9 +223,17 @@ workflow PIPELINE_COMPLETION {
 //
 // Check and validate pipeline parameters
 //
-def validateInputParameters(genome, genomes, mutect2_pon_name, tools) {
+def validateInputParameters(genome, genomes, cnvkit_pon_name, gcnv_model_name, gens_pon_name, mutect2_pon_name, tools) {
     genomeExistsError(genome, genomes)
-    mutect2PonNameError(mutect2_pon_name, 'mutect2' in tools)
+    checkPonName(
+        tools,
+        [
+            cnvkit_pon_name: cnvkit_pon_name,
+            gcnv_model_name: gcnv_model_name,
+            gens_pon_name: gens_pon_name,
+            mutect2_pon_name: mutect2_pon_name,
+        ],
+    )
 }
 
 //
@@ -199,12 +247,17 @@ def genomeExistsError(genome, genomes) {
 }
 
 //
-// Exit pipeline if --tools contains mutect2 and --mutect2_pon_name is missing
+// Check PON names: error on null/empty, warn if default for a selected tool
 //
-def mutect2PonNameError(mutect2_pon_name, mutect2) {
-    if (mutect2 && !mutect2_pon_name) {
-        log.warn("Please provide a panel of normals name with '--mutect2_pon_name <NAME>' when running '--tools mutect2'.")
-        error("Missing required parameter for mutect2: --mutect2_pon_name")
+def checkPonName(tools, pon_names) {
+    def defaults = [cnvkit_pon_name: 'cnvkit', mutect2_pon_name: 'mutect2', gens_pon_name: 'gens', gcnv_model_name: 'germlinecnvcaller']
+    pon_names.each { param, value ->
+        if (!value) {
+            error("--${param} is not set. Please specify a name for the panel of normals.")
+        }
+        if (defaults[param] in tools && value == defaults[param]) {
+            log.warn("--${param} is set to the default value '${defaults[param]}'.")
+        }
     }
 }
 

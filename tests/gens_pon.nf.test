@@ -10,29 +10,37 @@ nextflow_pipeline {
 
     def test_scenario = [
         [
-            name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV",
+            name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_readcount_format TSV",
             params: [
                 genome: 'GRCh38.chr22.testdata',
                 gens_bin_length: 100,
                 gens_interval_list: null,
-                gens_pon_name: 'gens_pon',
                 gens_readcount_format: "TSV",
                 input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
                 tools: 'gens',
             ],
         ],
         [
-            name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_pon_name gens_pon --gens_readcount_format TSV --gens_analysis_type lrs",
+            name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_readcount_format TSV --gens_analysis_type lrs",
             params: [
                 genome: 'GRCh38.chr22.testdata',
                 gens_analysis_type: 'lrs',
                 gens_bin_length: 100,
                 gens_interval_list: null,
-                gens_pon_name: 'gens_pon',
                 gens_readcount_format: "TSV",
                 input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
                 tools: 'gens',
             ],
+        ],
+        [
+            name: "-profile test --tools gens --gens_pon_name null",
+            params: [
+                gens_pon_name: null,
+                tools: 'gens',
+            ],
+            failure: true,
+            snapshot: 'stdout',
+            snapshot_include: 'gens_pon_name',
         ],
     ]
 
