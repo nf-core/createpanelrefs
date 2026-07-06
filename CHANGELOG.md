@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [#91](https://github.com/nf-core/createpanelrefs/pull/91) - Add AGENTS.md file with nf-core agent instructions
+
 ### `Changed`
 
 - [#90](https://github.com/nf-core/createpanelrefs/pull/90) - Back to dev
