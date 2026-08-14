@@ -1,0 +1,86 @@
+{
+    "-profile test --tools cnvkit --input tests/csv/1.0.0/bam_cram.csv": {
+        "content": [
+            4,
+            {
+                "CNVKIT_BATCH": {
+                    "cnvkit": "0.9.14",
+                    "samtools": "1.24"
+                },
+                "SAMTOOLS_VIEW": {
+                    "samtools": "1.24"
+                }
+            },
+            [
+                "cnvkit",
+                "cnvkit/cnvkit.cnn",
+                "cnvkit/sample3.antitargetcoverage.cnn",
+                "cnvkit/sample3.targetcoverage.cnn",
+                "cnvkit/sample4.antitargetcoverage.cnn",
+                "cnvkit/sample4.targetcoverage.cnn",
+                "cnvkit/test.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
+                "cnvkit/test.paired_end.recalibrated.sorted.targetcoverage.cnn",
+                "cnvkit/test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
+                "cnvkit/test2.paired_end.recalibrated.sorted.targetcoverage.cnn",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/cnvkit",
+                "references/cnvkit/genome.antitarget.bed",
+                "references/cnvkit/genome.bed",
+                "references/cnvkit/genome.target.bed",
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
+            ],
+            "No VCF files",
+            [
+                "cnvkit.cnn:md5,3755ecae8e023739da02eeb84515d4fe",
+                "sample3.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "sample3.targetcoverage.cnn:md5,814200aceed64f3e0c4a69dab64553c4",
+                "sample4.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "sample4.targetcoverage.cnn:md5,ae3bfc49096f86e48c37bc9b997982fb",
+                "test.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "test.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,814200aceed64f3e0c4a69dab64553c4",
+                "test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "test2.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,ae3bfc49096f86e48c37bc9b997982fb",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            [
+                "WARN: --cnvkit_pon_name is set to the default value 'cnvkit'."
+            ]
+        ],
+        "timestamp": "2026-08-14T12:49:52.631912091",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "-profile test --tools cnvkit --cnvkit_pon_name null": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            "No warnings",
+            [
+                "  cnvkit_pon_name                    : null",
+                "--cnvkit_pon_name is not set. Please specify a name for the panel of normals."
+            ]
+        ],
+        "timestamp": "2026-06-05T18:22:34.274091356",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    }
+}
