@@ -4,11 +4,11 @@
             4,
             {
                 "CNVKIT_BATCH": {
-                    "cnvkit": "0.9.12",
-                    "samtools": "1.21"
+                    "cnvkit": "0.9.14",
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_VIEW": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 }
             },
             [
@@ -43,7 +43,7 @@
             ],
             "No VCF files",
             [
-                "cnvkit.cnn:md5,bb11c7ec8b2a5679fcabc4dbfa83294a",
+                "cnvkit.cnn:md5,3755ecae8e023739da02eeb84515d4fe",
                 "sample3.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
                 "sample3.targetcoverage.cnn:md5,814200aceed64f3e0c4a69dab64553c4",
                 "sample4.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
@@ -58,10 +58,10 @@
                 "WARN: --cnvkit_pon_name is set to the default value 'cnvkit'."
             ]
         ],
-        "timestamp": "2026-06-05T18:03:38.158554356",
+        "timestamp": "2026-08-14T12:49:52.631912091",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     },
     "-profile test --tools cnvkit --cnvkit_pon_name null": {
