@@ -101,7 +101,7 @@
                     "gawk": "5.3.1"
                 },
                 "SAMTOOLS_VIEW": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 }
             },
             [
@@ -131,8 +131,8 @@
             ],
             "No VCF files",
             [
-                "testN_concat:md5,70dfd965fb28e73ba76b2c4ddff5f818",
-                "testT_concat:md5,acb6c8d8144ccecb3e11b06552989092",
+                "testN_concat:md5,9bf85437af4963afe8eabdd9e124fdfb",
+                "testT_concat:md5,609f880750c621425cefd734f81707dd",
                 "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
@@ -140,10 +140,10 @@
                 "WARN: --gens_pon_name is set to the default value 'gens'."
             ]
         ],
-        "timestamp": "2026-06-05T17:30:56.435736853",
+        "timestamp": "2026-08-14T12:51:05.696377894",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     }
 }
