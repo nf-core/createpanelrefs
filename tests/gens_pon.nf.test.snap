@@ -1,0 +1,149 @@
+{
+    "-profile test --tools gens --gens_pon_name null": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            "No warnings",
+            [
+                "  gens_pon_name                      : null",
+                "--gens_pon_name is not set. Please specify a name for the panel of normals."
+            ]
+        ],
+        "timestamp": "2026-06-05T18:22:43.685889282",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
+    "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_readcount_format TSV": {
+        "content": [
+            5,
+            {
+                "GATK4_COLLECTREADCOUNTS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_PREPROCESSINTERVALS_GENS": {
+                    "gatk4": "4.6.2.0"
+                }
+            },
+            [
+                "gens",
+                "gens/createreadcountpanelofnormals",
+                "gens/createreadcountpanelofnormals/gens.hdf5",
+                "gens/readcounts",
+                "gens/readcounts/testN.tsv",
+                "gens/readcounts/testT.tsv",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/gens",
+                "references/gens/genome.interval_list",
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
+            ],
+            "No VCF files",
+            [
+                "testN.tsv:md5,bfceab35109b04317f38f9cc1cde71ca",
+                "testT.tsv:md5,7141d08cdc26f6057557be9e23ef4365",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            [
+                "WARN: --gens_pon_name is set to the default value 'gens'."
+            ]
+        ],
+        "timestamp": "2026-06-05T17:30:27.718195846",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
+    "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_readcount_format TSV --gens_analysis_type lrs": {
+        "content": [
+            14,
+            {
+                "FIND_CONCATENATE": {
+                    "coreutils": "9.4",
+                    "find": "4.6.0",
+                    "pigz": "2.8"
+                },
+                "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_PREPROCESSINTERVALS_GENS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "INTERVAL_LIST_TO_BED": {
+                    "gawk": "5.3.1"
+                },
+                "MOSDEPTH": {
+                    "gzip": "1.14",
+                    "mosdepth": "0.3.14"
+                },
+                "MOSDEPTH_GATK_FORMAT": {
+                    "gawk": "5.3.1"
+                },
+                "MOSDEPTH_GATK_HEADER": {
+                    "gawk": "5.3.1"
+                },
+                "SAMTOOLS_VIEW": {
+                    "samtools": "1.24"
+                }
+            },
+            [
+                "gens",
+                "gens/createreadcountpanelofnormals",
+                "gens/createreadcountpanelofnormals/gens.hdf5",
+                "gens/readcounts",
+                "gens/readcounts/testN_concat",
+                "gens/readcounts/testT_concat",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/gens",
+                "references/gens/genome.interval_list",
+                "references/gens/gens_coverage_bins.bed",
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
+            ],
+            "No VCF files",
+            [
+                "testN_concat:md5,9bf85437af4963afe8eabdd9e124fdfb",
+                "testT_concat:md5,609f880750c621425cefd734f81707dd",
+                "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            [
+                "WARN: --gens_pon_name is set to the default value 'gens'."
+            ]
+        ],
+        "timestamp": "2026-08-17T10:42:06.406441137",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

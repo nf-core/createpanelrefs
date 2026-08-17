@@ -8,12 +8,13 @@ lint:
     - .github/workflows/linting.yml
   modules_config: false
   nf_test_content: false
+  skip_features:
+    - fastqc
 nf_core_version: 4.1.0
 repository_type: pipeline
 template:
   author: "@maxulysse"
-  description: Generate Panel of Normals, models or other similar references from
-    lots of samples
+  description: Generate Panel of Normals, models or other similar references from lots of samples
   force: false
   is_nfcore: true
   name: createpanelrefs
