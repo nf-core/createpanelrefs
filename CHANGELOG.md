@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#92](https://github.com/nf-core/createpanelrefs/pull/92) - Template update for nf-core/tools v4.0.3
 - [#95](https://github.com/nf-core/createpanelrefs/pull/95) - Template update for nf-core/tools v4.1.0
 - [#95](https://github.com/nf-core/createpanelrefs/pull/95) - Update all modules
+- [#96](https://github.com/nf-core/createpanelrefs/pull/96) - Template update for nf-core/tools v4.1.0 (re-sync)
 
 ### `Fixed`
 
