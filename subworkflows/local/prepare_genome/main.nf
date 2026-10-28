@@ -102,7 +102,7 @@ workflow PREPARE_GENOME {
     def run_build_intervals = !params_mutect2_target_bed
 
     BUILD_INTERVALS(
-        ch_fai.filter { run_build_intervals && ('mutect2' in tools) },
+        ch_fai.filter { run_build_intervals && ('mutect2' in tools) }.map { meta, fai -> [meta, fai, 'bed'] },
         [],
         false,
     )

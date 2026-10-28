@@ -23,13 +23,13 @@
             5,
             {
                 "GATK4_COLLECTREADCOUNTS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_PREPROCESSINTERVALS_GENS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 }
             },
             [
@@ -82,10 +82,10 @@
                     "pigz": "2.8"
                 },
                 "GATK4_CREATEREADCOUNTPANELOFNORMALS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_PREPROCESSINTERVALS_GENS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "INTERVAL_LIST_TO_BED": {
                     "gawk": "5.3.1"

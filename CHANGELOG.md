@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#96](https://github.com/nf-core/createpanelrefs/pull/96) - Template update for nf-core/tools v4.1.0 (re-sync)
 - [#99](https://github.com/nf-core/createpanelrefs/pull/99) - Template update for nf-core/tools v4.2.1
 - [#99](https://github.com/nf-core/createpanelrefs/pull/99) - Update nft-utils to 1.2.1
+- [#100](https://github.com/nf-core/createpanelrefs/pull/100) - Update all modules
 
 ### `Fixed`
 
@@ -32,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | - samtools | 1.21        | 1.24        |
 | samtools   | 1.23.1      | 1.24        |
 | - htslib   | 1.23.1      | 1.24        |
+| gatk4      | 4.6.2.0     | 4.7.0.0     |
 
 ### `Dependencies` - Nextflow plugins
 

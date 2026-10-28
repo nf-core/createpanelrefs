@@ -35,7 +35,7 @@ workflow GENS_PON {
     else if (val_analysis_type == 'lrs') {
 
         INTERVAL_LIST_TO_BED(
-            ch_interval_list,
+            ch_interval_list.map { meta, input -> [meta, input, 'bed'] },
             [],
             [],
         )
@@ -59,13 +59,13 @@ workflow GENS_PON {
         )
 
         MOSDEPTH_GATK_HEADER(
-            SAMTOOLS_VIEW.out.sam,
+            SAMTOOLS_VIEW.out.sam.map { meta, input -> [meta, input, 'mosdepth_gatk_header.tsv'] },
             [],
             false,
         )
 
         MOSDEPTH_GATK_FORMAT(
-            MOSDEPTH.out.regions_bed,
+            MOSDEPTH.out.regions_bed.map { meta, input -> [meta, input, 'gatk_format.tsv'] },
             [],
             false,
         )
