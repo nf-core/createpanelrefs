@@ -1,0 +1,96 @@
+%%metro title: nf-core/createpanelrefs
+%%metro logo: nf-core-createpanelrefs_logo_light.png | nf-core-createpanelrefs_logo_dark.png
+%%metro style: nfcore
+%%metro line: cnvkit | CNVkit PoN | #0570b0
+%%metro line: gens | GENS PoN (short reads) | #2db572
+%%metro line: gens_lrs | GENS PoN (long reads) | #f5c542
+%%metro line: gcnv | GATK gCNV cohort models | #e63946
+%%metro line: mutect2 | Mutect2 PoN | #7b2d3b
+%%metro file: samplesheet | READS | | banner
+%%metro file: multiqc_report | HTML | | banner
+%%metro legend: bl
+%%metro grid: input | 0,0
+%%metro grid: indexing | 0,1
+%%metro grid: cnvkit_pon | 1,0
+%%metro grid: gens_pon | 1,1
+%%metro grid: gcnv_cohort | 1,2
+%%metro grid: mutect2_pon | 1,3
+%%metro grid: reporting | 2,3
+%%metro logo_scale: 0.6
+
+graph LR
+    subgraph input [Input BAM/CRAM]
+        samplesheet[ ]
+    end
+
+    subgraph indexing [Indexing]
+        %%metro entry: top | gens,gens_lrs,gcnv,mutect2
+        samtools_index[SAMtools index]
+    end
+
+    subgraph cnvkit_pon [CNVkit]
+        samtools_view_cram[SAMtools view]
+        cnvkit_batch[CNVkit batch]
+
+        samtools_view_cram -->|cnvkit| cnvkit_batch
+    end
+
+    subgraph gens_pon [GENS]
+        collectreadcounts_gens[GATK4 CollectReadCounts]
+        samtools_view_header[SAMtools view header]
+        mosdepth[mosdepth]
+        gawk[gawk GATK format]
+        concatenate[concatenate]
+        createreadcountpon[GATK4 CreateReadCountPanelOfNormals]
+
+        collectreadcounts_gens -->|gens| createreadcountpon
+        samtools_view_header -->|gens_lrs| mosdepth
+        mosdepth -->|gens_lrs| gawk
+        gawk -->|gens_lrs| concatenate
+        concatenate -->|gens_lrs| createreadcountpon
+    end
+
+    subgraph gcnv_cohort [GATK germline CNV caller]
+        preprocessintervals[GATK4 PreprocessIntervals]
+        annotateintervals[GATK4 AnnotateIntervals]
+        collectreadcounts_gcnv[GATK4 CollectReadCounts]
+        filterintervals[GATK4 FilterIntervals]
+        determineploidy[GATK4 DetermineGermlineContigPloidy]
+        germlinecnvcaller[GATK4 GermlineCNVCaller]
+
+        preprocessintervals -->|gcnv| annotateintervals
+        annotateintervals -->|gcnv| collectreadcounts_gcnv
+        collectreadcounts_gcnv -->|gcnv| filterintervals
+        filterintervals -->|gcnv| determineploidy
+        determineploidy -->|gcnv| germlinecnvcaller
+    end
+
+    subgraph mutect2_pon [Mutect2]
+        mutect2[GATK4 Mutect2]
+        mergevcfs[GATK4 MergeVcfs]
+        genomicsdbimport[GATK4 GenomicsDBImport]
+        createsomaticpon[GATK4 CreateSomaticPanelOfNormals]
+
+        mutect2 -->|mutect2| mergevcfs
+        mergevcfs -->|mutect2| genomicsdbimport
+        genomicsdbimport -->|mutect2| createsomaticpon
+    end
+
+    subgraph reporting [Reporting]
+        multiqc[MultiQC]
+        multiqc_report[ ]
+
+        multiqc -->|cnvkit,gens,gens_lrs,gcnv,mutect2| multiqc_report
+    end
+
+    %% Inter-section edges
+    samplesheet -->|gens,gens_lrs,gcnv,mutect2| samtools_index
+    samplesheet -->|cnvkit| samtools_view_cram
+    samtools_index -->|gens| collectreadcounts_gens
+    samtools_index -->|gens_lrs| samtools_view_header
+    samtools_index -->|gcnv| preprocessintervals
+    samtools_index -->|mutect2| mutect2
+    cnvkit_batch -->|cnvkit| multiqc
+    createreadcountpon -->|gens,gens_lrs| multiqc
+    germlinecnvcaller -->|gcnv| multiqc
+    createsomaticpon -->|mutect2| multiqc

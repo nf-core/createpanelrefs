@@ -30,6 +30,8 @@
 5. Build Panel of Normals for [`Mutect2`](https://genome.cshlp.org/content/20/9/1297)
 6. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
+![nf-core/createpanelrefs metro map](docs/images/metro_map.svg)
+
 ## Usage
 
 > [!NOTE]
