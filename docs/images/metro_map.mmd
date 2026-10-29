@@ -9,12 +9,14 @@
 %%metro file: samplesheet | READS | | banner
 %%metro file: multiqc_report | HTML | | banner
 %%metro legend: bl
+
+%%metro legend: bl
 %%metro grid: input | 0,0
 %%metro grid: indexing | 0,1
-%%metro grid: cnvkit_pon | 1,0
-%%metro grid: gens_pon | 1,1
-%%metro grid: gcnv_cohort | 1,2
-%%metro grid: mutect2_pon | 1,3
+%%metro grid: gens_pon | 1,0
+%%metro grid: gcnv_cohort | 1,1
+%%metro grid: mutect2_pon | 1,2
+%%metro grid: cnvkit_pon | 1,3
 %%metro grid: reporting | 2,3
 %%metro logo_scale: 0.6
 
@@ -26,13 +28,6 @@ graph LR
     subgraph indexing [Indexing]
         %%metro entry: top | gens,gens_lrs,gcnv,mutect2
         samtools_index[SAMtools index]
-    end
-
-    subgraph cnvkit_pon [CNVkit]
-        samtools_view_cram[SAMtools view]
-        cnvkit_batch[CNVkit batch]
-
-        samtools_view_cram -->|cnvkit| cnvkit_batch
     end
 
     subgraph gens_pon [GENS]
@@ -76,11 +71,18 @@ graph LR
         genomicsdbimport -->|mutect2| createsomaticpon
     end
 
+    subgraph cnvkit_pon [CNVkit]
+        samtools_view_cram[SAMtools view]
+        cnvkit_batch[CNVkit batch]
+
+        samtools_view_cram -->|cnvkit| cnvkit_batch
+    end
+
     subgraph reporting [Reporting]
         multiqc[MultiQC]
         multiqc_report[ ]
 
-        multiqc -->|cnvkit,gens,gens_lrs,gcnv,mutect2| multiqc_report
+        multiqc -->|gens,gens_lrs,gcnv,mutect2,cnvkit| multiqc_report
     end
 
     %% Inter-section edges
@@ -90,7 +92,7 @@ graph LR
     samtools_index -->|gens_lrs| samtools_view_header
     samtools_index -->|gcnv| preprocessintervals
     samtools_index -->|mutect2| mutect2
-    cnvkit_batch -->|cnvkit| multiqc
     createreadcountpon -->|gens,gens_lrs| multiqc
     germlinecnvcaller -->|gcnv| multiqc
     createsomaticpon -->|mutect2| multiqc
+    cnvkit_batch -->|cnvkit| multiqc
