@@ -21,6 +21,7 @@ class UTILS {
             "Staging foreign file",
             "Unable to resume cached task",
             "Unable to stage foreign file",
+            "Unrecognized config option 'manifest.diagram'",
         ]
 
         // stable_name: All files + folders in ${outdir}/ with a stable name

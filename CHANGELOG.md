@@ -10,6 +10,7 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 ### `Added`
 
 - [#91](https://github.com/nf-core/createpanelrefs/pull/91) - Add AGENTS.md file with nf-core agent instructions
+- [#102](https://github.com/nf-core/createpanelrefs/pull/102) - Add metro map made with nf-metro
 
 ### `Changed`
 
