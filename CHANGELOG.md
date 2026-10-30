@@ -11,6 +11,8 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 
 - [#91](https://github.com/nf-core/createpanelrefs/pull/91) - Add AGENTS.md file with nf-core agent instructions
 - [#102](https://github.com/nf-core/createpanelrefs/pull/102) - Add metro map made with nf-metro
+- [#103](https://github.com/nf-core/createpanelrefs/pull/103) - Add `--cnvkit_method` to set the CNVkit batch sequencing method
+- [#104](https://github.com/nf-core/createpanelrefs/pull/104) - Add `--cnvkit_annotate` to label CNVkit target regions with gene names
 - [#105](https://github.com/nf-core/createpanelrefs/pull/105) - Add `--gens_mosdepth_fast_mode` to toggle mosdepth `--fast-mode` for long-read GENS panels of normals
 
 ### `Changed`
@@ -31,6 +33,8 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 
 | Params                    | Status |
 | ------------------------- | ------ |
+| `cnvkit_annotate`         | New    |
+| `cnvkit_method`           | New    |
 | `gens_mosdepth_fast_mode` | New    |
 
 ### `Dependencies` - modules

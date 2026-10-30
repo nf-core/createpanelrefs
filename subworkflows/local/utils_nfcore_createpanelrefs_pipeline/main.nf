@@ -39,7 +39,10 @@ workflow PIPELINE_INITIALISATION {
     help_full // boolean: Show the full help message
     show_hidden // boolean: Show hidden parameters in the help message
     tools
+    cnvkit_annotate
+    cnvkit_method
     cnvkit_pon_name
+    cnvkit_targets
     gcnv_model_name
     gens_pon_name
     mutect2_pon_name
@@ -155,7 +158,10 @@ workflow PIPELINE_INITIALISATION {
     validateInputParameters(
         genome,
         genomes,
+        cnvkit_annotate,
+        cnvkit_method,
         cnvkit_pon_name,
+        cnvkit_targets,
         gcnv_model_name,
         gens_pon_name,
         mutect2_pon_name,
@@ -223,8 +229,14 @@ workflow PIPELINE_COMPLETION {
 //
 // Check and validate pipeline parameters
 //
-def validateInputParameters(genome, genomes, cnvkit_pon_name, gcnv_model_name, gens_pon_name, mutect2_pon_name, tools) {
+def validateInputParameters(genome, genomes, cnvkit_annotate, cnvkit_method, cnvkit_pon_name, cnvkit_targets, gcnv_model_name, gens_pon_name, mutect2_pon_name, tools) {
     genomeExistsError(genome, genomes)
+    if ('cnvkit' in tools && cnvkit_annotate && !cnvkit_targets) {
+        error("--cnvkit_annotate requires --cnvkit_targets.")
+    }
+    if ('cnvkit' in tools && cnvkit_method != 'wgs' && !cnvkit_targets) {
+        error("--cnvkit_method ${cnvkit_method} requires --cnvkit_targets.")
+    }
     checkPonName(
         tools,
         [
