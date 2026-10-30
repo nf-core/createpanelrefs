@@ -116,6 +116,10 @@ Both `hybrid` and `amplicon` require `--cnvkit_targets` as a BED file of the tar
 nextflow run nf-core/createpanelrefs --input ./samplesheet.csv --outdir ./results --genome GRCh38 -profile docker --tools cnvkit --cnvkit_method hybrid --cnvkit_targets targets.bed
 ```
 
+To label the target regions with gene names, provide a gene annotation file with `--cnvkit_annotate`.
+CNVkit accepts UCSC `refFlat.txt` or `ensFlat.txt` (preferred), BED, interval list or GFF/GTF files.
+`--cnvkit_annotate` requires `--cnvkit_targets`.
+
 ### gens
 
 If you are running the pipeline to generate references for the GENS workflow, you should ensure that you have provided all the mandatory options specified in the table below.
