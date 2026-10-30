@@ -1,4 +1,22 @@
 {
+    "-profile test --tools cnvkit --cnvkit_annotate chr21_gencode.gtf": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            "No warnings",
+            [
+                "--cnvkit_annotate requires --cnvkit_targets."
+            ]
+        ],
+        "timestamp": "2026-10-30T11:46:03.85784004",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
+    },
     "-profile test --tools cnvkit --input tests/csv/1.0.0/bam_cram.csv": {
         "content": [
             4,
@@ -64,6 +82,59 @@
             "nextflow": "26.04.6"
         }
     },
+    "-profile test --tools cnvkit --cnvkit_method hybrid --cnvkit_targets multi_intervals.bed": {
+        "content": [
+            2,
+            {
+                "CNVKIT_BATCH": {
+                    "cnvkit": "0.9.14",
+                    "samtools": "1.24"
+                }
+            },
+            [
+                "cnvkit",
+                "cnvkit/cnvkit.cnn",
+                "cnvkit/test.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
+                "cnvkit/test.paired_end.recalibrated.sorted.targetcoverage.cnn",
+                "cnvkit/test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
+                "cnvkit/test2.paired_end.recalibrated.sorted.targetcoverage.cnn",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/cnvkit",
+                "references/cnvkit/multi_intervals.antitarget.bed",
+                "references/cnvkit/multi_intervals.target.bed",
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
+            ],
+            "No VCF files",
+            [
+                "cnvkit.cnn:md5,ba6f88c15320ac3bf0a85e0b08febfc9",
+                "test.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,fe1248aa91fad7769303bb4c031d55ca",
+                "test.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,36ca0c991a9dc52a6e7bea3d69412f21",
+                "test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,067115082c4af4b64d58c0dc3a3642e4",
+                "test2.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,7904eff78e7b9518e7de97c9016470aa",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            [
+                "WARN: --cnvkit_pon_name is set to the default value 'cnvkit'."
+            ]
+        ],
+        "timestamp": "2026-10-30T11:22:11.717274107",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
+    },
     "-profile test --tools cnvkit --cnvkit_pon_name null": {
         "content": [
             [
@@ -81,6 +152,80 @@
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
+        }
+    },
+    "-profile test --tools cnvkit --cnvkit_targets multi_intervals.bed --cnvkit_annotate chr21_gencode.gtf": {
+        "content": [
+            3,
+            {
+                "CNVKIT_BATCH": {
+                    "cnvkit": "0.9.14",
+                    "samtools": "1.24"
+                },
+                "CNVKIT_TARGET": {
+                    "cnvkit": "0.9.14"
+                }
+            },
+            [
+                "cnvkit",
+                "cnvkit/cnvkit.cnn",
+                "cnvkit/test.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
+                "cnvkit/test.paired_end.recalibrated.sorted.targetcoverage.cnn",
+                "cnvkit/test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn",
+                "cnvkit/test2.paired_end.recalibrated.sorted.targetcoverage.cnn",
+                "pipeline_info",
+                "pipeline_info/nf_core_createpanelrefs_software_mqc_versions.yml",
+                "references",
+                "references/cnvkit",
+                "references/cnvkit/genome.antitarget.bed",
+                "references/cnvkit/genome.target.bed",
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
+            ],
+            "No VCF files",
+            [
+                "cnvkit.cnn:md5,7c21cb145110a89ce0958f79933c44ae",
+                "test.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "test.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,bd1c3ecc6e11e796a6ec7b877acb0e06",
+                "test2.paired_end.recalibrated.sorted.antitargetcoverage.cnn:md5,203caf8cef6935bb50b4138097955cb8",
+                "test2.paired_end.recalibrated.sorted.targetcoverage.cnn:md5,2b76ef369534eef50a6271ef7f8ee6d7",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            [
+                "WARN: --cnvkit_pon_name is set to the default value 'cnvkit'."
+            ]
+        ],
+        "timestamp": "2026-10-30T11:45:56.039093024",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
+    },
+    "-profile test --tools cnvkit --cnvkit_method hybrid": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            "No warnings",
+            [
+                "--cnvkit_method hybrid requires --cnvkit_targets."
+            ]
+        ],
+        "timestamp": "2026-10-30T11:22:18.823549351",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     }
 }

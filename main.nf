@@ -69,7 +69,10 @@ workflow {
         params.help_full,
         params.show_hidden,
         tools,
+        params.cnvkit_annotate,
+        params.cnvkit_method,
         params.cnvkit_pon_name,
+        params.cnvkit_targets,
         params.gcnv_model_name,
         params.gens_pon_name,
         params.mutect2_pon_name,
@@ -79,6 +82,7 @@ workflow {
 
     PREPARE_GENOME(
         tools,
+        params.cnvkit_annotate,
         params.cnvkit_targets,
         params.dict,
         params.fai,

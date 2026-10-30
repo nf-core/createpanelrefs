@@ -107,40 +107,43 @@ To further assist in reproducibility, you can use share and reuse [parameter fil
 
 ### cnvkit
 
-If you are running the pipeline to generate references for the CNVkit variant calling workflow, you should consider that currently the default method for this pipeline is whole-genome. In order to use the CNVkit default, i.e. hybrid capture, when the user is creating a background for targeted capture sequencing (most commonly, exomes or panels), the user should
+The CNVkit sequencing method is set with `--cnvkit_method` and defaults to `wgs` (whole-genome sequencing).
+For targeted capture sequencing (most commonly, exomes or panels), use `--cnvkit_method hybrid`.
+For targeted amplicon sequencing, use `--cnvkit_method amplicon`.
+Both `hybrid` and `amplicon` require `--cnvkit_targets` as a BED file of the targeted regions.
 
-1. provide an additional config file, in order to change or remove the method specified in the default `ext.args`, i.e.
-
-```
-process {
-
-    withName: CNVKIT_BATCH {
-        ext.args   = {"--output-reference ${meta.id}.cnn"}
-    }
-
-}
+```bash
+nextflow run nf-core/createpanelrefs --input ./samplesheet.csv --outdir ./results --genome GRCh38 -profile docker --tools cnvkit --cnvkit_method hybrid --cnvkit_targets targets.bed
 ```
 
-2. provide the `--cnvkit_target` parameter (optional) as a .bed file for the targets
+To label the target regions with gene names, provide a gene annotation file with `--cnvkit_annotate`.
+CNVkit accepts UCSC `refFlat.txt` or `ensFlat.txt` (preferred), BED, interval list or GFF/GTF files.
+`--cnvkit_annotate` requires `--cnvkit_targets`.
 
 ### gens
 
 If you are running the pipeline to generate references for the GENS workflow, you should ensure that you have provided all the mandatory options specified in the table below.
 
-| Mandatory     | Optional              |
-| ------------- | --------------------- |
-| fasta/genomes | fai                   |
-|               | dict                  |
-|               | gens_analysis_type    |
-|               | gens_bin_length       |
-|               | gens_pon_name         |
-|               | gens_readcount_format |
-|               | gens_interval_list    |
+| Mandatory     | Optional                |
+| ------------- | ----------------------- |
+| fasta/genomes | fai                     |
+|               | dict                    |
+|               | gens_analysis_type      |
+|               | gens_bin_length         |
+|               | gens_pon_name           |
+|               | gens_readcount_format   |
+|               | gens_interval_list      |
+|               | gens_mosdepth_fast_mode |
 
 The GENS workflow creates a panel of normals for read-count denoising from normal samples. This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection. For more information, see the [GENS documentation](https://github.com/Clinical-Genomics-Lund/gens).
 
 > [!NOTE]
 > If `--gens_analysis_type` is set to 'lrs', this requires the sample ID set in the samplesheet to be equal to the `SM` tag in the BAM-file.
+
+With `--gens_analysis_type lrs`, coverage is computed with mosdepth using `--fast-mode` by default.
+`--fast-mode` skips internal CIGAR operations and mate-overlap correction, and overestimates coverage over deletions.
+Set `--gens_mosdepth_fast_mode false` to disable it.
+Use the same setting as for the coverage of the case samples (nf-core/nallo uses `--fast-mode`), so that the bias cancels out during denoising.
 
 ### germlinecnvcaller
 
