@@ -11,6 +11,7 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 
 - [#91](https://github.com/nf-core/createpanelrefs/pull/91) - Add AGENTS.md file with nf-core agent instructions
 - [#102](https://github.com/nf-core/createpanelrefs/pull/102) - Add metro map made with nf-metro
+- [#105](https://github.com/nf-core/createpanelrefs/pull/105) - Add `--gens_mosdepth_fast_mode` to toggle mosdepth `--fast-mode` for long-read GENS panels of normals
 
 ### `Changed`
 
@@ -27,6 +28,10 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 ### `Fixed`
 
 ### `Parameters`
+
+| Params                    | Status |
+| ------------------------- | ------ |
+| `gens_mosdepth_fast_mode` | New    |
 
 ### `Dependencies` - modules
 

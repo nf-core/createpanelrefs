@@ -245,6 +245,13 @@
                     "description": "Minimum interval median percentile for gatk CreateReadCountPanelOfNormals",
                     "help_text": "Genomic intervals with a median (across samples) of fractional coverage (optionally corrected for GC bias) less than or equal to this percentile are filtered out. (This is the first filter applied.)"
                 },
+                "gens_mosdepth_fast_mode": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Run mosdepth with `--fast-mode` when computing long-read coverage ('lrs').",
+                    "fa_icon": "fas fa-tachometer-alt",
+                    "help_text": "`--fast-mode` skips internal CIGAR operations and mate-overlap correction, which overestimates coverage over deletions. Keep the same setting as the coverage of the case samples, for example `--fast-mode` in nf-core/nallo, so that the bias cancels out during denoising."
+                },
                 "gens_pon_name": {
                     "type": "string",
                     "description": "Name for panel of normals.",
