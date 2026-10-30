@@ -68,11 +68,9 @@ graph LR
     end
 
     subgraph cnvkit_pon [CNVkit]
-        cnvkit_target[CNVkit target]
         samtools_view_cram[SAMtools view]
         cnvkit_batch[CNVkit batch]
 
-        cnvkit_target -->|cnvkit| cnvkit_batch
         samtools_view_cram -->|cnvkit| cnvkit_batch
     end
 
