@@ -4,9 +4,9 @@
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS
+IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+ */
 
 include { checkCondaChannels   } from 'plugin/nf-core-utils'
 include { checkConfigProvided  } from 'plugin/nf-core-utils'
@@ -23,9 +23,9 @@ include { validateParameters   } from 'plugin/nf-schema'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    SUBWORKFLOW TO INITIALISE PIPELINE
+SUBWORKFLOW TO INITIALISE PIPELINE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+ */
 
 workflow PIPELINE_INITIALISATION {
     take:
@@ -173,9 +173,9 @@ workflow PIPELINE_INITIALISATION {
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    SUBWORKFLOW FOR PIPELINE COMPLETION
+SUBWORKFLOW FOR PIPELINE COMPLETION
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+ */
 
 workflow PIPELINE_COMPLETION {
     take:
@@ -216,9 +216,9 @@ workflow PIPELINE_COMPLETION {
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    FUNCTIONS
+FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+ */
 
 //
 // Check and validate pipeline parameters
