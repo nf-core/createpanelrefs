@@ -107,21 +107,14 @@ To further assist in reproducibility, you can use share and reuse [parameter fil
 
 ### cnvkit
 
-If you are running the pipeline to generate references for the CNVkit variant calling workflow, you should consider that currently the default method for this pipeline is whole-genome. In order to use the CNVkit default, i.e. hybrid capture, when the user is creating a background for targeted capture sequencing (most commonly, exomes or panels), the user should
+The CNVkit sequencing method is set with `--cnvkit_method` and defaults to `wgs` (whole-genome sequencing).
+For targeted capture sequencing (most commonly, exomes or panels), use `--cnvkit_method hybrid`.
+For targeted amplicon sequencing, use `--cnvkit_method amplicon`.
+Both `hybrid` and `amplicon` require `--cnvkit_targets` as a BED file of the targeted regions.
 
-1. provide an additional config file, in order to change or remove the method specified in the default `ext.args`, i.e.
-
+```bash
+nextflow run nf-core/createpanelrefs --input ./samplesheet.csv --outdir ./results --genome GRCh38 -profile docker --tools cnvkit --cnvkit_method hybrid --cnvkit_targets targets.bed
 ```
-process {
-
-    withName: CNVKIT_BATCH {
-        ext.args   = {"--output-reference ${meta.id}.cnn"}
-    }
-
-}
-```
-
-2. provide the `--cnvkit_target` parameter (optional) as a .bed file for the targets
 
 ### gens
 

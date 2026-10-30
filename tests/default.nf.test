@@ -16,13 +16,31 @@ nextflow_pipeline {
             ],
         ],
         [
+            name: "-profile test --tools cnvkit --cnvkit_method hybrid --cnvkit_targets multi_intervals.bed",
+            params: [
+                cnvkit_method: 'hybrid',
+                cnvkit_targets: 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/chr21/sequence/multi_intervals.bed',
+                tools: 'cnvkit',
+            ],
+        ],
+        [
+            name: "-profile test --tools cnvkit --cnvkit_method hybrid",
+            params: [
+                cnvkit_method: 'hybrid',
+                tools: 'cnvkit',
+            ],
+            failure: true,
+            snapshot: 'stdout,stderr',
+            snapshot_include: 'cnvkit_targets',
+        ],
+        [
             name: "-profile test --tools cnvkit --cnvkit_pon_name null",
             params: [
                 cnvkit_pon_name: null,
                 tools: 'cnvkit',
             ],
             failure: true,
-            snapshot: 'stdout',
+            snapshot: 'stdout,stderr',
             snapshot_include: 'cnvkit_pon_name',
         ],
     ]
