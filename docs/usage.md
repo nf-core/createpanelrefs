@@ -124,20 +124,26 @@ CNVkit accepts UCSC `refFlat.txt` or `ensFlat.txt` (preferred), BED, interval li
 
 If you are running the pipeline to generate references for the GENS workflow, you should ensure that you have provided all the mandatory options specified in the table below.
 
-| Mandatory     | Optional              |
-| ------------- | --------------------- |
-| fasta/genomes | fai                   |
-|               | dict                  |
-|               | gens_analysis_type    |
-|               | gens_bin_length       |
-|               | gens_pon_name         |
-|               | gens_readcount_format |
-|               | gens_interval_list    |
+| Mandatory     | Optional                |
+| ------------- | ----------------------- |
+| fasta/genomes | fai                     |
+|               | dict                    |
+|               | gens_analysis_type      |
+|               | gens_bin_length         |
+|               | gens_pon_name           |
+|               | gens_readcount_format   |
+|               | gens_interval_list      |
+|               | gens_mosdepth_fast_mode |
 
 The GENS workflow creates a panel of normals for read-count denoising from normal samples. This panel can be used with GENS for somatic variant calling to reduce technical noise and improve variant detection. For more information, see the [GENS documentation](https://github.com/Clinical-Genomics-Lund/gens).
 
 > [!NOTE]
 > If `--gens_analysis_type` is set to 'lrs', this requires the sample ID set in the samplesheet to be equal to the `SM` tag in the BAM-file.
+
+With `--gens_analysis_type lrs`, coverage is computed with mosdepth using `--fast-mode` by default.
+`--fast-mode` skips internal CIGAR operations and mate-overlap correction, and overestimates coverage over deletions.
+Set `--gens_mosdepth_fast_mode false` to disable it.
+Use the same setting as for the coverage of the case samples (nf-core/nallo uses `--fast-mode`), so that the bias cancels out during denoising.
 
 ### germlinecnvcaller
 
