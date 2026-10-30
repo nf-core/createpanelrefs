@@ -201,6 +201,14 @@
             "description": "Options used by the cnvkit subworkflow",
             "default": "",
             "properties": {
+                "cnvkit_method": {
+                    "type": "string",
+                    "description": "Sequencing method used by CNVkit batch.",
+                    "help_text": "Use `hybrid` for hybrid capture (exomes and panels), `amplicon` for targeted amplicon sequencing and `wgs` for whole-genome sequencing. `hybrid` and `amplicon` require `--cnvkit_targets`.",
+                    "fa_icon": "fas fa-dna",
+                    "enum": ["hybrid", "amplicon", "wgs"],
+                    "default": "wgs"
+                },
                 "cnvkit_pon_name": {
                     "type": "string",
                     "description": "Name for panel of normals.",
