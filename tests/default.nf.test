@@ -16,6 +16,24 @@ nextflow_pipeline {
             ],
         ],
         [
+            name: "-profile test --tools cnvkit --cnvkit_targets multi_intervals.bed --cnvkit_annotate chr21_gencode.gtf",
+            params: [
+                cnvkit_annotate: 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/chr21/sequence/chr21_gencode.gtf',
+                cnvkit_targets: 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/chr21/sequence/multi_intervals.bed',
+                tools: 'cnvkit',
+            ],
+        ],
+        [
+            name: "-profile test --tools cnvkit --cnvkit_annotate chr21_gencode.gtf",
+            params: [
+                cnvkit_annotate: 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/chr21/sequence/chr21_gencode.gtf',
+                tools: 'cnvkit',
+            ],
+            failure: true,
+            snapshot: 'stdout',
+            snapshot_include: 'cnvkit_targets',
+        ],
+        [
             name: "-profile test --tools cnvkit --cnvkit_pon_name null",
             params: [
                 cnvkit_pon_name: null,

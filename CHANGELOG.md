@@ -11,6 +11,7 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 
 - [#91](https://github.com/nf-core/createpanelrefs/pull/91) - Add AGENTS.md file with nf-core agent instructions
 - [#102](https://github.com/nf-core/createpanelrefs/pull/102) - Add metro map made with nf-metro
+- [#104](https://github.com/nf-core/createpanelrefs/pull/104) - Add `--cnvkit_annotate` to label CNVkit target regions with gene names
 
 ### `Changed`
 
@@ -27,6 +28,10 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 ### `Fixed`
 
 ### `Parameters`
+
+| Params            | Status |
+| ----------------- | ------ |
+| `cnvkit_annotate` | New    |
 
 ### `Dependencies` - modules
 

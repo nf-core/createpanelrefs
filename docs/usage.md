@@ -123,6 +123,10 @@ process {
 
 2. provide the `--cnvkit_target` parameter (optional) as a .bed file for the targets
 
+To label the target regions with gene names, provide a gene annotation file with `--cnvkit_annotate`.
+CNVkit accepts UCSC `refFlat.txt` or `ensFlat.txt` (preferred), BED, interval list or GFF/GTF files.
+`--cnvkit_annotate` requires `--cnvkit_targets`.
+
 ### gens
 
 If you are running the pipeline to generate references for the GENS workflow, you should ensure that you have provided all the mandatory options specified in the table below.
