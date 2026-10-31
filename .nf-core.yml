@@ -8,7 +8,9 @@ lint:
     - .github/workflows/linting.yml
   modules_config: false
   nf_test_content: false
-nf_core_version: 4.0.2
+  skip_features:
+    - fastqc
+nf_core_version: 4.2.1
 repository_type: pipeline
 template:
   author: "@maxulysse"
@@ -18,4 +20,4 @@ template:
   name: createpanelrefs
   org: nf-core
   outdir: .
-  version: 1.0.0
+  version: 1.1.0

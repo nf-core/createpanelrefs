@@ -22,7 +22,7 @@ nextflow_workflow {
                     [],
                     []
                 ])
-                input[1] = 'mutect2'
+                input[1] = ['mutect2']
                 """
             }
         }
@@ -49,7 +49,7 @@ nextflow_workflow {
                     file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
                     []
                 ])
-                input[1] = 'mutect2'
+                input[1] = ['mutect2']
                 """
             }
         }
@@ -85,7 +85,7 @@ nextflow_workflow {
                         file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram.crai', checkIfExists: true)
                     ]
                 )
-                input[1] = 'mutect2'
+                input[1] = ['mutect2']
                 """
             }
         }

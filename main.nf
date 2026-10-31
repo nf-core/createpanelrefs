@@ -1,19 +1,19 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/createpanelrefs
+nf-core/createpanelrefs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/createpanelrefs
-    Website: https://nf-co.re/createpanelrefs
-    Slack  : https://nfcore.slack.com/channels/createpanelrefs
+Github : https://github.com/nf-core/createpanelrefs
+Website: https://nf-co.re/createpanelrefs
+Slack  : https://nfcore.slack.com/channels/createpanelrefs
 ----------------------------------------------------------------------------------------
-*/
+ */
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
+IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+ */
 
 include { CREATEPANELREFS         } from './workflows/createpanelrefs'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
@@ -28,9 +28,9 @@ include { softwareVersionsToYAML  } from 'plugin/nf-core-utils'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    GENOME PARAMETER VALUES
+GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+ */
 
 params.dict                        = getGenomeAttribute('dict')
 params.fai                         = getGenomeAttribute('fai')
@@ -47,10 +47,9 @@ params.mutect2_target_bed          = getGenomeAttribute('mutect2_target_bed')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    RUN MAIN WORKFLOW
+RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+ */
 
 workflow {
 
@@ -70,7 +69,10 @@ workflow {
         params.help_full,
         params.show_hidden,
         tools,
+        params.cnvkit_annotate,
+        params.cnvkit_method,
         params.cnvkit_pon_name,
+        params.cnvkit_targets,
         params.gcnv_model_name,
         params.gens_pon_name,
         params.mutect2_pon_name,
@@ -80,6 +82,7 @@ workflow {
 
     PREPARE_GENOME(
         tools,
+        params.cnvkit_annotate,
         params.cnvkit_targets,
         params.dict,
         params.fai,
@@ -263,9 +266,9 @@ output {
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOWS FOR PIPELINE
+NAMED WORKFLOWS FOR PIPELINE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+ */
 
 // WORKFLOW: Run main analysis pipeline depending on type of input
 workflow NFCORE_CREATEPANELREFS {
@@ -355,12 +358,12 @@ def paramsSummaryMultiqc(summary_params) {
         }
 
     def yaml_file_text = "id: '${workflow.manifest.name.replace('/', '-')}-summary'\n" as String
-    yaml_file_text     += "description: ' - this information is collected when the pipeline is started.'\n"
-    yaml_file_text     += "section_name: '${workflow.manifest.name} Workflow Summary'\n"
-    yaml_file_text     += "section_href: 'https://github.com/${workflow.manifest.name}'\n"
-    yaml_file_text     += "plot_type: 'html'\n"
-    yaml_file_text     += "data: |\n"
-    yaml_file_text     += "${summary_section}"
+    yaml_file_text += "description: ' - this information is collected when the pipeline is started.'\n"
+    yaml_file_text += "section_name: '${workflow.manifest.name} Workflow Summary'\n"
+    yaml_file_text += "section_href: 'https://github.com/${workflow.manifest.name}'\n"
+    yaml_file_text += "plot_type: 'html'\n"
+    yaml_file_text += "data: |\n"
+    yaml_file_text += "${summary_section}"
 
     return yaml_file_text
 }

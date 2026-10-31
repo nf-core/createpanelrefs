@@ -201,6 +201,21 @@
             "description": "Options used by the cnvkit subworkflow",
             "default": "",
             "properties": {
+                "cnvkit_annotate": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to a gene annotation file used to label the CNVkit target regions.",
+                    "help_text": "UCSC refFlat.txt or ensFlat.txt (preferred), BED, interval list or GFF/GTF file. Gene names are added to the target regions with `cnvkit.py target --annotate`. Requires `--cnvkit_targets`."
+                },
+                "cnvkit_method": {
+                    "type": "string",
+                    "description": "Sequencing method used by CNVkit batch.",
+                    "help_text": "Use `hybrid` for hybrid capture (exomes and panels), `amplicon` for targeted amplicon sequencing and `wgs` for whole-genome sequencing. `hybrid` and `amplicon` require `--cnvkit_targets`.",
+                    "fa_icon": "fas fa-dna",
+                    "enum": ["hybrid", "amplicon", "wgs"],
+                    "default": "wgs"
+                },
                 "cnvkit_pon_name": {
                     "type": "string",
                     "description": "Name for panel of normals.",
@@ -244,6 +259,13 @@
                     "default": 5,
                     "description": "Minimum interval median percentile for gatk CreateReadCountPanelOfNormals",
                     "help_text": "Genomic intervals with a median (across samples) of fractional coverage (optionally corrected for GC bias) less than or equal to this percentile are filtered out. (This is the first filter applied.)"
+                },
+                "gens_mosdepth_fast_mode": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Run mosdepth with `--fast-mode` when computing long-read coverage ('lrs').",
+                    "fa_icon": "fas fa-tachometer-alt",
+                    "help_text": "`--fast-mode` skips internal CIGAR operations and mate-overlap correction, which overestimates coverage over deletions. Keep the same setting as the coverage of the case samples, for example `--fast-mode` in nf-core/nallo, so that the bias cancels out during denoising."
                 },
                 "gens_pon_name": {
                     "type": "string",
@@ -467,7 +489,7 @@
                 },
                 "trace_report_suffix": {
                     "type": "string",
-                    "fa_icon": "far calendar",
+                    "fa_icon": "far fa-calendar",
                     "description": "Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.",
                     "hidden": true
                 },
