@@ -26,6 +26,7 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 - [#99](https://github.com/nf-core/createpanelrefs/pull/99) - Update nft-utils to 1.2.1
 - [#100](https://github.com/nf-core/createpanelrefs/pull/100) - Update all modules
 - [#101](https://github.com/nf-core/createpanelrefs/pull/101) - Prepare release 1.1.0
+- [#106](https://github.com/nf-core/createpanelrefs/pull/106) - Format pipeline Nextflow code and configs with `nextflow lint -format -harshil-alignment`
 
 ### `Fixed`
 
