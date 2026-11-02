@@ -27,8 +27,11 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 - [#100](https://github.com/nf-core/createpanelrefs/pull/100) - Update all modules
 - [#101](https://github.com/nf-core/createpanelrefs/pull/101) - Prepare release 1.1.0
 - [#106](https://github.com/nf-core/createpanelrefs/pull/106) - Format pipeline Nextflow code and configs with `nextflow lint -format -harshil-alignment`
+- [#107](https://github.com/nf-core/createpanelrefs/pull/107) - Update nf-core-utils to 0.7.0, use `paramsSummaryMultiqc`, `methodsDescriptionText` and `citationsOnTheFly` from the plugin, build tool citations from module `meta.yml`, patch module `meta.yml` files with `publication` blocks (`cnvkit`, `gatk4`, `mosdepth`, `multiqc`, `samtools`) and missing tool entries (`gzip` entry, `pigz` homepage)
 
 ### `Fixed`
+
+- [#107](https://github.com/nf-core/createpanelrefs/pull/107) - Pin nf-schema in the AWS full test Platform config, so the injected `plugins` block does not load nf-schema 3.x
 
 ### `Parameters`
 
@@ -50,6 +53,10 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 | gatk4      | 4.6.2.0     | 4.7.0.0     |
 
 ### `Dependencies` - Nextflow plugins
+
+| Dependency    | Old version | New version |
+| ------------- | ----------- | ----------- |
+| nf-core-utils | 0.5.0       | 0.7.0       |
 
 ### `Deprecated`
 

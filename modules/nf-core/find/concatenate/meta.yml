@@ -23,6 +23,7 @@ tools:
       licence:
         - "other"
       identifier: ""
+      homepage: https://zlib.net/pigz/
 input:
   - - meta:
         type: map

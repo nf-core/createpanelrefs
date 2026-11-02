@@ -1,0 +1,28 @@
+Changes in component 'nf-core/cnvkit/target'
+Changes in 'cnvkit/target/meta.yml':
+--- modules/nf-core/cnvkit/target/meta.yml
++++ modules/nf-core/cnvkit/target/meta.yml
+@@ -13,10 +13,15 @@
+       homepage: https://cnvkit.readthedocs.io/en/stable/index.html
+       documentation: https://cnvkit.readthedocs.io/en/stable/index.html
+       tool_dev_url: "https://github.com/etal/cnvkit"
+-      doi: 10.1371/journal.pcbi.1004873
+       licence:
+         - "Apache-2.0"
+       identifier: biotools:cnvkit
++      doi: "10.1371/journal.pcbi.1004873"
++      publication:
++        author: "Talevich E., Shain A.H., Botton T. & Bastian B.C."
++        year: 2016
++        title: "CNVkit: genome-wide copy number detection and visualization from targeted DNA sequencing"
++        source: "PLoS Computational Biology"
+ input:
+   - - meta:
+         type: map
+
+'modules/nf-core/cnvkit/target/environment.yml' is unchanged
+'modules/nf-core/cnvkit/target/main.nf' is unchanged
+'modules/nf-core/cnvkit/target/.conda-lock/linux_amd64-bd-288e98d6210b7304_1.txt' is unchanged
+'modules/nf-core/cnvkit/target/tests/main.nf.test' is unchanged
+'modules/nf-core/cnvkit/target/tests/main.nf.test.snap' is unchanged
+************************************************************

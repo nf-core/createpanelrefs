@@ -22,8 +22,10 @@ include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
 include { MULTIQC                 } from './modules/nf-core/multiqc'
 include { defineToolsList         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { paramsSummaryMap        } from 'plugin/nf-schema'
-include { methodsDescriptionText  } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
+include { citationsOnTheFly       } from 'plugin/nf-core-utils'
 include { getGenomeAttribute      } from 'plugin/nf-core-utils'
+include { methodsDescriptionText  } from 'plugin/nf-core-utils'
+include { paramsSummaryMultiqc    } from 'plugin/nf-core-utils'
 include { softwareVersionsToYAML  } from 'plugin/nf-core-utils'
 
 /*
@@ -151,7 +153,19 @@ workflow {
     def summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
     def workflow_summary = channel.value(paramsSummaryMultiqc(summary_params))
     def multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
-    def methods_description = channel.value(methodsDescriptionText(multiqc_custom_methods_description))
+    // MultiQC runs after this collect, so its version never reaches the topic
+    def methods_description = channel.topic("versions")
+        .collect(flat: false)
+        .map { versions ->
+            methodsDescriptionText(
+                multiqc_custom_methods_description.toString(),
+                citationsOnTheFly(
+                    versions,
+                    files("${projectDir}/modules/**/meta.yml").collect { path -> path.toString() },
+                    ['multiqc'],
+                ),
+            )
+        }
 
     multiqc_files = multiqc_files.mix(workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     multiqc_files = multiqc_files.mix(methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
@@ -335,35 +349,4 @@ workflow NFCORE_CREATEPANELREFS {
     germlinecnvcaller_cnv          = CREATEPANELREFS.out.germlinecnvcaller_cnv
     germlinecnvcaller_ploidy_model = CREATEPANELREFS.out.germlinecnvcaller_ploidy_model
     germlinecnvcaller_read_counts  = CREATEPANELREFS.out.germlinecnvcaller_read_counts
-}
-
-// Get workflow summary for MultiQC
-def paramsSummaryMultiqc(summary_params) {
-    def summary_section = ''
-    summary_params
-        .keySet()
-        .each { group ->
-            def group_params = summary_params.get(group)
-            if (group_params) {
-                summary_section += "    <p style=\"font-size:110%\"><b>${group}</b></p>\n"
-                summary_section += "    <dl class=\"dl-horizontal\">\n"
-                group_params
-                    .keySet()
-                    .sort()
-                    .each { param ->
-                        summary_section += "        <dt>${param}</dt><dd><samp>${group_params.get(param) ?: '<span style=\"color:#999999;\">N/A</a>'}</samp></dd>\n"
-                    }
-                summary_section += "    </dl>\n"
-            }
-        }
-
-    def yaml_file_text = "id: '${workflow.manifest.name.replace('/', '-')}-summary'\n" as String
-    yaml_file_text += "description: ' - this information is collected when the pipeline is started.'\n"
-    yaml_file_text += "section_name: '${workflow.manifest.name} Workflow Summary'\n"
-    yaml_file_text += "section_href: 'https://github.com/${workflow.manifest.name}'\n"
-    yaml_file_text += "plot_type: 'html'\n"
-    yaml_file_text += "data: |\n"
-    yaml_file_text += "${summary_section}"
-
-    return yaml_file_text
 }

@@ -1,0 +1,29 @@
+Changes in component 'nf-core/samtools/view'
+Changes in 'samtools/view/meta.yml':
+--- modules/nf-core/samtools/view/meta.yml
++++ modules/nf-core/samtools/view/meta.yml
+@@ -13,9 +13,14 @@
+         These files are generated as output by short read aligners like BWA.
+       homepage: http://www.htslib.org/
+       documentation: http://www.htslib.org/doc/samtools.html
+-      doi: 10.1093/bioinformatics/btp352
+       licence: ["MIT"]
+       identifier: biotools:samtools
++      doi: "10.1093/bioinformatics/btp352"
++      publication:
++        author: "Li H., Handsaker B., Wysoker A., Fennell T., Ruan J., Homer N., Marth G., Abecasis G., Durbin R. & 1000 Genome Project Data Processing Subgroup"
++        year: 2009
++        title: "The Sequence Alignment/Map format and SAMtools"
++        source: "Bioinformatics"
+ input:
+   - - meta:
+         type: map
+
+'modules/nf-core/samtools/view/environment.yml' is unchanged
+'modules/nf-core/samtools/view/main.nf' is unchanged
+'modules/nf-core/samtools/view/.conda-lock/linux_amd64-bd-8a3ddf262165ba23_1.txt' is unchanged
+'modules/nf-core/samtools/view/.conda-lock/linux_arm64-bd-4003425f22200067_1.txt' is unchanged
+'modules/nf-core/samtools/view/tests/main.nf.test' is unchanged
+'modules/nf-core/samtools/view/tests/nextflow.config' is unchanged
+'modules/nf-core/samtools/view/tests/main.nf.test.snap' is unchanged
+************************************************************

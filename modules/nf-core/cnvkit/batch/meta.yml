@@ -14,6 +14,12 @@ tools:
       licence:
         - "Apache-2.0"
       identifier: biotools:cnvkit
+      doi: "10.1371/journal.pcbi.1004873"
+      publication:
+        author: "Talevich E., Shain A.H., Botton T. & Bastian B.C."
+        year: 2016
+        title: "CNVkit: genome-wide copy number detection and visualization from targeted DNA sequencing"
+        source: "PLoS Computational Biology"
 input:
   - - meta:
         type: map
