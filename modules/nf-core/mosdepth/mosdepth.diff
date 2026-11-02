@@ -2,10 +2,20 @@ Changes in component 'nf-core/mosdepth'
 Changes in 'mosdepth/meta.yml':
 --- modules/nf-core/mosdepth/meta.yml
 +++ modules/nf-core/mosdepth/meta.yml
-@@ -14,6 +14,13 @@
+@@ -10,10 +10,22 @@
+       description: |
+         Fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing.
+       documentation: https://github.com/brentp/mosdepth
+-      doi: 10.1093/bioinformatics/btx699
        licence:
          - "MIT"
        identifier: biotools:mosdepth
++      doi: "10.1093/bioinformatics/btx699"
++      publication:
++        author: "Pedersen B.S. & Quinlan A.R."
++        year: 2018
++        title: "Mosdepth: quick coverage calculation for genomes and exomes"
++        source: "Bioinformatics"
 +  - gzip:
 +      description: GNU gzip compresses and decompresses files
 +      homepage: https://www.gnu.org/software/gzip/
@@ -20,16 +30,6 @@ Changes in 'mosdepth/meta.yml':
 'modules/nf-core/mosdepth/environment.yml' is unchanged
 'modules/nf-core/mosdepth/main.nf' is unchanged
 'modules/nf-core/mosdepth/tests/main.nf.test' is unchanged
-Changes in 'mosdepth/tests/nextflow.config':
---- modules/nf-core/mosdepth/tests/nextflow.config
-+++ modules/nf-core/mosdepth/tests/nextflow.config
-@@ -1,5 +1,5 @@
- process {
--    withName: "MOSDEPTH" {
-+    withName: MOSDEPTH {
-         ext.args = params.module_args
-     }
- }
-
+'modules/nf-core/mosdepth/tests/nextflow.config' is unchanged
 'modules/nf-core/mosdepth/tests/main.nf.test.snap' is unchanged
 ************************************************************

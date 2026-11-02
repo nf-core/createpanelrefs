@@ -10,10 +10,15 @@ tools:
       description: |
         Fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing.
       documentation: https://github.com/brentp/mosdepth
-      doi: 10.1093/bioinformatics/btx699
       licence:
         - "MIT"
       identifier: biotools:mosdepth
+      doi: "10.1093/bioinformatics/btx699"
+      publication:
+        author: "Pedersen B.S. & Quinlan A.R."
+        year: 2018
+        title: "Mosdepth: quick coverage calculation for genomes and exomes"
+        source: "Bioinformatics"
   - gzip:
       description: GNU gzip compresses and decompresses files
       homepage: https://www.gnu.org/software/gzip/

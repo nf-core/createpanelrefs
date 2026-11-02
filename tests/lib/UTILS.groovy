@@ -18,6 +18,7 @@ class UTILS {
             "Downloading plugin",
             "Got an interrupted  exception while taking agent result",
             "No citation metadata found for tool 'coreutils'",
+            "No citation metadata found for tool 'find'",
             "Pulling Singularity image",
             "Staging foreign file",
             "Unable to resume cached task",
