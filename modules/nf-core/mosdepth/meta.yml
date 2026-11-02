@@ -14,6 +14,13 @@ tools:
       licence:
         - "MIT"
       identifier: biotools:mosdepth
+  - gzip:
+      description: GNU gzip compresses and decompresses files
+      homepage: https://www.gnu.org/software/gzip/
+      documentation: https://www.gnu.org/software/gzip/manual/
+      licence:
+        - "GPL-3.0-or-later"
+      identifier: ""
 input:
   - - meta:
         type: map
