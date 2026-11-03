@@ -103,6 +103,26 @@ To further assist in reproducibility, you can use share and reuse [parameter fil
 > [!TIP]
 > If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
 
+## Reference genome
+
+Reference files can come from iGenomes with `--genome`, or from a [references datasheet](https://github.com/nf-core/references-datasheets) with `--references`.
+`--references` and `--genome` cannot be used together.
+
+```bash
+nextflow run nf-core/createpanelrefs \
+   --references https://raw.githubusercontent.com/nf-core/references-datasheets/latest/genomes/Homo_sapiens/GATK/GRCh38_chr22.yml \
+   --references_base_path s3://nf-core-references \
+   ...
+```
+
+Datasheet paths can start with `${params.references_base_path}`.
+Set `--references_base_path` to `s3://nf-core-references` for the `genomes/` datasheets; the default, `s3://ngi-igenomes/igenomes`, fits the `igenomes/` datasheets.
+With `--igenomes_ignore`, `--genome` selects a datasheet under `--references_datasheets_path` instead of the iGenomes config, e.g. `--genome GATK/GRCh38`.
+
+The datasheet provides `fasta`, `fai`, `dict` and the genome-level gCNV files: `gcnv_ploidy_priors`, `gcnv_exclude_bed`, `gcnv_exclude_interval_list`, `gcnv_mappable_regions` and `gcnv_segmental_duplications`.
+Assay-specific files (`gcnv_target_bed`, `gcnv_target_interval_list`, `gens_interval_list`, `mutect2_target_bed`) are not read from datasheets.
+A reference parameter given explicitly, e.g. `--gcnv_ploidy_priors`, takes precedence over the datasheet.
+
 ## Workflow specific arguments
 
 ### cnvkit

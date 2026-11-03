@@ -70,7 +70,30 @@
                     "type": "string",
                     "description": "Name of iGenomes reference.",
                     "fa_icon": "fas fa-book",
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
+                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.\n\nWith `--igenomes_ignore`, `--genome` selects a references datasheet under `--references_datasheets_path` instead, e.g. `--genome GATK/GRCh38`. Cannot be used with `--references`."
+                },
+                "references": {
+                    "type": "string",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.ya?ml$",
+                    "description": "Path to a references datasheet (YAML) describing the reference genome.",
+                    "help_text": "A datasheet from [nf-core/references-datasheets](https://github.com/nf-core/references-datasheets), or a local one with the same keys (see `assets/schema_references.json`). Explicit reference parameters such as `--fasta` take precedence over the datasheet. Cannot be used with `--genome`.",
+                    "fa_icon": "fas fa-file-alt"
+                },
+                "references_datasheets_path": {
+                    "type": "string",
+                    "description": "Location of the references datasheets used by `--genome` with `--igenomes_ignore`.",
+                    "default": "https://raw.githubusercontent.com/nf-core/references-datasheets/latest/igenomes",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
+                },
+                "references_base_path": {
+                    "type": "string",
+                    "description": "Base path substituted for `${params.references_base_path}` in references datasheets.",
+                    "help_text": "Use `s3://ngi-igenomes/igenomes` for the `igenomes/` datasheets and `s3://nf-core-references` for the `genomes/` datasheets.",
+                    "default": "s3://ngi-igenomes/igenomes",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
                 },
                 "fasta": {
                     "type": "string",

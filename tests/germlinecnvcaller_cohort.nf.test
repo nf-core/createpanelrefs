@@ -19,6 +19,18 @@ nextflow_pipeline {
             no_conda: true,
         ],
         [
+            name: "-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --genome null --references GATK/GRCh38_chr22.yml --gcnv_scatter_content 2",
+            params: [
+                genome: null,
+                gcnv_scatter_content: 2,
+                input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
+                references: 'https://raw.githubusercontent.com/nf-core/references-datasheets/latest/genomes/Homo_sapiens/GATK/GRCh38_chr22.yml',
+                references_base_path: 's3://nf-core-references',
+                tools: 'germlinecnvcaller',
+            ],
+            no_conda: true,
+        ],
+        [
             name: "-profile test --tools germlinecnvcaller --gcnv_model_name null",
             params: [
                 gcnv_model_name: null,

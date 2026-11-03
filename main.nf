@@ -22,8 +22,12 @@ include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
 include { MULTIQC                 } from './modules/nf-core/multiqc'
 include { defineToolsList         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { paramsSummaryMap        } from 'plugin/nf-schema'
+include { samplesheetToList       } from 'plugin/nf-schema'
 include { citationsOnTheFly       } from 'plugin/nf-core-utils'
 include { getGenomeAttribute      } from 'plugin/nf-core-utils'
+include { getReferenceAttribute   } from 'plugin/nf-core-utils'
+include { getReferenceMetadata    } from 'plugin/nf-core-utils'
+include { getReferencePath        } from 'plugin/nf-core-utils'
 include { methodsDescriptionText  } from 'plugin/nf-core-utils'
 include { paramsSummaryMultiqc    } from 'plugin/nf-core-utils'
 include { softwareVersionsToYAML  } from 'plugin/nf-core-utils'
@@ -82,18 +86,39 @@ workflow {
         params.genomes,
     )
 
+    // Genome-level references not set by a parameter or --genome come from the references datasheet
+    def reference_path = getReferencePath(
+        references: params.references,
+        genome: params.genome,
+        igenomesIgnore: params.igenomes_ignore,
+        datasheetPath: params.references_datasheets_path,
+    )
+    def datasheet = reference_path
+        ? getReferenceMetadata(rows: samplesheetToList(reference_path, "${projectDir}/assets/schema_references.json"))
+        : null
+    def references = [
+        'dict',
+        'fai',
+        'fasta',
+        'gcnv_exclude_bed',
+        'gcnv_exclude_interval_list',
+        'gcnv_mappable_regions',
+        'gcnv_ploidy_priors',
+        'gcnv_segmental_duplications',
+    ].collectEntries { name -> [name, params[name] ?: getReferenceAttribute(param: name, datasheet: datasheet)] }
+
     PREPARE_GENOME(
         tools,
         params.cnvkit_annotate,
         params.cnvkit_targets,
-        params.dict,
-        params.fai,
-        params.fasta,
-        params.gcnv_exclude_bed,
-        params.gcnv_exclude_interval_list,
-        params.gcnv_mappable_regions,
-        params.gcnv_ploidy_priors,
-        params.gcnv_segmental_duplications,
+        references.dict,
+        references.fai,
+        references.fasta,
+        references.gcnv_exclude_bed,
+        references.gcnv_exclude_interval_list,
+        references.gcnv_mappable_regions,
+        references.gcnv_ploidy_priors,
+        references.gcnv_segmental_duplications,
         params.gcnv_target_bed,
         params.gcnv_target_interval_list,
         params.gens_interval_list,
