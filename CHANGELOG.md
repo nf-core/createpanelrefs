@@ -33,6 +33,7 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 
 - [#107](https://github.com/nf-core/createpanelrefs/pull/107) - Pin nf-schema in the AWS full test Platform config, so the injected `plugins` block does not load nf-schema 3.x
 - [#109](https://github.com/nf-core/createpanelrefs/pull/109) - Fix nallo organisation (`genomic-medicine-sweden/nallo`) in `--gens_mosdepth_fast_mode` docs
+- [#110](https://github.com/nf-core/createpanelrefs/pull/110) - List the gatk4 package split (`gatk4-lite`, `gatk4-main`) and the `gcnvkernel` removal in the modules dependency table
 
 ### `Parameters`
 
@@ -49,17 +50,19 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 | cnvkit     | 0.9.12      | 0.9.14      |
 | - htslib   | 1.21        | 1.24        |
 | - samtools | 1.21        | 1.24        |
+| gatk4      | 4.6.2.0     |             |
+| gatk4-lite |             | 4.7.0.0     |
+| - python   |             | 3.12.11     |
+| gatk4-main |             | 4.7.0.0     |
+| gcnvkernel | 0.9         |             |
 | samtools   | 1.23.1      | 1.24        |
 | - htslib   | 1.23.1      | 1.24        |
-| gatk4      | 4.6.2.0     | 4.7.0.0     |
 
 ### `Dependencies` - Nextflow plugins
 
 | Dependency    | Old version | New version |
 | ------------- | ----------- | ----------- |
 | nf-core-utils | 0.5.0       | 0.7.0       |
-
-### `Deprecated`
 
 ## [1.0.0](https://github.com/nf-core/createpanelrefs/releases/tag/1.0.0) - Hell's Gate
 
