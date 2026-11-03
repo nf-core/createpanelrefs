@@ -38,7 +38,7 @@ nextflow_pipeline {
                 tools: 'cnvkit',
             ],
             failure: true,
-            snapshot: 'stdout',
+            snapshot: 'stdout,stderr',
             snapshot_include: 'cnvkit_targets',
         ],
         [

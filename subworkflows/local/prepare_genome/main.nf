@@ -33,15 +33,14 @@ workflow PREPARE_GENOME {
         ? channel.fromPath(params_cnvkit_targets).map { targets -> [[id: 'genome'], targets] }.collect()
         : channel.value([[id: 'genome'], []])
 
-    def is_cnvkit_annotate = params_cnvkit_annotate
-    def ch_cnvkit_annotate = is_cnvkit_annotate
-        ? channel.fromPath(params_cnvkit_annotate).map { annotate -> [[id: 'genome'], annotate] }.collect()
-        : channel.value([[id: 'genome'], []])
-
-    CNVKIT_TARGET(
-        ch_cnvkit_targets.filter { is_cnvkit_annotate && ('cnvkit' in tools) },
-        ch_cnvkit_annotate,
-    )
+    // Label the cnvkit targets with gene names
+    if (params_cnvkit_annotate && ('cnvkit' in tools)) {
+        CNVKIT_TARGET(
+            ch_cnvkit_targets,
+            channel.fromPath(params_cnvkit_annotate).map { annotate -> [[id: 'genome'], annotate] }.collect(),
+        )
+        ch_cnvkit_targets = CNVKIT_TARGET.out.bed.collect()
+    }
 
     // Initialize germlinecnvcaller specific parameters
     def is_gcnv_exclude_bed = params_gcnv_exclude_bed
@@ -141,7 +140,7 @@ workflow PREPARE_GENOME {
     }
 
     emit:
-    cnvkit_targets              = is_cnvkit_annotate ? CNVKIT_TARGET.out.bed.collect() : ch_cnvkit_targets
+    cnvkit_targets              = ch_cnvkit_targets
     dict                        = ch_dict // channel: [ val(meta), path(dict) ]
     fai                         = ch_fai // channel: [ val(meta), path(fai) ]
     fasta                       = ch_fasta

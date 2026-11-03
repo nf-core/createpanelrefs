@@ -1,11 +1,8 @@
 lint:
   files_exist:
     - conf/modules.config
-    - .github/workflows/linting_comment.yml
   files_unchanged:
     - .github/PULL_REQUEST_TEMPLATE.md
-    - .github/workflows/branch.yml
-    - .github/workflows/linting.yml
   modules_config: false
   nf_test_content: false
   skip_features:
