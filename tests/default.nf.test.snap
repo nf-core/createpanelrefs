@@ -144,14 +144,31 @@
             "No stable content",
             "No warnings",
             [
-                "  cnvkit_pon_name                    : null",
                 "--cnvkit_pon_name is not set. Please specify a name for the panel of normals."
             ]
         ],
-        "timestamp": "2026-06-05T18:22:34.274091356",
+        "timestamp": "2026-11-03T14:16:20.593568494",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.0"
+        }
+    },
+    "-profile test --tools cnvkit --cnvkit_method hybrid": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            "No warnings",
+            [
+                "--cnvkit_method hybrid requires --cnvkit_targets."
+            ]
+        ],
+        "timestamp": "2026-10-30T11:22:18.823549351",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "-profile test --tools cnvkit --cnvkit_targets multi_intervals.bed --cnvkit_annotate chr21_gencode.gtf": {
@@ -205,24 +222,6 @@
             ]
         ],
         "timestamp": "2026-10-30T11:45:56.039093024",
-        "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.0"
-        }
-    },
-    "-profile test --tools cnvkit --cnvkit_method hybrid": {
-        "content": [
-            [
-                "pipeline_info"
-            ],
-            "No VCF files",
-            "No stable content",
-            "No warnings",
-            [
-                "--cnvkit_method hybrid requires --cnvkit_targets."
-            ]
-        ],
-        "timestamp": "2026-10-30T11:22:18.823549351",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"

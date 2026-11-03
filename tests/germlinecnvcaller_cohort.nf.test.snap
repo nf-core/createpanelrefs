@@ -8,14 +8,13 @@
             "No stable content",
             "No warnings",
             [
-                "  gcnv_model_name                    : null",
                 "--gcnv_model_name is not set. Please specify a name for the panel of normals."
             ]
         ],
-        "timestamp": "2026-06-05T18:22:52.632196797",
+        "timestamp": "2026-11-03T14:16:32.492951265",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.0"
         }
     },
     "-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --gcnv_ploidy_priors --gcnv_scatter_content 2": {

@@ -35,7 +35,7 @@ workflow PIPELINE_INITIALISATION {
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir //  string: The output directory where the results will be saved
     input //  string: Path to input samplesheet
-    help // boolean: Display help message and exit
+    help // boolean or string: Display help message (for one parameter if a string) and exit
     help_full // boolean: Show the full help message
     show_hidden // boolean: Show hidden parameters in the help message
     tools
@@ -111,13 +111,9 @@ workflow PIPELINE_INITIALISATION {
             command: command,
             showHidden: show_hidden,
             fullHelp: help_full,
+            parameter: help instanceof String && help != "true" ? help : "",
         ]
-        log.info(
-            paramsHelp(
-                help_options,
-                params.help instanceof String && params.help != "true" ? params.help : "",
-            )
-        )
+        log.info(paramsHelp(help_options))
         exit(0)
     }
 
@@ -129,7 +125,7 @@ workflow PIPELINE_INITIALISATION {
     //
 
     log.info(before_text)
-    log.info(paramsSummaryLog([:], workflow))
+    log.info(paramsSummaryLog())
     log.info(after_text)
 
     extra_text = """
@@ -193,7 +189,7 @@ workflow PIPELINE_COMPLETION {
     multiqc_report //  string: Path to MultiQC report
 
     main:
-    summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    summary_params = paramsSummaryMap(parameters_schema: "nextflow_schema.json")
     def multiqc_reports = multiqc_report.toList()
 
     //

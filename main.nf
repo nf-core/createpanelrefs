@@ -150,7 +150,7 @@ workflow {
     multiqc_files = multiqc_files.mix(collated_versions)
     multiqc_files = multiqc_files.mix(collated_reports)
 
-    def summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    def summary_params = paramsSummaryMap(parameters_schema: "nextflow_schema.json")
     def workflow_summary = channel.value(paramsSummaryMultiqc(summary_params))
     def multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
     // MultiQC runs after this collect, so its version never reaches the topic
