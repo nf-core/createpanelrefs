@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Dependencies` - Nextflow plugins
 
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| nf-schema  | 2.7.2       | 3.0.0       |
+
 ### `Deprecated`
 
 ## [1.1.0](https://github.com/nf-core/createpanelrefs/releases/tag/1.1.0) - Abisko
