@@ -143,7 +143,7 @@ The GENS workflow creates a panel of normals for read-count denoising from norma
 With `--gens_analysis_type lrs`, coverage is computed with mosdepth using `--fast-mode` by default.
 `--fast-mode` skips internal CIGAR operations and mate-overlap correction, and overestimates coverage over deletions.
 Set `--gens_mosdepth_fast_mode false` to disable it.
-Use the same setting as for the coverage of the case samples (nf-core/nallo uses `--fast-mode`), so that the bias cancels out during denoising.
+Use the same setting as for the coverage of the case samples (genomic-medicine-sweden/nallo uses `--fast-mode`), so that the bias cancels out during denoising.
 
 ### germlinecnvcaller
 
