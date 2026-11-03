@@ -265,7 +265,7 @@
                     "default": true,
                     "description": "Run mosdepth with `--fast-mode` when computing long-read coverage ('lrs').",
                     "fa_icon": "fas fa-tachometer-alt",
-                    "help_text": "`--fast-mode` skips internal CIGAR operations and mate-overlap correction, which overestimates coverage over deletions. Keep the same setting as the coverage of the case samples, for example `--fast-mode` in genomic-medicine-sweden/nallo, so that the bias cancels out during denoising."
+                    "help_text": "`--fast-mode` skips internal CIGAR operations and mate-overlap correction, which overestimates coverage over deletions. Keep the same setting as the coverage of the case samples, so that the bias cancels out during denoising."
                 },
                 "gens_pon_name": {
                     "type": "string",
