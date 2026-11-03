@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - [#108](https://github.com/nf-core/createpanelrefs/pull/108) - Back to dev
+- [#113](https://github.com/nf-core/createpanelrefs/pull/113) - Update nf-schema to 3.0.0
 
 ### `Fixed`
 
