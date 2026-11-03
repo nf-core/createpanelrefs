@@ -7,128 +7,158 @@
                 "nf-core": {
                     "cnvkit/batch": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/cnvkit/batch/cnvkit-batch.diff"
+                    },
+                    "cnvkit/target": {
+                        "branch": "master",
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/cnvkit/target/cnvkit-target.diff"
                     },
                     "find/concatenate": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/find/concatenate/find-concatenate.diff"
                     },
                     "gatk4/annotateintervals": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/annotateintervals/gatk4-annotateintervals.diff"
                     },
                     "gatk4/bedtointervallist": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/bedtointervallist/gatk4-bedtointervallist.diff"
                     },
                     "gatk4/collectreadcounts": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/collectreadcounts/gatk4-collectreadcounts.diff"
                     },
                     "gatk4/createreadcountpanelofnormals": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/createreadcountpanelofnormals/gatk4-createreadcountpanelofnormals.diff"
                     },
                     "gatk4/createsequencedictionary": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/createsequencedictionary/gatk4-createsequencedictionary.diff"
                     },
                     "gatk4/createsomaticpanelofnormals": {
                         "branch": "master",
-                        "git_sha": "f8001d415ee08634fee5019bd15c7fdaa2a1915d",
-                        "installed_by": ["bam_create_som_pon_gatk"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["bam_create_som_pon_gatk"],
+                        "patch": "modules/nf-core/gatk4/createsomaticpanelofnormals/gatk4-createsomaticpanelofnormals.diff"
                     },
                     "gatk4/determinegermlinecontigploidy": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/determinegermlinecontigploidy/gatk4-determinegermlinecontigploidy.diff"
                     },
                     "gatk4/filterintervals": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/filterintervals/gatk4-filterintervals.diff"
                     },
                     "gatk4/genomicsdbimport": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["bam_create_som_pon_gatk"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["bam_create_som_pon_gatk"],
+                        "patch": "modules/nf-core/gatk4/genomicsdbimport/gatk4-genomicsdbimport.diff"
                     },
                     "gatk4/germlinecnvcaller": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/germlinecnvcaller/gatk4-germlinecnvcaller.diff"
                     },
                     "gatk4/indexfeaturefile": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/indexfeaturefile/gatk4-indexfeaturefile.diff"
                     },
                     "gatk4/intervallisttools": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/intervallisttools/gatk4-intervallisttools.diff"
                     },
                     "gatk4/mergemutectstats": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["bam_create_som_pon_gatk"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["bam_create_som_pon_gatk"],
+                        "patch": "modules/nf-core/gatk4/mergemutectstats/gatk4-mergemutectstats.diff"
                     },
                     "gatk4/mergevcfs": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["bam_create_som_pon_gatk"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["bam_create_som_pon_gatk"],
+                        "patch": "modules/nf-core/gatk4/mergevcfs/gatk4-mergevcfs.diff"
                     },
                     "gatk4/mutect2": {
                         "branch": "master",
-                        "git_sha": "f8001d415ee08634fee5019bd15c7fdaa2a1915d",
-                        "installed_by": ["bam_create_som_pon_gatk"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["bam_create_som_pon_gatk"],
+                        "patch": "modules/nf-core/gatk4/mutect2/gatk4-mutect2.diff"
                     },
                     "gatk4/preprocessintervals": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/preprocessintervals/gatk4-preprocessintervals.diff"
                     },
                     "gatk4/splitintervals": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/splitintervals/gatk4-splitintervals.diff"
                     },
                     "gawk": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
                         "installed_by": ["modules"]
                     },
                     "mosdepth": {
                         "branch": "master",
-                        "git_sha": "999b9db1d6b8bdc591e1168e183f4cc87d6606f9",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/mosdepth/mosdepth.diff"
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "98403d15b0e50edae1f3fec5eae5e24982f1fade",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/multiqc/multiqc.diff"
                     },
                     "samtools/faidx": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/samtools/faidx/samtools-faidx.diff"
                     },
                     "samtools/index": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/samtools/index/samtools-index.diff"
                     },
                     "samtools/view": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/samtools/view/samtools-view.diff"
                     }
                 }
             },
@@ -136,7 +166,7 @@
                 "nf-core": {
                     "bam_create_som_pon_gatk": {
                         "branch": "master",
-                        "git_sha": "f8001d415ee08634fee5019bd15c7fdaa2a1915d",
+                        "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
                         "installed_by": ["subworkflows"]
                     }
                 }

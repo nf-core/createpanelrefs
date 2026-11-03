@@ -1,0 +1,20 @@
+Changes in component 'nf-core/find/concatenate'
+Changes in 'find/concatenate/meta.yml':
+--- modules/nf-core/find/concatenate/meta.yml
++++ modules/nf-core/find/concatenate/meta.yml
+@@ -23,6 +23,7 @@
+       licence:
+         - "other"
+       identifier: ""
++      homepage: https://zlib.net/pigz/
+ input:
+   - - meta:
+         type: map
+
+'modules/nf-core/find/concatenate/environment.yml' is unchanged
+'modules/nf-core/find/concatenate/main.nf' is unchanged
+'modules/nf-core/find/concatenate/tests/main.nf.test' is unchanged
+'modules/nf-core/find/concatenate/tests/nextflow_zipped_unzipped.config' is unchanged
+'modules/nf-core/find/concatenate/tests/nextflow_unzipped_zipped.config' is unchanged
+'modules/nf-core/find/concatenate/tests/main.nf.test.snap' is unchanged
+************************************************************

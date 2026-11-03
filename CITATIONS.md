@@ -10,17 +10,35 @@
 
 ## Pipeline tools
 
-- [CNVKIT](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004873)
+- [CNVkit](https://doi.org/10.1371/journal.pcbi.1004873)
 
   > Talevich E, Shain AH, Botton T, Bastian BC (2016) CNVkit: Genome-Wide Copy Number Detection and Visualization from Targeted DNA Sequencing. PLoS Comput Biol 12(4): e1004873. doi: 10.1371/journal.pcbi.1004873. PubMed PMID: 27100738. PubMed Central PMCID: PMC4839673.
 
-- [GATK] (https://genome.cshlp.org/content/20/9/1297)
+- [GATK](https://doi.org/10.1101/gr.107524.110)
 
   > McKenna A, Hanna M, Banks E, et al. The Genome Analysis Toolkit: A MapReduce framework for analyzing next-generation DNA sequencing data. Genome Res. 2010;20(9):1297-1303. doi:10.1101/gr.107524.110
+
+- [GNU Awk](https://www.gnu.org/software/gawk/)
+
+- [GNU Coreutils](https://www.gnu.org/software/coreutils/)
+
+- [GNU Findutils](https://www.gnu.org/software/findutils/)
+
+- [GNU Gzip](https://www.gnu.org/software/gzip/)
+
+- [Mosdepth](https://doi.org/10.1093/bioinformatics/btx699)
+
+  > Pedersen BS, Quinlan AR. Mosdepth: quick coverage calculation for genomes and exomes. Bioinformatics. 2018 Mar 1;34(5):867-868. doi: 10.1093/bioinformatics/btx699. PubMed PMID: 29096012; PubMed Central PMCID: PMC6030888.
 
 - [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
 
   > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
+
+- [pigz](https://zlib.net/pigz/)
+
+- [SAMtools](https://doi.org/10.1093/bioinformatics/btp352)
+
+  > Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, Homer N, Marth G, Abecasis G, Durbin R; 1000 Genome Project Data Processing Subgroup. The Sequence Alignment/Map format and SAMtools. Bioinformatics. 2009 Aug 15;25(16):2078-9. doi: 10.1093/bioinformatics/btp352. Epub 2009 Jun 8. PubMed PMID: 19505943; PubMed Central PMCID: PMC2723002.
 
 ## Software packaging/containerisation tools
 

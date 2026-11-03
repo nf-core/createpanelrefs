@@ -23,25 +23,25 @@
             10,
             {
                 "GATK4_ANNOTATEINTERVALS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_COLLECTREADCOUNTS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_DETERMINEGERMLINECONTIGPLOIDY": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_FILTERINTERVALS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_GERMLINECNVCALLER": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_INTERVALLISTTOOLS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_PREPROCESSINTERVALS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 }
             },
             [

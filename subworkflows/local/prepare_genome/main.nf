@@ -1,3 +1,4 @@
+include { CNVKIT_TARGET                                               } from '../../../modules/nf-core/cnvkit/target'
 include { GATK4_CREATESEQUENCEDICTIONARY                              } from '../../../modules/nf-core/gatk4/createsequencedictionary'
 include { GATK4_PREPROCESSINTERVALS as GATK4_PREPROCESSINTERVALS_GENS } from '../../../modules/nf-core/gatk4/preprocessintervals'
 include { GATK4_SPLITINTERVALS                                        } from '../../../modules/nf-core/gatk4/splitintervals'
@@ -7,6 +8,7 @@ include { SAMTOOLS_FAIDX                                              } from '..
 workflow PREPARE_GENOME {
     take:
     tools //   list: [mandatory] tools to run
+    params_cnvkit_annotate // [optional] path(cnvkit_annotate)
     params_cnvkit_targets // [optional] path(cnvkit_targets)
     params_dict // [optional]  path(dict)
     params_fai // [optional]  path(fai)
@@ -30,6 +32,15 @@ workflow PREPARE_GENOME {
     def ch_cnvkit_targets = is_cnvkit_targets
         ? channel.fromPath(params_cnvkit_targets).map { targets -> [[id: 'genome'], targets] }.collect()
         : channel.value([[id: 'genome'], []])
+
+    // Label the cnvkit targets with gene names
+    if (params_cnvkit_annotate && ('cnvkit' in tools)) {
+        CNVKIT_TARGET(
+            ch_cnvkit_targets,
+            channel.fromPath(params_cnvkit_annotate).map { annotate -> [[id: 'genome'], annotate] }.collect(),
+        )
+        ch_cnvkit_targets = CNVKIT_TARGET.out.bed.collect()
+    }
 
     // Initialize germlinecnvcaller specific parameters
     def is_gcnv_exclude_bed = params_gcnv_exclude_bed
@@ -102,7 +113,7 @@ workflow PREPARE_GENOME {
     def run_build_intervals = !params_mutect2_target_bed
 
     BUILD_INTERVALS(
-        ch_fai.filter { run_build_intervals && ('mutect2' in tools) },
+        ch_fai.filter { run_build_intervals && ('mutect2' in tools) }.map { meta, fai -> [meta, fai, 'bed'] },
         [],
         false,
     )

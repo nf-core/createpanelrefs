@@ -4,13 +4,13 @@
             5,
             {
                 "GATK4_CREATESOMATICPANELOFNORMALS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_GENOMICSDBIMPORT": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_MUTECT2": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 }
             },
             [
@@ -86,22 +86,22 @@
             12,
             {
                 "GATK4_CREATESOMATICPANELOFNORMALS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_GENOMICSDBIMPORT": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_MERGEMUTECTSTATS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_MERGEVCFS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_MUTECT2": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_SPLITINTERVALS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 }
             },
             [
@@ -180,13 +180,13 @@
                     "gawk": "5.3.1"
                 },
                 "GATK4_CREATESOMATICPANELOFNORMALS": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_GENOMICSDBIMPORT": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 },
                 "GATK4_MUTECT2": {
-                    "gatk4": "4.6.2.0"
+                    "gatk4": "4.7.0.0"
                 }
             },
             [

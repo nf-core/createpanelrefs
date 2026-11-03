@@ -40,12 +40,12 @@ The nf-core stance on the use of AI and LLMs is that humans are still ultimately
 
 If you’re using AI tools, try to stick by these guidelines:
 
-- Keep PRs as small and focussed as possible
+- Keep PRs as small and focused as possible
 - Avoid any unnecessary changes, such as moving or refactoring code (unless that is the explicit intention of the PR)
 - Review all generated code yourself before opening a PR, and ensure that you understand it
 - Engage with the community review process and expect to make revisions
 
-For more detail, see the the [blog post](https://nf-co.re/blog/2026/statement-on-ai) for a statement from the nf-core/core team.
+For more detail, see the [blog post](https://nf-co.re/blog/2026/statement-on-ai) for a statement from the nf-core/core team.
 
 ### Getting help
 
@@ -128,7 +128,7 @@ Please also refer to the [pipeline-specific contribution guidelines](#pipeline-s
 - [ ] Perform local tests to validate that the new code works as expected.
   - [ ] If applicable, add a new test in the `tests` directory.
 - [ ] Update `usage.md`, `output.md`, and `citation.md` as appropriate.
-- [ ] [Lint](lint) the code with nf-core/tools.
+- [ ] [Lint](#lint-tests) the code with nf-core/tools.
 - [ ] Update any diagrams or pipeline images as necessary.
 - [ ] Update MultiQC config `assets/multiqc_config.yml` so relevant suffixes, file name cleanup, and module plots are in the appropriate order.
 - [ ] If applicable, create a [MultiQC](https://seqera.io/multiqc/) module.
@@ -166,7 +166,7 @@ Specify these with generic `withLabel:` selectors, so they can be shared across 
 nf-core provides a set of standard labels that you should follow where possible, as seen in the [nf-core pipeline template](https://github.com/nf-core/tools/blob/main/nf_core/pipeline-template/conf/base.config).
 These labels define resource defaults for single-core processes, modules that require a GPU, and different levels of multi-core configurations with increasing memory requirements.
 
-Values assigned within these labels can be dynamically passed to a tool using the the `${task.cpus}` and `${task.memory}` Nextflow variables in the `script:` block of a module (see an example in the [modules repository](https://github.com/nf-core/modules/blob/bd1b6a40f55933d94b8c9ca94ec8c1ea0eaf4b82/modules/nf-core/samtools/bam2fq/main.nf#L30)).
+Values assigned within these labels can be dynamically passed to a tool using the `${task.cpus}` and `${task.memory}` Nextflow variables in the `script:` block of a module (see an example in the [modules repository](https://github.com/nf-core/modules/blob/bd1b6a40f55933d94b8c9ca94ec8c1ea0eaf4b82/modules/nf-core/samtools/bam2fq/main.nf#L30)).
 
 #### Nextflow version bumping
 
@@ -183,3 +183,32 @@ If you update images or graphics, follow the nf-core [style guidelines](https://
 ## Pipeline specific contribution guidelines
 
 <!-- TODO nf-core: Add any pipeline specific contribution guidelines here, such as coding styles, procedures, checklists etc. -->
+
+### Tool citations
+
+The MultiQC methods description cites tools on the fly with `citationsOnTheFly()` from the nf-core-utils plugin.
+It reads the tools that ran from the `versions` topic and takes their citation from the `tools` entries of every `modules/**/meta.yml`.
+The tool name in the `versions` topic must match the tool key in `meta.yml`.
+
+Each cited tool entry in `meta.yml` should carry a `doi` and a nested `publication` block in Harvard style:
+
+```yaml
+tools:
+  - mosdepth:
+      doi: "10.1093/bioinformatics/btx699"
+      publication:
+        author: "Pedersen B.S. & Quinlan A.R."
+        year: 2018
+        title: "Mosdepth: quick coverage calculation for genomes and exomes"
+        source: "Bioinformatics"
+```
+
+A tool without a `publication` block falls back to its `doi`, then its `homepage`.
+
+The `publication` block is not yet in every upstream nf-core module.
+When an installed module lacks it, add it to the module `meta.yml`, then run `nf-core modules patch <tool>` so the change survives module updates and passes `nf-core pipelines lint`.
+If the module already has a patch, delete the `.diff` file and its `patch` entry in `modules.json`, then run `nf-core modules patch <tool>` again so the new patch covers both changes.
+Open a PR to nf-core/modules to upstream the `publication` block.
+
+MultiQC runs after the `versions` topic is collected, so `main.nf` passes it to `citationsOnTheFly()` as an extra tool.
+Tools without any citation metadata, such as `coreutils` and `find`, print a `No citation metadata found` warning, which `tests/lib/UTILS.groovy` ignores in snapshots.
