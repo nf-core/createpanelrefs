@@ -31,8 +31,8 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 
 ### `Fixed`
 
-- [#109](https://github.com/nf-core/createpanelrefs/pull/109) - Fix nallo organisation (`genomic-medicine-sweden/nallo`) in `--gens_mosdepth_fast_mode` docs
 - [#107](https://github.com/nf-core/createpanelrefs/pull/107) - Pin nf-schema in the AWS full test Platform config, so the injected `plugins` block does not load nf-schema 3.x
+- [#109](https://github.com/nf-core/createpanelrefs/pull/109) - Fix nallo organisation (`genomic-medicine-sweden/nallo`) in `--gens_mosdepth_fast_mode` docs
 
 ### `Parameters`
 
