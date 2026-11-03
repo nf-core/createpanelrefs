@@ -35,6 +35,7 @@ Abisko National Park is a national park in Swedish Lapland, near the Norwegian b
 - [#109](https://github.com/nf-core/createpanelrefs/pull/109) - Remove the nallo mention from the `--gens_mosdepth_fast_mode` docs
 - [#110](https://github.com/nf-core/createpanelrefs/pull/110) - List the gatk4 package split (`gatk4-lite`, `gatk4-main`) and the `gcnvkernel` removal in the modules dependency table
 - [#111](https://github.com/nf-core/createpanelrefs/pull/111) - Run the GENS tests as the calling user instead of root
+- [#112](https://github.com/nf-core/createpanelrefs/pull/112) - Mount `/etc/passwd` and `/etc/group` for `GATK4_CREATEREADCOUNTPANELOFNORMALS` in the GENS tests, so the user exists in the container
 
 ### `Parameters`
 
