@@ -1,0 +1,149 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/createpanelrefs/dev/assets/schema_references.json",
+    "title": "nf-core/createpanelrefs references datasheet schema",
+    "description": "Schema for the references datasheet provided with --references. Properties with meta map a datasheet key to a pipeline parameter; the others are datasheet keys createpanelrefs does not use, declared so they are accepted and dropped.",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "genome": {
+                "meta": ["genome", "id"],
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Genome name must be provided and cannot contain spaces"
+            },
+            "reference_source": {
+                "meta": ["reference_source"],
+                "type": "string",
+                "pattern": "^\\S+$"
+            },
+            "species": {
+                "meta": ["species"],
+                "type": "string",
+                "pattern": "^\\S+$"
+            },
+            "annotation_version": {
+                "meta": ["annotation_version"],
+                "type": "string",
+                "pattern": "^\\S+$"
+            },
+            "fasta": {
+                "meta": ["fasta"],
+                "type": "string",
+                "pattern": "^\\S+\\.f(ast|n)?a(\\.gz)?$",
+                "errorMessage": "Fasta must end in '.fa', '.fasta' or '.fna' (optionally .gz) and cannot contain spaces"
+            },
+            "fasta_fai": {
+                "meta": ["fai"],
+                "type": "string",
+                "pattern": "^\\S+\\.f(ast|n)?a\\.fai$",
+                "errorMessage": "Fasta index must end in '.fa.fai', '.fasta.fai' or '.fna.fai' and cannot contain spaces"
+            },
+            "fasta_dict": {
+                "meta": ["dict"],
+                "type": "string",
+                "pattern": "^\\S+\\.dict$",
+                "errorMessage": "Sequence dictionary must end in '.dict' and cannot contain spaces"
+            },
+            "contig_ploidy_priors_tsv": {
+                "meta": ["gcnv_ploidy_priors"],
+                "type": "string",
+                "pattern": "^\\S+\\.tsv$",
+                "errorMessage": "Contig ploidy priors must end in '.tsv' and cannot contain spaces"
+            },
+            "exclude_bed": {
+                "meta": ["gcnv_exclude_bed"],
+                "type": "string",
+                "pattern": "^\\S+\\.bed$",
+                "errorMessage": "Exclude BED must end in '.bed' and cannot contain spaces"
+            },
+            "exclude_interval_list": {
+                "meta": ["gcnv_exclude_interval_list"],
+                "type": "string",
+                "pattern": "^\\S+\\.interval_list$",
+                "errorMessage": "Exclude interval list must end in '.interval_list' and cannot contain spaces"
+            },
+            "mappable_regions_bed": {
+                "meta": ["gcnv_mappable_regions"],
+                "type": "string",
+                "pattern": "^\\S+\\.bed(\\.gz)?$",
+                "errorMessage": "Mappable regions must end in '.bed' or '.bed.gz' and cannot contain spaces"
+            },
+            "segmental_duplications_bed": {
+                "meta": ["gcnv_segmental_duplications"],
+                "type": "string",
+                "pattern": "^\\S+\\.bed(\\.gz)?$",
+                "errorMessage": "Segmental duplications must end in '.bed' or '.bed.gz' and cannot contain spaces"
+            },
+            "abundantsequences_fasta": {},
+            "ascat_alleles": {},
+            "ascat_genome": {},
+            "ascat_loci": {},
+            "ascat_loci_gc": {},
+            "ascat_loci_rt": {},
+            "bismark_index": {},
+            "bowtie1_index": {},
+            "bowtie2_index": {},
+            "bwamem1_index": {},
+            "bwamem2_index": {},
+            "cf_chrom_len": {},
+            "chrom_info": {},
+            "chromosomes_fasta": {},
+            "dragmap_hashtable": {},
+            "fasta_sizes": {},
+            "genes_bed": {},
+            "genes_refflat": {},
+            "genes_refgene": {},
+            "genome_size_xml": {},
+            "gff": {},
+            "gtf": {},
+            "hairpin_fasta": {},
+            "hisat2_index": {},
+            "intervals_bed": {},
+            "kallisto_index": {},
+            "mappability": {},
+            "mature_fasta": {},
+            "mito_name": {},
+            "msisensor2_models": {},
+            "msisensorpro_list": {},
+            "msisensorpro_scan": {},
+            "ngscheckmate_bed": {},
+            "readme": {},
+            "rsem_index": {},
+            "salmon_index": {},
+            "sentieon_dnascope_model": {},
+            "snpeff_db": {},
+            "splice_sites": {},
+            "star_index": {},
+            "transcript_fasta": {},
+            "vcf_dbsnp_vcf": {},
+            "vcf_dbsnp_vcf_source": {},
+            "vcf_dbsnp_vcf_tbi": {},
+            "vcf_dbsnp_vcf_vqsr": {},
+            "vcf_germline_resource_vcf": {},
+            "vcf_germline_resource_vcf_source": {},
+            "vcf_germline_resource_vcf_tbi": {},
+            "vcf_hapmap_vcf": {},
+            "vcf_hapmap_vcf_source": {},
+            "vcf_hapmap_vcf_tbi": {},
+            "vcf_known_indels_vcf": {},
+            "vcf_known_indels_vcf_source": {},
+            "vcf_known_indels_vcf_tbi": {},
+            "vcf_known_indels_vcf_vqsr": {},
+            "vcf_known_snps_vcf": {},
+            "vcf_known_snps_vcf_source": {},
+            "vcf_known_snps_vcf_tbi": {},
+            "vcf_known_snps_vcf_vqsr": {},
+            "vcf_other_vcf": {},
+            "vcf_other_vcf_tbi": {},
+            "vcf_pon_vcf": {},
+            "vcf_pon_vcf_source": {},
+            "vcf_pon_vcf_tbi": {},
+            "vep_cache_version": {},
+            "vep_genome": {},
+            "vep_species": {}
+        },
+        "required": ["genome"]
+    }
+}

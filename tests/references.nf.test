@@ -1,0 +1,59 @@
+def projectDir = new File('.').absolutePath
+
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_createpanelrefs"
+
+    def test_scenario = [
+        [
+            name: "-profile test --tools cnvkit --genome null --references GATK/GRCh38_chr21.yml",
+            params: [
+                genome: null,
+                references: 'https://raw.githubusercontent.com/nf-core/references-datasheets/latest/genomes/Homo_sapiens/GATK/GRCh38_chr21.yml',
+                references_base_path: 's3://nf-core-references',
+                tools: 'cnvkit',
+            ],
+        ],
+        [
+            name: "-profile test --tools cnvkit --igenomes_ignore --genome GATK/GRCh38_chr21 --references_datasheets_path genomes/Homo_sapiens",
+            params: [
+                genome: 'GATK/GRCh38_chr21',
+                igenomes_ignore: true,
+                references_base_path: 's3://nf-core-references',
+                references_datasheets_path: 'https://raw.githubusercontent.com/nf-core/references-datasheets/latest/genomes/Homo_sapiens',
+                tools: 'cnvkit',
+            ],
+        ],
+        [
+            name: "-profile test --tools cnvkit --references GATK/GRCh38_chr21.yml",
+            params: [
+                references: 'https://raw.githubusercontent.com/nf-core/references-datasheets/latest/genomes/Homo_sapiens/GATK/GRCh38_chr21.yml',
+                references_base_path: 's3://nf-core-references',
+                tools: 'cnvkit',
+            ],
+            failure: true,
+            snapshot: 'stdout,stderr',
+            snapshot_include: 'Use either',
+        ],
+        [
+            name: "-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --genome null --references GATK/GRCh38_chr22.yml --gcnv_scatter_content 2",
+            params: [
+                genome: null,
+                gcnv_scatter_content: 2,
+                input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
+                references: 'https://raw.githubusercontent.com/nf-core/references-datasheets/latest/genomes/Homo_sapiens/GATK/GRCh38_chr22.yml',
+                references_base_path: 's3://nf-core-references',
+                tools: 'germlinecnvcaller',
+            ],
+            no_conda: true,
+        ],
+    ]
+
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
+    }
+}

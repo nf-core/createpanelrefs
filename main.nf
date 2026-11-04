@@ -21,31 +21,12 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_crea
 include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
 include { MULTIQC                 } from './modules/nf-core/multiqc'
 include { defineToolsList         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
+include { referenceParams         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { paramsSummaryMap        } from 'plugin/nf-schema'
 include { citationsOnTheFly       } from 'plugin/nf-core-utils'
-include { getGenomeAttribute      } from 'plugin/nf-core-utils'
 include { methodsDescriptionText  } from 'plugin/nf-core-utils'
 include { paramsSummaryMultiqc    } from 'plugin/nf-core-utils'
 include { softwareVersionsToYAML  } from 'plugin/nf-core-utils'
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-GENOME PARAMETER VALUES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
-
-params.dict                        = getGenomeAttribute('dict')
-params.fai                         = getGenomeAttribute('fai')
-params.fasta                       = getGenomeAttribute('fasta')
-params.gcnv_exclude_bed            = getGenomeAttribute('gcnv_exclude_bed')
-params.gcnv_exclude_interval_list  = getGenomeAttribute('gcnv_exclude_interval_list')
-params.gcnv_mappable_regions       = getGenomeAttribute('gcnv_mappable_regions')
-params.gcnv_ploidy_priors          = getGenomeAttribute('gcnv_ploidy_priors')
-params.gcnv_segmental_duplications = getGenomeAttribute('gcnv_segmental_duplications')
-params.gcnv_target_bed             = getGenomeAttribute('gcnv_target_bed')
-params.gcnv_target_interval_list   = getGenomeAttribute('gcnv_target_interval_list')
-params.gens_interval_list          = getGenomeAttribute('gens_interval_list')
-params.mutect2_target_bed          = getGenomeAttribute('mutect2_target_bed')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,25 +61,31 @@ workflow {
         params.mutect2_pon_name,
         params.genome,
         params.genomes,
+        params.igenomes_ignore,
+        params.references,
+        params.references_datasheets_path,
+        params.subMap(referenceParams()),
     )
+
+    def references = PIPELINE_INITIALISATION.out.references.getVal()
 
     PREPARE_GENOME(
         tools,
         params.cnvkit_annotate,
         params.cnvkit_targets,
-        params.dict,
-        params.fai,
-        params.fasta,
-        params.gcnv_exclude_bed,
-        params.gcnv_exclude_interval_list,
-        params.gcnv_mappable_regions,
-        params.gcnv_ploidy_priors,
-        params.gcnv_segmental_duplications,
-        params.gcnv_target_bed,
-        params.gcnv_target_interval_list,
-        params.gens_interval_list,
+        references.dict,
+        references.fai,
+        references.fasta,
+        references.gcnv_exclude_bed,
+        references.gcnv_exclude_interval_list,
+        references.gcnv_mappable_regions,
+        references.gcnv_ploidy_priors,
+        references.gcnv_segmental_duplications,
+        references.gcnv_target_bed,
+        references.gcnv_target_interval_list,
+        references.gens_interval_list,
         params.mutect2_intervals_num,
-        params.mutect2_target_bed,
+        references.mutect2_target_bed,
     )
 
     // WORKFLOW: Run main workflow
