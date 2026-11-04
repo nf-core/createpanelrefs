@@ -5,6 +5,7 @@ lint:
     - .github/PULL_REQUEST_TEMPLATE.md
   modules_config: false
   nf_test_content: false
+  schema_params: false
   skip_features:
     - fastqc
 nf_core_version: 4.2.1

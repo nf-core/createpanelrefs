@@ -18,6 +18,16 @@ nextflow_pipeline {
             ],
         ],
         [
+            name: "-profile test --tools cnvkit --igenomes_ignore --genome GATK/GRCh38_chr21 --references_datasheets_path genomes/Homo_sapiens",
+            params: [
+                genome: 'GATK/GRCh38_chr21',
+                igenomes_ignore: true,
+                references_base_path: 's3://nf-core-references',
+                references_datasheets_path: 'https://raw.githubusercontent.com/nf-core/references-datasheets/latest/genomes/Homo_sapiens',
+                tools: 'cnvkit',
+            ],
+        ],
+        [
             name: "-profile test --tools cnvkit --references GATK/GRCh38_chr21.yml",
             params: [
                 references: 'https://raw.githubusercontent.com/nf-core/references-datasheets/latest/genomes/Homo_sapiens/GATK/GRCh38_chr21.yml',

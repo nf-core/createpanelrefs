@@ -24,32 +24,12 @@ include { defineToolsList         } from './subworkflows/local/utils_nfcore_crea
 include { paramsSummaryMap        } from 'plugin/nf-schema'
 include { samplesheetToList       } from 'plugin/nf-schema'
 include { citationsOnTheFly       } from 'plugin/nf-core-utils'
-include { getGenomeAttribute      } from 'plugin/nf-core-utils'
 include { getReferenceAttribute   } from 'plugin/nf-core-utils'
 include { getReferenceMetadata    } from 'plugin/nf-core-utils'
 include { getReferencePath        } from 'plugin/nf-core-utils'
 include { methodsDescriptionText  } from 'plugin/nf-core-utils'
 include { paramsSummaryMultiqc    } from 'plugin/nf-core-utils'
 include { softwareVersionsToYAML  } from 'plugin/nf-core-utils'
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-GENOME PARAMETER VALUES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
-
-params.dict                        = getGenomeAttribute('dict')
-params.fai                         = getGenomeAttribute('fai')
-params.fasta                       = getGenomeAttribute('fasta')
-params.gcnv_exclude_bed            = getGenomeAttribute('gcnv_exclude_bed')
-params.gcnv_exclude_interval_list  = getGenomeAttribute('gcnv_exclude_interval_list')
-params.gcnv_mappable_regions       = getGenomeAttribute('gcnv_mappable_regions')
-params.gcnv_ploidy_priors          = getGenomeAttribute('gcnv_ploidy_priors')
-params.gcnv_segmental_duplications = getGenomeAttribute('gcnv_segmental_duplications')
-params.gcnv_target_bed             = getGenomeAttribute('gcnv_target_bed')
-params.gcnv_target_interval_list   = getGenomeAttribute('gcnv_target_interval_list')
-params.gens_interval_list          = getGenomeAttribute('gens_interval_list')
-params.mutect2_target_bed          = getGenomeAttribute('mutect2_target_bed')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,7 +66,7 @@ workflow {
         params.genomes,
     )
 
-    // Genome-level references not set by a parameter or --genome come from the references datasheet
+    // References come from --genome (iGenomes) or from a references datasheet; an explicit parameter, even null, wins
     def reference_path = getReferencePath(
         references: params.references,
         genome: params.genome,
@@ -105,7 +85,18 @@ workflow {
         'gcnv_mappable_regions',
         'gcnv_ploidy_priors',
         'gcnv_segmental_duplications',
-    ].collectEntries { name -> [name, params[name] ?: getReferenceAttribute(param: name, datasheet: datasheet)] }
+    ].collectEntries { name ->
+        [name, params.containsKey(name) ? params[name] : getReferenceAttribute(param: name, datasheet: datasheet, genomeMap: params.genomes, genomeKey: params.genome)]
+    }
+    // Assay-specific files never come from a datasheet
+    references += [
+        'gcnv_target_bed',
+        'gcnv_target_interval_list',
+        'gens_interval_list',
+        'mutect2_target_bed',
+    ].collectEntries { name ->
+        [name, params.containsKey(name) ? params[name] : getReferenceAttribute(param: name, genomeMap: params.genomes, genomeKey: params.genome)]
+    }
 
     PREPARE_GENOME(
         tools,
@@ -119,11 +110,11 @@ workflow {
         references.gcnv_mappable_regions,
         references.gcnv_ploidy_priors,
         references.gcnv_segmental_duplications,
-        params.gcnv_target_bed,
-        params.gcnv_target_interval_list,
-        params.gens_interval_list,
+        references.gcnv_target_bed,
+        references.gcnv_target_interval_list,
+        references.gens_interval_list,
         params.mutect2_intervals_num,
-        params.mutect2_target_bed,
+        references.mutect2_target_bed,
     )
 
     // WORKFLOW: Run main workflow
