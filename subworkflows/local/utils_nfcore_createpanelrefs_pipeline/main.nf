@@ -14,6 +14,9 @@ include { checkProfileProvided } from 'plugin/nf-core-utils'
 include { completionEmail      } from 'plugin/nf-core-utils'
 include { completionSummary    } from 'plugin/nf-core-utils'
 include { dumpParametersToJSON } from 'plugin/nf-core-utils'
+include { getReferenceAttribute } from 'plugin/nf-core-utils'
+include { getReferenceMetadata } from 'plugin/nf-core-utils'
+include { getReferencePath     } from 'plugin/nf-core-utils'
 include { getWorkflowVersion   } from 'plugin/nf-core-utils'
 include { paramsHelp           } from 'plugin/nf-schema'
 include { paramsSummaryLog     } from 'plugin/nf-schema'
@@ -48,6 +51,10 @@ workflow PIPELINE_INITIALISATION {
     mutect2_pon_name
     genome
     genomes
+    igenomes_ignore
+    references_datasheet
+    references_datasheets_path
+    explicit_references // map: reference parameters set by the user, even to null
 
     main:
 
@@ -165,11 +172,32 @@ workflow PIPELINE_INITIALISATION {
     )
 
     //
+    // References come from --genome (iGenomes) or from a references datasheet; an explicit parameter, even null, wins
+    //
+    def reference_path = getReferencePath(
+        references: references_datasheet,
+        genome: genome,
+        igenomesIgnore: igenomes_ignore,
+        datasheetPath: references_datasheets_path,
+    )
+    def datasheet = reference_path
+        ? getReferenceMetadata(rows: samplesheetToList(reference_path, "${projectDir}/assets/schema_references.json"))
+        : null
+    def resolved_references = genomeReferenceParams().collectEntries { name ->
+        [name, explicit_references.containsKey(name) ? explicit_references[name] : getReferenceAttribute(param: name, datasheet: datasheet, genomeMap: genomes, genomeKey: genome)]
+    }
+    // Assay-specific files never come from a datasheet
+    resolved_references += assayReferenceParams().collectEntries { name ->
+        [name, explicit_references.containsKey(name) ? explicit_references[name] : getReferenceAttribute(param: name, genomeMap: genomes, genomeKey: genome)]
+    }
+
+    //
     // Create channel from input file provided through input
     //
     ch_samplesheet = channel.fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
 
     emit:
+    references  = resolved_references
     samplesheet = ch_samplesheet
 }
 
@@ -221,6 +249,34 @@ workflow PIPELINE_COMPLETION {
 FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
+
+//
+// Reference parameters that a references datasheet can provide
+//
+def genomeReferenceParams() {
+    return [
+        'dict',
+        'fai',
+        'fasta',
+        'gcnv_exclude_bed',
+        'gcnv_exclude_interval_list',
+        'gcnv_mappable_regions',
+        'gcnv_ploidy_priors',
+        'gcnv_segmental_duplications',
+    ]
+}
+
+//
+// Reference parameters that depend on the assay
+//
+def assayReferenceParams() {
+    return [
+        'gcnv_target_bed',
+        'gcnv_target_interval_list',
+        'gens_interval_list',
+        'mutect2_target_bed',
+    ]
+}
 
 //
 // Check and validate pipeline parameters

@@ -20,13 +20,11 @@ include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_crea
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
 include { MULTIQC                 } from './modules/nf-core/multiqc'
+include { assayReferenceParams    } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { defineToolsList         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
+include { genomeReferenceParams   } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { paramsSummaryMap        } from 'plugin/nf-schema'
-include { samplesheetToList       } from 'plugin/nf-schema'
 include { citationsOnTheFly       } from 'plugin/nf-core-utils'
-include { getReferenceAttribute   } from 'plugin/nf-core-utils'
-include { getReferenceMetadata    } from 'plugin/nf-core-utils'
-include { getReferencePath        } from 'plugin/nf-core-utils'
 include { methodsDescriptionText  } from 'plugin/nf-core-utils'
 include { paramsSummaryMultiqc    } from 'plugin/nf-core-utils'
 include { softwareVersionsToYAML  } from 'plugin/nf-core-utils'
@@ -64,39 +62,13 @@ workflow {
         params.mutect2_pon_name,
         params.genome,
         params.genomes,
+        params.igenomes_ignore,
+        params.references,
+        params.references_datasheets_path,
+        params.subMap(genomeReferenceParams() + assayReferenceParams()),
     )
 
-    // References come from --genome (iGenomes) or from a references datasheet; an explicit parameter, even null, wins
-    def reference_path = getReferencePath(
-        references: params.references,
-        genome: params.genome,
-        igenomesIgnore: params.igenomes_ignore,
-        datasheetPath: params.references_datasheets_path,
-    )
-    def datasheet = reference_path
-        ? getReferenceMetadata(rows: samplesheetToList(reference_path, "${projectDir}/assets/schema_references.json"))
-        : null
-    def references = [
-        'dict',
-        'fai',
-        'fasta',
-        'gcnv_exclude_bed',
-        'gcnv_exclude_interval_list',
-        'gcnv_mappable_regions',
-        'gcnv_ploidy_priors',
-        'gcnv_segmental_duplications',
-    ].collectEntries { name ->
-        [name, params.containsKey(name) ? params[name] : getReferenceAttribute(param: name, datasheet: datasheet, genomeMap: params.genomes, genomeKey: params.genome)]
-    }
-    // Assay-specific files never come from a datasheet
-    references += [
-        'gcnv_target_bed',
-        'gcnv_target_interval_list',
-        'gens_interval_list',
-        'mutect2_target_bed',
-    ].collectEntries { name ->
-        [name, params.containsKey(name) ? params[name] : getReferenceAttribute(param: name, genomeMap: params.genomes, genomeKey: params.genome)]
-    }
+    def references = PIPELINE_INITIALISATION.out.references.getVal()
 
     PREPARE_GENOME(
         tools,
