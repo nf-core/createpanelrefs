@@ -8,7 +8,7 @@
         "type": "object",
         "properties": {
             "genome": {
-                "meta": ["genome"],
+                "meta": ["genome", "id"],
                 "type": "string",
                 "pattern": "^\\S+$",
                 "errorMessage": "Genome name must be provided and cannot contain spaces"

@@ -20,9 +20,8 @@ include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_crea
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
 include { MULTIQC                 } from './modules/nf-core/multiqc'
-include { assayReferenceParams    } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { defineToolsList         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
-include { genomeReferenceParams   } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
+include { referenceParams         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { paramsSummaryMap        } from 'plugin/nf-schema'
 include { citationsOnTheFly       } from 'plugin/nf-core-utils'
 include { methodsDescriptionText  } from 'plugin/nf-core-utils'
@@ -65,7 +64,7 @@ workflow {
         params.igenomes_ignore,
         params.references,
         params.references_datasheets_path,
-        params.subMap(genomeReferenceParams() + assayReferenceParams()),
+        params.subMap(referenceParams()),
     )
 
     def references = PIPELINE_INITIALISATION.out.references.getVal()
