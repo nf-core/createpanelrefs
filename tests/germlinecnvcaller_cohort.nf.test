@@ -1,0 +1,37 @@
+def projectDir = new File('.').absolutePath
+
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_createpanelrefs"
+
+    def test_scenario = [
+        [
+            name: "-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --gcnv_ploidy_priors --gcnv_scatter_content 2",
+            params: [
+                genome: 'GRCh38.chr22.testdata',
+                gcnv_scatter_content: 2,
+                input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",
+                tools: 'germlinecnvcaller',
+            ],
+            no_conda: true,
+        ],
+        [
+            name: "-profile test --tools germlinecnvcaller --gcnv_model_name null",
+            params: [
+                gcnv_model_name: null,
+                tools: 'germlinecnvcaller',
+            ],
+            failure: true,
+            snapshot: 'stdout',
+            snapshot_include: 'gcnv_model_name',
+        ],
+    ]
+
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
+    }
+}

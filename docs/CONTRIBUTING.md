@@ -183,3 +183,32 @@ If you update images or graphics, follow the nf-core [style guidelines](https://
 ## Pipeline specific contribution guidelines
 
 <!-- TODO nf-core: Add any pipeline specific contribution guidelines here, such as coding styles, procedures, checklists etc. -->
+
+### Tool citations
+
+The MultiQC methods description cites tools on the fly with `citationsOnTheFly()` from the nf-core-utils plugin.
+It reads the tools that ran from the `versions` topic and takes their citation from the `tools` entries of every `modules/**/meta.yml`.
+The tool name in the `versions` topic must match the tool key in `meta.yml`.
+
+Each cited tool entry in `meta.yml` should carry a `doi` and a nested `publication` block in Harvard style:
+
+```yaml
+tools:
+  - mosdepth:
+      doi: "10.1093/bioinformatics/btx699"
+      publication:
+        author: "Pedersen B.S. & Quinlan A.R."
+        year: 2018
+        title: "Mosdepth: quick coverage calculation for genomes and exomes"
+        source: "Bioinformatics"
+```
+
+A tool without a `publication` block falls back to its `doi`, then its `homepage`.
+
+The `publication` block is not yet in every upstream nf-core module.
+When an installed module lacks it, add it to the module `meta.yml`, then run `nf-core modules patch <tool>` so the change survives module updates and passes `nf-core pipelines lint`.
+If the module already has a patch, delete the `.diff` file and its `patch` entry in `modules.json`, then run `nf-core modules patch <tool>` again so the new patch covers both changes.
+Open a PR to nf-core/modules to upstream the `publication` block.
+
+MultiQC runs after the `versions` topic is collected, so `main.nf` passes it to `citationsOnTheFly()` as an extra tool.
+Tools without any citation metadata, such as `coreutils` and `find`, print a `No citation metadata found` warning, which `tests/lib/UTILS.groovy` ignores in snapshots.

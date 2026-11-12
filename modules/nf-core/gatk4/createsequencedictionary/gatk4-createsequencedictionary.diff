@@ -1,0 +1,27 @@
+Changes in component 'nf-core/gatk4/createsequencedictionary'
+Changes in 'gatk4/createsequencedictionary/meta.yml':
+--- modules/nf-core/gatk4/createsequencedictionary/meta.yml
++++ modules/nf-core/gatk4/createsequencedictionary/meta.yml
+@@ -13,9 +13,14 @@
+         and high-performance computing features make it capable of taking on projects of any size.
+       homepage: https://gatk.broadinstitute.org/hc/en-us
+       documentation: https://gatk.broadinstitute.org/hc/en-us/categories/360002369672s
+-      doi: 10.1158/1538-7445.AM2017-3590
+       licence: ["Apache-2.0"]
+       identifier: ""
++      doi: "10.1101/gr.107524.110"
++      publication:
++        author: "McKenna A., Hanna M., Banks E., Sivachenko A., Cibulskis K., Kernytsky A., Garimella K., Altshuler D., Gabriel S., Daly M. & DePristo M.A."
++        year: 2010
++        title: "The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data"
++        source: "Genome Research"
+ input:
+   - - meta:
+         type: map
+
+'modules/nf-core/gatk4/createsequencedictionary/environment.yml' is unchanged
+'modules/nf-core/gatk4/createsequencedictionary/main.nf' is unchanged
+'modules/nf-core/gatk4/createsequencedictionary/.conda-lock/linux_amd64-bd-79918b8b2632f4b1_1.txt' is unchanged
+'modules/nf-core/gatk4/createsequencedictionary/tests/main.nf.test' is unchanged
+'modules/nf-core/gatk4/createsequencedictionary/tests/main.nf.test.snap' is unchanged
+************************************************************

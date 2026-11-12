@@ -1,0 +1,5 @@
+sample,bam,cram
+sample1,https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.paired_end.recalibrated.sorted.bam
+sample2,https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test2.paired_end.recalibrated.sorted.bam
+sample3,,https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/cram/test.paired_end.markduplicates.sorted.cram
+sample4,,https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/cram/test2.paired_end.markduplicates.sorted.cram
