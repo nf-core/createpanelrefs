@@ -117,7 +117,7 @@ With `--igenomes_ignore`, `--genome` is a path under `--references_datasheets_pa
 
 Datasheet paths may carry `${params.references_base_path}` placeholders, resolved when the datasheet loads. The default fits the `igenomes/` datasheets; set `--references_base_path s3://nf-core-references` for the `genomes/` datasheets. The resolution order and the datasheet format are documented in the [nf-core/references usage documentation](https://nf-co.re/references/usage).
 
-Datasheets can provide `fasta`, `fai`, `dict` and the genome-level gCNV files: `gcnv_ploidy_priors`, `gcnv_exclude_bed`, `gcnv_exclude_interval_list`, `gcnv_mappable_regions` and `gcnv_segmental_duplications`. Among the gCNV files, published datasheets currently carry only `gcnv_ploidy_priors` and `gcnv_exclude_bed`.
+Datasheets can provide `fasta`, `fai`, `dict`, `gcnv_ploidy_priors` and `gcnv_exclude_bed`.
 Assay-specific files (`gcnv_target_bed`, `gcnv_target_interval_list`, `gens_interval_list`, `mutect2_target_bed`) are not read from datasheets.
 
 ## Workflow specific arguments

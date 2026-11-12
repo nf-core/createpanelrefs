@@ -28,6 +28,15 @@ nextflow_pipeline {
             ],
         ],
         [
+            name: "-profile test --tools cnvkit --genome null --references tests/assets/references.yml",
+            params: [
+                genome: null,
+                references: "${projectDir}/tests/assets/references.yml",
+                references_base_path: 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data',
+                tools: 'cnvkit',
+            ],
+        ],
+        [
             name: "-profile test --tools cnvkit --references GATK/GRCh38_chr21.yml",
             params: [
                 references: 'https://raw.githubusercontent.com/nf-core/references-datasheets/latest/genomes/Homo_sapiens/GATK/GRCh38_chr21.yml',
