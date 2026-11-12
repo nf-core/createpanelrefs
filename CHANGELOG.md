@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#108](https://github.com/nf-core/createpanelrefs/pull/108) - Back to dev
 - [#113](https://github.com/nf-core/createpanelrefs/pull/113) - Update nf-schema to 3.0.0
+- [#115](https://github.com/nf-core/createpanelrefs/pull/115) - Update all nf-core modules
+- [#116](https://github.com/nf-core/createpanelrefs/pull/116) - Template update for nf-core/tools v4.2.2
 
 ### `Fixed`
 
@@ -25,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | `references_datasheets_path` | New    |
 
 ### `Dependencies` - modules
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| samtools   | 1.24        | 1.25        |
+| - htslib   | 1.24        | 1.25        |
 
 ### `Dependencies` - Nextflow plugins
 
