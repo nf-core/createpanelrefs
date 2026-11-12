@@ -46,7 +46,7 @@
                     "gawk": "5.3.1"
                 },
                 "SAMTOOLS_VIEW": {
-                    "samtools": "1.24"
+                    "samtools": "1.25"
                 }
             },
             [
@@ -76,8 +76,8 @@
             ],
             "No VCF files",
             [
-                "testN_concat:md5,17920531ca2da53784223f4e813338c3",
-                "testT_concat:md5,0c6483654cb7c7c8f34572ae941f9897",
+                "testN_concat:md5,fb99347e4d86a2f81a541102cfe95bb5",
+                "testT_concat:md5,dd8dee02b87cd7bdd4e8246033baa60a",
                 "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
@@ -85,7 +85,7 @@
                 "WARN: --gens_pon_name is set to the default value 'gens'."
             ]
         ],
-        "timestamp": "2026-10-30T12:14:32.590602018",
+        "timestamp": "2026-11-10T13:05:33.806605058",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
@@ -174,7 +174,7 @@
                     "gawk": "5.3.1"
                 },
                 "SAMTOOLS_VIEW": {
-                    "samtools": "1.24"
+                    "samtools": "1.25"
                 }
             },
             [
@@ -204,8 +204,8 @@
             ],
             "No VCF files",
             [
-                "testN_concat:md5,9bf85437af4963afe8eabdd9e124fdfb",
-                "testT_concat:md5,609f880750c621425cefd734f81707dd",
+                "testN_concat:md5,02131cb392c5a973f63187c006927eae",
+                "testT_concat:md5,43dcb241df15e3a34c8ebe979be94141",
                 "gens_coverage_bins.bed:md5,b5c7f328aaf419595302baaa16f5b649",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
@@ -213,10 +213,10 @@
                 "WARN: --gens_pon_name is set to the default value 'gens'."
             ]
         ],
-        "timestamp": "2026-08-17T10:42:06.406441137",
+        "timestamp": "2026-11-10T13:05:14.695049508",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.0"
         }
     }
 }
