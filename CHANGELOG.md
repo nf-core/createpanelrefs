@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [#114](https://github.com/nf-core/createpanelrefs/pull/114) - Add `--references` to read reference files from an nf-core/references-datasheets YAML
+
 ### `Changed`
 
 - [#108](https://github.com/nf-core/createpanelrefs/pull/108) - Back to dev
@@ -17,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 ### `Parameters`
+
+| Params                         | Status |
+| ------------------------------ | ------ |
+| `--references`                 | Added  |
+| `--references_base_path`       | Added  |
+| `--references_datasheets_path` | Added  |
 
 ### `Dependencies` - modules
 

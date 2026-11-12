@@ -103,6 +103,23 @@ To further assist in reproducibility, you can use share and reuse [parameter fil
 > [!TIP]
 > If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
 
+## Reference selection
+
+Reference attributes (`--fasta`, `--fai`, `--dict` and the other reference parameters) are each resolved from the first source that supplies them:
+
+1. Explicit parameters.
+2. A references datasheet, passed with `--references`, or located from `--references_datasheets_path` with `--genome` and `--igenomes_ignore`.
+3. An iGenomes catalogue entry for `--genome`.
+
+`--references` and `--genome` are mutually exclusive: passing both is an error.
+
+With `--igenomes_ignore`, `--genome` is a path under `--references_datasheets_path`, without `.yml`, e.g. `--genome GATK/GRCh38`.
+
+Datasheet paths may carry `${params.references_base_path}` placeholders, resolved when the datasheet loads. The default fits the `igenomes/` datasheets; set `--references_base_path s3://nf-core-references` for the `genomes/` datasheets. The resolution order and the datasheet format are documented in the [nf-core/references usage documentation](https://nf-co.re/references/usage).
+
+Datasheets can provide `fasta`, `fai`, `dict`, `gcnv_ploidy_priors` and `gcnv_exclude_bed`.
+Assay-specific files (`gcnv_target_bed`, `gcnv_target_interval_list`, `gens_interval_list`, `mutect2_target_bed`) are not read from datasheets.
+
 ## Workflow specific arguments
 
 ### cnvkit
