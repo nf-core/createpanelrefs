@@ -108,111 +108,207 @@
                     "fa_icon": "fas fa-folder-open"
                 },
                 "fasta": {
-                    "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/plain",
+                            "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
                 },
                 "dict": {
-                    "type": "string",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "^\\S+\\.dict$",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/plain"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to sequence dictionary file",
-                    "pattern": "^\\S+\\.dict$",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "exists": true,
-                    "mimetype": "text/plain"
+                    "fa_icon": "fas fa-file"
                 },
                 "fai": {
-                    "type": "string",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/plain"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to fasta index file",
-                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "exists": true,
-                    "mimetype": "text/plain"
+                    "fa_icon": "fas fa-file"
                 },
                 "gens_interval_list": {
-                    "type": "string",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "^\\S+\\.interval_list$",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/plain"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to GENS interval list file",
-                    "pattern": "^\\S+\\.interval_list$",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "exists": true,
-                    "mimetype": "text/plain"
+                    "fa_icon": "fas fa-file"
                 },
                 "gcnv_exclude_bed": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "path",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "path",
+                            "pattern": "^\\S+\\.bed$"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed$",
                     "description": "Path to directory for a bed file containing regions to be exluded from the analysis.",
                     "help_text": "If the regions you would like to exclude are in bed format, use this option. If you have an interval_list file, use `exclude_interval_list` parameter instead."
                 },
                 "gcnv_exclude_interval_list": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "path",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "path",
+                            "pattern": "^\\S+\\.interval_list$"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.interval_list$",
                     "description": "Path to directory for exclude_interval_list file.",
                     "help_text": "If the regions you would like to exclude are in interval_list format, use this option. If you have a bed file, use `exclude` parameter instead."
                 },
                 "gcnv_mappable_regions": {
-                    "type": "string",
-                    "exists": true,
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "file-path"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to Umap single-read mappability track in .bed or .bed.gz format. Overlapping intervals must be merged.",
-                    "format": "file-path",
                     "fa_icon": "fas fa-file",
                     "help_text": "Used by GATK's AnnotateIntervals."
                 },
                 "gcnv_ploidy_priors": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "file-path",
-                    "mimetype": "text/plain",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "file-path",
+                            "mimetype": "text/plain"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to a file containing ploidy priors table.",
                     "fa_icon": "fas fa-file",
                     "help_text": "Used by GATK's DeterminGermlineContigPloidy."
                 },
                 "gcnv_segmental_duplications": {
-                    "type": "string",
-                    "exists": true,
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "file-path"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to segmental-duplication track in .bed or .bed.gz format. Overlapping intervals must be merged.",
-                    "format": "file-path",
                     "fa_icon": "fas fa-file",
                     "help_text": "Used by GATK's AnnotateIntervals."
                 },
                 "gcnv_target_bed": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "path",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "path",
+                            "pattern": "^\\S+\\.bed$"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed$",
                     "description": "Path to directory for target bed file.",
                     "help_text": "If the regions you would like to analyse are in bed format, use this option. If you have an interval_list file, use `target_interval_list` parameter instead."
                 },
                 "gcnv_target_interval_list": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "path",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "path",
+                            "pattern": "^\\S+\\.interval_list$"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.interval_list$",
                     "description": "Path to directory for target interval_list file.",
                     "help_text": "If the regions you would like to analyse are in interval_list format, use this option. If you have a bed file, use `target_bed` parameter instead."
                 },
                 "mutect2_target_bed": {
-                    "type": "string",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "^\\S+\\.bed$",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/plain"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to target bed file",
-                    "pattern": "^\\S+\\.bed$",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "exists": true,
-                    "mimetype": "text/plain"
+                    "fa_icon": "fas fa-file"
                 },
                 "igenomes_ignore": {
                     "type": "boolean",

@@ -16,10 +16,10 @@ nextflow_pipeline {
             ],
         ],
         [
-            name: "-profile test --tools mutect2 --mutect2_target_bed null --input tests/csv/1.0.0/cram.csv",
+            name: "-profile test --tools mutect2 --mutect2_target_bed false --input tests/csv/1.0.0/cram.csv",
             params: [
                 input: "${projectDir}/tests/csv/1.0.0/cram.csv",
-                mutect2_target_bed: null,
+                mutect2_target_bed: false,
                 tools: 'mutect2',
             ],
         ],

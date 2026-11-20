@@ -54,10 +54,10 @@ workflow PIPELINE_INITIALISATION {
     references_datasheet // string: Path to a references datasheet
     references_datasheets_path // string: Location of the datasheets used with igenomes_ignore
     references_schema // string: Path to the references datasheet schema
-    references_params // map: Reference params set by the user, even to null
+    references_params // map: Reference params: null reads the datasheet or genome config, false turns one off
     assay_datasheet // string: Path to an assay datasheet
     assay_schema // string: Path to the assay datasheet schema
-    assay_params // map: Assay params set by the user, even to null
+    assay_params // map: Assay params: null reads the assay datasheet, false turns one off
 
     main:
 
@@ -173,7 +173,7 @@ workflow PIPELINE_INITIALISATION {
     )
 
     //
-    // References come from --genome (iGenomes) or from a references datasheet; an explicit parameter, even null, wins
+    // References come from --genome (iGenomes) or from a references datasheet; a non-null parameter wins, false turns it off
     //
     def references_path = getReferencePath(
         references: references_datasheet,
@@ -191,15 +191,13 @@ workflow PIPELINE_INITIALISATION {
     )
 
     //
-    // Assay target files come from an assay datasheet built for the same genome; an explicit parameter, even null, wins
+    // Assay target files come from an assay datasheet built for the same genome; a non-null parameter wins, false turns it off
     //
     def assay_rows = assay_datasheet ? samplesheetToList(assay_datasheet, assay_schema, unrecognisedHeaders: 'skip') : null
     if (assay_rows) {
         assayGenomeMatchError(datasheetGenome(assay_rows), references_rows ? datasheetGenome(references_rows) : genome)
     }
-    def assay_resolved = assay_rows
-        ? getReferences(schema: assay_schema, rows: assay_rows, params: assay_params)
-        : assay_params
+    def assay_resolved = getReferences(schema: assay_schema, rows: assay_rows, params: assay_params)
 
     //
     // Create channel from input file provided through input
