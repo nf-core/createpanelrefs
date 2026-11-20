@@ -17,11 +17,11 @@ IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
 
 include { CREATEPANELREFS         } from './workflows/createpanelrefs'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
+include { getReferenceNames       } from 'plugin/nf-core-utils'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
 include { MULTIQC                 } from './modules/nf-core/multiqc'
 include { defineToolsList         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
-include { referenceParams         } from './subworkflows/local/utils_nfcore_createpanelrefs_pipeline'
 include { paramsSummaryMap        } from 'plugin/nf-schema'
 include { citationsOnTheFly       } from 'plugin/nf-core-utils'
 include { methodsDescriptionText  } from 'plugin/nf-core-utils'
@@ -39,6 +39,9 @@ workflow {
     main:
     // Define list of tools to run
     def tools = defineToolsList(params.tools)
+
+    def references_schema = "${projectDir}/assets/schema_references.json"
+    def assay_schema = "${projectDir}/assets/schema_assay.json"
 
     // SUBWORKFLOW: Run initialisation tasks
     PIPELINE_INITIALISATION(
@@ -64,7 +67,11 @@ workflow {
         params.igenomes_ignore,
         params.references,
         params.references_datasheets_path,
-        params.subMap(referenceParams()),
+        references_schema,
+        params.subMap(getReferenceNames(schema: references_schema)),
+        params.assay,
+        assay_schema,
+        params.subMap(getReferenceNames(schema: assay_schema)),
     )
 
     def references = PIPELINE_INITIALISATION.out.references.getVal()

@@ -42,6 +42,18 @@
                 "type": "string",
                 "pattern": "^\\S+\\.bed$",
                 "errorMessage": "Exclude BED must end in '.bed' and cannot contain spaces"
+            },
+            "gcnv_exclude_interval_list": {
+                "meta": ["gcnv_exclude_interval_list"],
+                "type": "string"
+            },
+            "gcnv_mappable_regions": {
+                "meta": ["gcnv_mappable_regions"],
+                "type": "string"
+            },
+            "gcnv_segmental_duplications": {
+                "meta": ["gcnv_segmental_duplications"],
+                "type": "string"
             }
         },
         "required": ["genome"]

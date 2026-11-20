@@ -12,6 +12,7 @@ nextflow_pipeline {
         [
             name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_readcount_format TSV",
             params: [
+                assay: null,
                 genome: 'GRCh38.chr22.testdata',
                 gens_bin_length: 100,
                 gens_interval_list: null,
@@ -23,6 +24,7 @@ nextflow_pipeline {
         [
             name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_readcount_format TSV --gens_analysis_type lrs",
             params: [
+                assay: null,
                 genome: 'GRCh38.chr22.testdata',
                 gens_analysis_type: 'lrs',
                 gens_bin_length: 100,
@@ -35,6 +37,7 @@ nextflow_pipeline {
         [
             name: "-profile test --tools gens --input tests/csv/1.0.0/bam_sorted.csv --gens_bin_length 100 --gens_readcount_format TSV --gens_analysis_type lrs --gens_mosdepth_fast_mode false",
             params: [
+                assay: null,
                 genome: 'GRCh38.chr22.testdata',
                 gens_analysis_type: 'lrs',
                 gens_bin_length: 100,

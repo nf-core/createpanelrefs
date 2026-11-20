@@ -14,8 +14,7 @@ include { checkProfileProvided } from 'plugin/nf-core-utils'
 include { completionEmail      } from 'plugin/nf-core-utils'
 include { completionSummary    } from 'plugin/nf-core-utils'
 include { dumpParametersToJSON } from 'plugin/nf-core-utils'
-include { getReferenceAttribute } from 'plugin/nf-core-utils'
-include { getReferenceMetadata } from 'plugin/nf-core-utils'
+include { getReferences        } from 'plugin/nf-core-utils'
 include { getReferencePath     } from 'plugin/nf-core-utils'
 include { getWorkflowVersion   } from 'plugin/nf-core-utils'
 include { paramsHelp           } from 'plugin/nf-schema'
@@ -49,12 +48,16 @@ workflow PIPELINE_INITIALISATION {
     gcnv_model_name
     gens_pon_name
     mutect2_pon_name
-    genome // string: iGenomes key, or datasheet path with igenomes_ignore
+    genome // string: iGenomes key, or datasheet name with igenomes_ignore
     genomes // map: iGenomes catalogue
-    igenomes_ignore // boolean: Read --genome as a datasheet path
+    igenomes_ignore // boolean: Read --genome as a datasheet name
     references_datasheet // string: Path to a references datasheet
     references_datasheets_path // string: Location of the datasheets used with igenomes_ignore
-    explicit_references // map: Reference parameters set by the user, even to null
+    references_schema // string: Path to the references datasheet schema
+    references_params // map: Reference params set by the user, even to null
+    assay_datasheet // string: Path to an assay datasheet
+    assay_schema // string: Path to the assay datasheet schema
+    assay_params // map: Assay params set by the user, even to null
 
     main:
 
@@ -159,9 +162,6 @@ workflow PIPELINE_INITIALISATION {
     // Custom validation for pipeline parameters
     //
     validateInputParameters(
-        genome,
-        genomes,
-        references_datasheet,
         cnvkit_annotate,
         cnvkit_method,
         cnvkit_pon_name,
@@ -175,18 +175,31 @@ workflow PIPELINE_INITIALISATION {
     //
     // References come from --genome (iGenomes) or from a references datasheet; an explicit parameter, even null, wins
     //
-    def reference_path = getReferencePath(
+    def references_path = getReferencePath(
         references: references_datasheet,
         genome: genome,
         igenomesIgnore: igenomes_ignore,
         datasheetPath: references_datasheets_path,
     )
-    def datasheet = reference_path
-        ? getReferenceMetadata(rows: samplesheetToList(reference_path, "${projectDir}/assets/schema_references.json", unrecognisedHeaders: "skip"))
-        : null
-    def resolved_references = referenceParams().collectEntries { name ->
-        [name, explicit_references.containsKey(name) ? explicit_references[name] : getReferenceAttribute(param: name, datasheet: datasheet, genomeMap: genomes, genomeKey: genome)]
+    def references_rows = references_path ? samplesheetToList(references_path, references_schema, unrecognisedHeaders: 'skip') : null
+    def references_resolved = getReferences(
+        schema: references_schema,
+        rows: references_rows,
+        params: references_params,
+        genome: genome,
+        genomes: genomes,
+    )
+
+    //
+    // Assay target files come from an assay datasheet built for the same genome; an explicit parameter, even null, wins
+    //
+    def assay_rows = assay_datasheet ? samplesheetToList(assay_datasheet, assay_schema, unrecognisedHeaders: 'skip') : null
+    if (assay_rows) {
+        assayGenomeMatchError(datasheetGenome(assay_rows), references_rows ? datasheetGenome(references_rows) : genome)
     }
+    def assay_resolved = assay_rows
+        ? getReferences(schema: assay_schema, rows: assay_rows, params: assay_params)
+        : assay_params
 
     //
     // Create channel from input file provided through input
@@ -194,7 +207,7 @@ workflow PIPELINE_INITIALISATION {
     ch_samplesheet = channel.fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
 
     emit:
-    references = resolved_references
+    references = references_resolved + assay_resolved
     samplesheet = ch_samplesheet
 }
 
@@ -247,29 +260,10 @@ FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 
-// Reference params resolved from --references, a genome datasheet, or params.genomes
-def referenceParams() {
-    return [
-        'dict',
-        'fai',
-        'fasta',
-        'gcnv_exclude_bed',
-        'gcnv_exclude_interval_list',
-        'gcnv_mappable_regions',
-        'gcnv_ploidy_priors',
-        'gcnv_segmental_duplications',
-        'gcnv_target_bed',
-        'gcnv_target_interval_list',
-        'gens_interval_list',
-        'mutect2_target_bed',
-    ]
-}
-
 //
 // Check and validate pipeline parameters
 //
-def validateInputParameters(genome, genomes, references_datasheet, cnvkit_annotate, cnvkit_method, cnvkit_pon_name, cnvkit_targets, gcnv_model_name, gens_pon_name, mutect2_pon_name, tools) {
-    genomeExistsError(genome, genomes, references_datasheet)
+def validateInputParameters(cnvkit_annotate, cnvkit_method, cnvkit_pon_name, cnvkit_targets, gcnv_model_name, gens_pon_name, mutect2_pon_name, tools) {
     if ('cnvkit' in tools && cnvkit_annotate && !cnvkit_targets) {
         error("--cnvkit_annotate requires --cnvkit_targets.")
     }
@@ -288,16 +282,21 @@ def validateInputParameters(genome, genomes, references_datasheet, cnvkit_annota
 }
 
 //
-// Exit pipeline if incorrect --genome key provided
+// Genome of the first row of a datasheet whose genome column maps to meta.genome
 //
-def genomeExistsError(genome, genomes, references_datasheet) {
-    // Skip with --references: --genome must be unset there, and "--genome null" is a truthy string the key check would reject
-    if (references_datasheet) {
-        return null
+def datasheetGenome(rows) {
+    return rows[0][0].genome
+}
+
+//
+// Exit pipeline if the references have no genome name, or the assay datasheet was built for another genome
+//
+def assayGenomeMatchError(assay_genome, reference_genome) {
+    if (!reference_genome) {
+        error("--assay needs the references from a datasheet or iGenomes: provide --references or --genome.")
     }
-    if (genomes && genome && !genomes.containsKey(genome)) {
-        def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + "  Genome '${genome}' not found in any config files provided to the pipeline.\n" + "  Currently, the available genome keys are:\n" + "  ${genomes.keySet().join(", ")}\n" + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-        error(error_string)
+    if (assay_genome != reference_genome) {
+        error("The assay datasheet is for genome '${assay_genome}', but the references are for genome '${reference_genome}'.")
     }
 }
 

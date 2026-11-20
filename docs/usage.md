@@ -117,8 +117,18 @@ With `--igenomes_ignore`, `--genome` is a path under `--references_datasheets_pa
 
 Datasheet paths may carry `${params.references_base_path}` placeholders, resolved when the datasheet loads. The default fits the `igenomes/` datasheets; set `--references_base_path s3://nf-core-references` for the `genomes/` datasheets. The resolution order and the datasheet format are documented in the [nf-core/references usage documentation](https://nf-co.re/references/usage).
 
-Datasheets can provide `fasta`, `fai`, `dict`, `gcnv_ploidy_priors` and `gcnv_exclude_bed`.
-Assay-specific files (`gcnv_target_bed`, `gcnv_target_interval_list`, `gens_interval_list`, `mutect2_target_bed`) are not read from datasheets.
+Datasheets can provide `fasta`, `fai`, `dict`, `gcnv_ploidy_priors`, `gcnv_exclude_bed`, `gcnv_exclude_interval_list`, `gcnv_mappable_regions` and `gcnv_segmental_duplications`.
+
+## Assay selection
+
+Assay target files (`gcnv_target_bed`, `gcnv_target_interval_list`, `gens_interval_list`, `mutect2_target_bed`) are read from an assay datasheet passed with `--assay`, a YAML file with one record:
+
+```yaml
+- genome: GRCh38.chr21.testdata
+  mutect2_target_bed: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/chr21/sequence/multi_intervals.bed
+```
+
+`--assay` needs `--references` or `--genome`, and its `genome` must match the reference genome: the `--genome` key, or the `genome` of the references datasheet. An explicit parameter, e.g. `--mutect2_target_bed`, takes precedence over the assay datasheet.
 
 ## Workflow specific arguments
 

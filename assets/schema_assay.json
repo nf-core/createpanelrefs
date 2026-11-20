@@ -1,0 +1,43 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/createpanelrefs/dev/assets/schema_assay.json",
+    "title": "nf-core/createpanelrefs assay datasheet schema",
+    "description": "Schema for the assay datasheet provided with --assay. Each property maps a datasheet key to a pipeline parameter; other datasheet keys are ignored.",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "genome": {
+                "meta": ["genome", "id"],
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Genome name must be provided and cannot contain spaces"
+            },
+            "gcnv_target_bed": {
+                "meta": ["gcnv_target_bed"],
+                "type": "string",
+                "pattern": "^\\S+\\.bed$",
+                "errorMessage": "gCNV target BED must end in '.bed' and cannot contain spaces"
+            },
+            "gcnv_target_interval_list": {
+                "meta": ["gcnv_target_interval_list"],
+                "type": "string",
+                "pattern": "^\\S+\\.interval_list$",
+                "errorMessage": "gCNV target interval list must end in '.interval_list' and cannot contain spaces"
+            },
+            "gens_interval_list": {
+                "meta": ["gens_interval_list"],
+                "type": "string",
+                "pattern": "^\\S+\\.interval_list$",
+                "errorMessage": "GENS interval list must end in '.interval_list' and cannot contain spaces"
+            },
+            "mutect2_target_bed": {
+                "meta": ["mutect2_target_bed"],
+                "type": "string",
+                "pattern": "^\\S+\\.bed$",
+                "errorMessage": "Mutect2 target BED must end in '.bed' and cannot contain spaces"
+            }
+        },
+        "required": ["genome"]
+    }
+}

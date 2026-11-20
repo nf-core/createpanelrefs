@@ -255,6 +255,26 @@
             "nextflow": "26.04.0"
         }
     },
+    "-profile test --tools cnvkit --genome GRCh38.chr22.testdata": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            [
+                "WARN: --cnvkit_pon_name is set to the default value 'cnvkit'."
+            ],
+            [
+                "The assay datasheet is for genome 'GRCh38.chr21.testdata', but the references are for genome 'GRCh38.chr22.testdata'."
+            ]
+        ],
+        "timestamp": "2026-11-19T11:23:13.953875459",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.10.0"
+        }
+    },
     "-profile test --tools cnvkit --igenomes_ignore --genome GATK/GRCh38_chr21 --references_datasheets_path genomes/Homo_sapiens": {
         "content": [
             2,
@@ -361,6 +381,26 @@
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
+        }
+    },
+    "-profile test --tools cnvkit --genome null": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No VCF files",
+            "No stable content",
+            [
+                "WARN: --cnvkit_pon_name is set to the default value 'cnvkit'."
+            ],
+            [
+                "--assay needs the references from a datasheet or iGenomes: provide --references or --genome."
+            ]
+        ],
+        "timestamp": "2026-11-19T12:12:13.350120321",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.10.0"
         }
     }
 }

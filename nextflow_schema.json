@@ -82,6 +82,16 @@
                     "help_text": "Provides reference files and metadata from a single datasheet. Explicit reference parameters such as `--fasta` win over it. See [nf-core/references-datasheets](https://github.com/nf-core/references-datasheets).",
                     "fa_icon": "fas fa-file-alt"
                 },
+                "assay": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.(yaml|yml)$",
+                    "schema": "assets/schema_assay.json",
+                    "description": "Path to an assay datasheet YAML supplying the target files of a capture assay.",
+                    "help_text": "Provides `gcnv_target_bed`, `gcnv_target_interval_list`, `gens_interval_list` and `mutect2_target_bed`. Its `genome` must match the reference genome. Explicit parameters such as `--mutect2_target_bed` win over it.",
+                    "fa_icon": "fas fa-file-alt"
+                },
                 "references_datasheets_path": {
                     "type": "string",
                     "description": "Base URL or path for references-datasheets files loaded via --genome with --igenomes_ignore.",
