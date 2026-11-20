@@ -1,0 +1,61 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/createpanelrefs/dev/assets/schema_references.json",
+    "title": "nf-core/createpanelrefs references datasheet schema",
+    "description": "Schema for the references datasheet provided with --references. Each property maps a datasheet key to a pipeline parameter; other datasheet keys are ignored.",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "genome": {
+                "meta": ["genome", "id"],
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Genome name must be provided and cannot contain spaces"
+            },
+            "fasta": {
+                "meta": ["fasta"],
+                "type": "string",
+                "pattern": "^\\S+\\.f(ast|n)?a(\\.gz)?$",
+                "errorMessage": "Fasta must end in '.fa', '.fasta', or '.fna' (optionally .gz) and cannot contain spaces"
+            },
+            "fasta_fai": {
+                "meta": ["fai"],
+                "type": "string",
+                "pattern": "^\\S+\\.f(ast|n)?a\\.fai(\\.gz)?$",
+                "errorMessage": "Fasta index must end in '.fa.fai', '.fasta.fai', or '.fna.fai' (optionally .gz) and cannot contain spaces"
+            },
+            "fasta_dict": {
+                "meta": ["dict"],
+                "type": "string",
+                "pattern": "^\\S+\\.dict$",
+                "errorMessage": "Sequence dictionary must end in '.dict' and cannot contain spaces"
+            },
+            "contig_ploidy_priors_tsv": {
+                "meta": ["gcnv_ploidy_priors"],
+                "type": "string",
+                "pattern": "^\\S+\\.tsv$",
+                "errorMessage": "Contig ploidy priors must end in '.tsv' and cannot contain spaces"
+            },
+            "exclude_bed": {
+                "meta": ["gcnv_exclude_bed"],
+                "type": "string",
+                "pattern": "^\\S+\\.bed$",
+                "errorMessage": "Exclude BED must end in '.bed' and cannot contain spaces"
+            },
+            "gcnv_exclude_interval_list": {
+                "meta": ["gcnv_exclude_interval_list"],
+                "type": "string"
+            },
+            "gcnv_mappable_regions": {
+                "meta": ["gcnv_mappable_regions"],
+                "type": "string"
+            },
+            "gcnv_segmental_duplications": {
+                "meta": ["gcnv_segmental_duplications"],
+                "type": "string"
+            }
+        },
+        "required": ["genome"]
+    }
+}

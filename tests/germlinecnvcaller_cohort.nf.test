@@ -11,6 +11,7 @@ nextflow_pipeline {
         [
             name: "-profile test --tools germlinecnvcaller --input tests/csv/1.0.0/bam_sorted.csv --gcnv_ploidy_priors --gcnv_scatter_content 2",
             params: [
+                assay: null,
                 genome: 'GRCh38.chr22.testdata',
                 gcnv_scatter_content: 2,
                 input: "${projectDir}/tests/csv/1.0.0/bam_sorted.csv",

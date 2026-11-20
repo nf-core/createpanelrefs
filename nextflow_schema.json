@@ -68,116 +68,247 @@
             "properties": {
                 "genome": {
                     "type": "string",
-                    "description": "Name of iGenomes reference.",
+                    "description": "Reference genome name: an iGenomes catalogue key, or a references-datasheets path when igenomes_ignore is set. Do not combine with --references.",
                     "fa_icon": "fas fa-book",
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
+                    "help_text": "iGenomes: key in conf/igenomes.config. With --igenomes_ignore: path under --references_datasheets_path, without `.yml` (e.g. GATK/GRCh38 for igenomes/GATK/GRCh38.yml)."
                 },
-                "fasta": {
+                "references": {
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
-                    "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "pattern": "^\\S+\\.(yaml|yml)$",
+                    "schema": "assets/schema_references.json",
+                    "description": "Path to a references-datasheets YAML supplying reference files and metadata. Do not combine with --genome.",
+                    "help_text": "Provides reference files and metadata from a single datasheet. Explicit reference parameters such as `--fasta` win over it. See [nf-core/references-datasheets](https://github.com/nf-core/references-datasheets).",
+                    "fa_icon": "fas fa-file-alt"
+                },
+                "assay": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.(yaml|yml)$",
+                    "schema": "assets/schema_assay.json",
+                    "description": "Path to an assay datasheet YAML supplying the target files of a capture assay.",
+                    "help_text": "Provides `gcnv_target_bed`, `gcnv_target_interval_list`, `gens_interval_list` and `mutect2_target_bed`. Its `genome` must match the reference genome. Explicit parameters such as `--mutect2_target_bed` win over it.",
+                    "fa_icon": "fas fa-file-alt"
+                },
+                "references_datasheets_path": {
+                    "type": "string",
+                    "description": "Base URL or path for references-datasheets files loaded via --genome with --igenomes_ignore.",
+                    "default": "https://raw.githubusercontent.com/nf-core/references-datasheets/latest/igenomes",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
+                },
+                "references_base_path": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Base path substituted for ${params.references_base_path} placeholders in datasheet paths.",
+                    "help_text": "The default fits the `igenomes/` datasheets. Use `s3://nf-core-references` for the `genomes/` datasheets.",
+                    "default": "s3://ngi-igenomes/igenomes",
+                    "fa_icon": "fas fa-folder-open"
+                },
+                "fasta": {
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/plain",
+                            "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
                 },
                 "dict": {
-                    "type": "string",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "^\\S+\\.dict$",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/plain"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to sequence dictionary file",
-                    "pattern": "^\\S+\\.dict$",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "exists": true,
-                    "mimetype": "text/plain"
+                    "fa_icon": "fas fa-file"
                 },
                 "fai": {
-                    "type": "string",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/plain"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to fasta index file",
-                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "exists": true,
-                    "mimetype": "text/plain"
+                    "fa_icon": "fas fa-file"
                 },
                 "gens_interval_list": {
-                    "type": "string",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "^\\S+\\.interval_list$",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/plain"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to GENS interval list file",
-                    "pattern": "^\\S+\\.interval_list$",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "exists": true,
-                    "mimetype": "text/plain"
+                    "fa_icon": "fas fa-file"
                 },
                 "gcnv_exclude_bed": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "path",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "path",
+                            "pattern": "^\\S+\\.bed$"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed$",
                     "description": "Path to directory for a bed file containing regions to be exluded from the analysis.",
                     "help_text": "If the regions you would like to exclude are in bed format, use this option. If you have an interval_list file, use `exclude_interval_list` parameter instead."
                 },
                 "gcnv_exclude_interval_list": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "path",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "path",
+                            "pattern": "^\\S+\\.interval_list$"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.interval_list$",
                     "description": "Path to directory for exclude_interval_list file.",
                     "help_text": "If the regions you would like to exclude are in interval_list format, use this option. If you have a bed file, use `exclude` parameter instead."
                 },
                 "gcnv_mappable_regions": {
-                    "type": "string",
-                    "exists": true,
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "file-path"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to Umap single-read mappability track in .bed or .bed.gz format. Overlapping intervals must be merged.",
-                    "format": "file-path",
                     "fa_icon": "fas fa-file",
                     "help_text": "Used by GATK's AnnotateIntervals."
                 },
                 "gcnv_ploidy_priors": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "file-path",
-                    "mimetype": "text/plain",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "file-path",
+                            "mimetype": "text/plain"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to a file containing ploidy priors table.",
                     "fa_icon": "fas fa-file",
                     "help_text": "Used by GATK's DeterminGermlineContigPloidy."
                 },
                 "gcnv_segmental_duplications": {
-                    "type": "string",
-                    "exists": true,
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "file-path"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to segmental-duplication track in .bed or .bed.gz format. Overlapping intervals must be merged.",
-                    "format": "file-path",
                     "fa_icon": "fas fa-file",
                     "help_text": "Used by GATK's AnnotateIntervals."
                 },
                 "gcnv_target_bed": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "path",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "path",
+                            "pattern": "^\\S+\\.bed$"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed$",
                     "description": "Path to directory for target bed file.",
                     "help_text": "If the regions you would like to analyse are in bed format, use this option. If you have an interval_list file, use `target_interval_list` parameter instead."
                 },
                 "gcnv_target_interval_list": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "path",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "exists": true,
+                            "format": "path",
+                            "pattern": "^\\S+\\.interval_list$"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.interval_list$",
                     "description": "Path to directory for target interval_list file.",
                     "help_text": "If the regions you would like to analyse are in interval_list format, use this option. If you have a bed file, use `target_bed` parameter instead."
                 },
                 "mutect2_target_bed": {
-                    "type": "string",
+                    "type": ["string", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "^\\S+\\.bed$",
+                            "format": "file-path",
+                            "exists": true,
+                            "mimetype": "text/plain"
+                        },
+                        {
+                            "enum": ["false", false]
+                        }
+                    ],
                     "description": "Path to target bed file",
-                    "pattern": "^\\S+\\.bed$",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "exists": true,
-                    "mimetype": "text/plain"
+                    "fa_icon": "fas fa-file"
                 },
                 "igenomes_ignore": {
                     "type": "boolean",

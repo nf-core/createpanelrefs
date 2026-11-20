@@ -1,0 +1,6 @@
+- genome: GRCh38_chr21
+  reference_source: nf-core
+  species: Homo_sapiens
+  fasta: ${params.references_base_path}/genomics/homo_sapiens/genome/chr21/sequence/genome.fasta
+  fasta_fai: ${params.references_base_path}/genomics/homo_sapiens/genome/chr21/sequence/genome.fasta.fai
+  fasta_dict: ${params.references_base_path}/genomics/homo_sapiens/genome/chr21/sequence/genome.dict
